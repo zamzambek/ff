@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="ky">
+<head>
+<meta charset="utf-8">
+<title>Na жана Cl — KAINAP</title>
+<link rel="stylesheet" href="../../engine/style.css">
+<style>
+  /* 16:9, силуэтный кинематографичный стиль */
+  html, body, #stage { width: 1920px !important; height: 1080px !important; }
+  :root { --gold: #FFC46B; --heart: #FF3B5C; }
+  #stage { background: #06070F; }
+  .abs { position: absolute; }
+  .scene.full { top: 0; height: 1080px; display: block; }
+  .char { position: absolute; transform-origin: 50% 100%; }
+  .sil { filter: brightness(0) drop-shadow(5px 0 1px rgba(255,170,90,.95)) drop-shadow(-4px 0 1px rgba(140,160,255,.7)) drop-shadow(0 0 18px rgba(255,170,90,.25)); }
+  .bg { position: absolute; inset: 0; }
+  .vign { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 45%, rgba(0,0,0,.75) 100%); pointer-events: none; }
+  .bokeh { position: absolute; inset: 0; overflow: hidden; }
+  .cone { position: absolute; background: linear-gradient(rgba(255,210,150,.32), rgba(255,210,150,0)); clip-path: polygon(45% 0, 55% 0, 100% 100%, 0 100%); }
+  .orb { position: absolute; width: 56px; height: 56px; margin: -28px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #FFD0D8, var(--heart) 55%, #B0102C); box-shadow: 0 0 30px 10px rgba(255,59,92,.55), 0 0 90px 30px rgba(255,59,92,.25); }
+  .shell { position: absolute; border-radius: 50%; border: 3px solid rgba(255,255,255,.22); }
+  .spin { position: absolute; width: 0; height: 0; }
+  .el { position: absolute; width: 26px; height: 26px; margin: -13px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #DDF1FF, #59A8FF 60%, #2563D9); box-shadow: 0 0 14px rgba(90,170,255,.7); }
+  .nuc { position: absolute; width: 110px; height: 110px; margin: -55px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #FFE6B0, #F0A63A 60%, #B5701A); display: grid; place-items: center; font-weight: 900; font-size: 34px; color: #2a1600; box-shadow: 0 0 40px rgba(240,166,58,.5); }
+  .slot { position: absolute; width: 40px; height: 40px; margin: -20px; border-radius: 50%; border: 4px dashed var(--gold); box-shadow: 0 0 24px rgba(255,196,107,.6); }
+  .lbl { font-weight: 900; color: var(--gold); text-shadow: 0 0 24px rgba(255,196,107,.4); }
+  .note { font-weight: 800; color: #fff; background: rgba(255,255,255,.08); border: 2px solid rgba(255,255,255,.25); border-radius: 999px; padding: 8px 24px; font-size: 30px; white-space: nowrap; }
+  .stamp { font-weight: 900; color: #fff; background: #D9213E; padding: 8px 26px; font-size: 44px; letter-spacing: 3px; border-radius: 8px; box-shadow: 0 0 40px rgba(217,33,62,.5); transform: rotate(-6deg); }
+  .ion { position: absolute; border-radius: 50%; display: grid; place-items: center; font-weight: 900; color: #fff; }
+  .cap { top: auto; bottom: 60px; left: 200px; right: 200px; }
+  .cap-box { background: none; box-shadow: none; color: #fff; font-size: 50px; line-height: 1.3; text-shadow: 0 4px 18px rgba(0,0,0,.9); padding: 0; max-width: 1500px; }
+  .cap-box .w { padding: 0 3px; }
+  .cap-box .w.key { color: var(--gold); }
+  .corner-logo { position: absolute; right: 50px; top: 40px; width: 110px; opacity: .55; z-index: 8; }
+  .card { background: rgba(10,12,30,.85); border: 3px solid rgba(255,196,107,.6); border-radius: 30px; padding: 40px 60px; box-shadow: 0 0 60px rgba(255,196,107,.15); }
+  .eq { font-weight: 900; font-size: 58px; color: #fff; margin: 12px 0; white-space: nowrap; }
+  .eq sup { font-size: .55em; color: var(--gold); }
+</style>
+</head>
+<body class="cap-plain" data-pops="off">
+<div id="stage">
+
+  <!-- A. Он отдал самое ценное -->
+  <section class="scene full" data-from="s1">
+    <div class="abs" style="inset:0;transform-origin:50% 55%" data-zoom="1,1.08">
+      <div class="bg" style="background:radial-gradient(ellipse at 50% 30%,#1A1430,#06070F 70%)"></div>
+      <div class="bokeh" data-n="12"></div>
+      <div class="cone" style="left:560px;top:0;width:800px;height:900px"></div>
+      <div class="abs" style="left:0;right:0;top:860px;height:220px;background:#030308"></div>
+      <div class="char sil" data-char="aibek" style="left:610px;top:395px;width:260px" data-pose="s1:give,s2:idle" data-expr="s1:smile" data-face="right"></div>
+      <div class="char sil" data-char="girl" style="left:1060px;top:405px;width:250px" data-pose="s1:idle,s1#5:give" data-expr="s1:smile" data-face="left"></div>
+      <div class="orb" style="left:880px;top:560px" data-move="s1:0,0;s1#4:250,10;s2#1:250,-20"></div>
+      <div class="abs lbl" style="left:690px;top:330px;font-size:44px" data-in="s1#6" data-anim="fade">Na</div>
+      <div class="abs lbl" style="left:1145px;top:335px;font-size:44px" data-in="s1#7" data-anim="fade">Cl</div>
+    </div>
+    <div class="vign"></div>
+  </section>
+
+  <!-- B. Атомы: у натрия лишний, хлору не хватает -->
+  <section class="scene full" data-from="s3">
+    <div class="abs" style="inset:0;transform-origin:50% 45%" data-zoom="1,1.06" data-punch="s5#1">
+      <div class="bg" style="background:radial-gradient(ellipse at 50% 45%,#141838,#06070F 70%)"></div>
+      <div class="bokeh" data-n="10"></div>
+      <!-- Na -->
+      <div class="abs" style="left:560px;top:460px" data-in="s3#0" data-anim="pop">
+        <div class="shell" style="left:-100px;top:-100px;width:200px;height:200px"></div>
+        <div class="shell" style="left:-180px;top:-180px;width:360px;height:360px"></div>
+        <div class="shell" style="left:-270px;top:-270px;width:540px;height:540px;border-color:rgba(255,196,107,.35)"></div>
+        <div class="spin" data-spin="40"><div class="el" style="left:100px;top:0"></div><div class="el" style="left:-100px;top:0"></div></div>
+        <div class="spin" data-spin="-25">
+          <div class="el" style="left:180px;top:0"></div><div class="el" style="left:127px;top:127px"></div><div class="el" style="left:0;top:180px"></div><div class="el" style="left:-127px;top:127px"></div>
+          <div class="el" style="left:-180px;top:0"></div><div class="el" style="left:-127px;top:-127px"></div><div class="el" style="left:0;top:-180px"></div><div class="el" style="left:127px;top:-127px"></div>
+        </div>
+        <div class="nuc">11+</div>
+      </div>
+      <div class="abs lbl" style="left:250px;top:120px;font-size:54px" data-in="s3#0">Na <span style="color:#fff;font-size:36px">2 · 8 · 1</span></div>
+      <!-- Cl -->
+      <div class="abs" style="left:1360px;top:460px" data-in="s4#2" data-anim="pop">
+        <div class="shell" style="left:-100px;top:-100px;width:200px;height:200px"></div>
+        <div class="shell" style="left:-180px;top:-180px;width:360px;height:360px"></div>
+        <div class="shell" style="left:-270px;top:-270px;width:540px;height:540px;border-color:rgba(255,196,107,.35)"></div>
+        <div class="spin" data-spin="40"><div class="el" style="left:100px;top:0"></div><div class="el" style="left:-100px;top:0"></div></div>
+        <div class="spin" data-spin="-25">
+          <div class="el" style="left:180px;top:0"></div><div class="el" style="left:127px;top:127px"></div><div class="el" style="left:0;top:180px"></div><div class="el" style="left:-127px;top:127px"></div>
+          <div class="el" style="left:-180px;top:0"></div><div class="el" style="left:-127px;top:-127px"></div><div class="el" style="left:0;top:-180px"></div><div class="el" style="left:127px;top:-127px"></div>
+        </div>
+        <!-- 7 внешних электронов, место слева пустое -->
+        <div class="el" style="left:-191px;top:-191px"></div><div class="el" style="left:0;top:-270px"></div><div class="el" style="left:191px;top:-191px"></div>
+        <div class="el" style="left:270px;top:0"></div><div class="el" style="left:191px;top:191px"></div><div class="el" style="left:0;top:270px"></div><div class="el" style="left:-191px;top:191px"></div>
+        <div class="slot" style="left:-270px;top:0" data-in="s4#7" data-anim="pop" data-float></div>
+        <div class="nuc">17+</div>
+      </div>
+      <div class="abs lbl" style="left:1500px;top:120px;font-size:54px" data-in="s4#2">Cl <span style="color:#fff;font-size:36px">2 · 8 · 7</span></div>
+      <!-- одинокий электрон натрия → в пустое место хлора -->
+      <div class="orb" style="left:830px;top:460px" data-in="s3#3" data-anim="pop" data-move="s3:0,0;s5#1:260,0"></div>
+      <div class="abs note" style="left:640px;top:250px" data-in="s3#3" data-out="s5#0">жалгыз 1 электрон</div>
+      <div class="abs note" style="left:930px;top:640px" data-in="s4#7" data-out="s5#0">+1 жетпейт</div>
+      <div class="abs lbl" style="left:780px;top:360px;font-size:48px" data-in="s5#1">берди →</div>
+      <div class="abs lbl" style="left:1000px;top:540px;font-size:48px" data-in="s5#3">→ алды</div>
+    </div>
+    <div class="vign"></div>
+  </section>
+
+  <!-- C. Плюс и минус притягиваются -->
+  <section class="scene full" data-from="s6">
+    <div class="abs" style="inset:0;transform-origin:50% 55%" data-zoom="1,1.07">
+      <div class="bg" style="background:radial-gradient(ellipse at 50% 40%,#1D1636,#06070F 70%)"></div>
+      <div class="bokeh" data-n="14"></div>
+      <div class="cone" style="left:560px;top:0;width:800px;height:900px;opacity:.7"></div>
+      <div class="abs" style="left:0;right:0;top:860px;height:220px;background:#030308"></div>
+      <div class="char sil" data-char="aibek" style="left:470px;top:395px;width:260px" data-walk="s7#5-s7$:180" data-pose="s6:idle" data-expr="s6:smile" data-face="right"></div>
+      <div class="char sil" data-char="girl" style="left:1200px;top:405px;width:250px" data-walk="s7#5-s7$:-180" data-pose="s6:idle" data-expr="s6:smile" data-face="left"></div>
+      <div class="abs ion" style="left:555px;top:250px;width:90px;height:90px;background:radial-gradient(circle,#FFC46B,#C98420);font-size:70px;box-shadow:0 0 40px rgba(255,196,107,.7)" data-in="s6#1" data-anim="pop" data-move="s6:0,0;s7#5:180,0">+</div>
+      <div class="abs ion" style="left:1280px;top:250px;width:90px;height:90px;background:radial-gradient(circle,#7FB8FF,#2563D9);font-size:80px;box-shadow:0 0 40px rgba(90,170,255,.7)" data-in="s6#6" data-anim="pop" data-move="s6:0,0;s7#5:-180,0">−</div>
+      <div class="orb" style="left:960px;top:560px;width:40px;height:40px;margin:-20px" data-in="s7#6" data-anim="pop" data-float></div>
+      <div class="abs lbl" style="left:0;right:0;top:140px;text-align:center;font-size:60px" data-in="s7#6">Na⁺ ⟶ ⟵ Cl⁻</div>
+    </div>
+    <div class="vign"></div>
+  </section>
+
+  <!-- D. По отдельности опасны -->
+  <section class="scene full" data-from="s8">
+    <div class="abs" style="inset:0;transform-origin:50% 50%" data-zoom="1,1.05" data-punch="s9#5,s10#3">
+      <div class="bg" style="background:#05060C"></div>
+      <div class="abs" style="left:958px;top:0;bottom:0;width:4px;background:rgba(255,255,255,.12)"></div>
+      <div class="abs lbl" style="left:380px;top:110px;font-size:110px;color:#fff" data-in="s8#1" data-anim="fade">Na</div>
+      <div class="abs lbl" style="left:1340px;top:110px;font-size:110px;color:#fff" data-in="s8#1" data-anim="fade">Cl</div>
+      <!-- натрий в воде -->
+      <div class="abs" style="left:300px;top:440px;width:340px;height:380px;border:6px solid rgba(255,255,255,.55);border-top:none;border-radius:0 0 40px 40px;background:linear-gradient(transparent 30%,rgba(80,140,255,.35) 30%)" data-in="s9#1" data-anim="fade"></div>
+      <div class="abs" style="left:440px;top:300px;width:60px;height:46px;background:#C9CBD6;border-radius:8px" data-in="s9#1" data-move="s9#1:0,0;s9#4:0,240"></div>
+      <div class="abs" style="left:380px;top:420px;display:flex;gap:6px" data-in="s9#5" data-anim="pop">
+        <div style="width:50px;height:110px;border-radius:50% 50% 40% 40%;background:radial-gradient(circle at 50% 75%,#FFF4B0,#FFB33A 45%,#FF6A2A 80%);transform-origin:50% 100%" data-flicker></div>
+        <div style="width:70px;height:160px;border-radius:50% 50% 40% 40%;background:radial-gradient(circle at 50% 75%,#FFF4B0,#FFB33A 45%,#FF6A2A 80%);transform-origin:50% 100%" data-flicker></div>
+        <div style="width:50px;height:110px;border-radius:50% 50% 40% 40%;background:radial-gradient(circle at 50% 75%,#FFF4B0,#FFB33A 45%,#FF6A2A 80%);transform-origin:50% 100%" data-flicker></div>
+      </div>
+      <div class="abs stamp" style="left:560px;top:340px" data-in="s9#5+0.2" data-anim="pop" data-sfx="flame">ЖАЛЫН!</div>
+      <!-- хлор: ядовитое облако -->
+      <div class="abs" style="left:1180px;top:360px;width:560px;height:460px;border-radius:50%;background:radial-gradient(circle,rgba(190,230,80,.55),rgba(150,200,60,.15) 60%,rgba(0,0,0,0) 72%)" data-in="s10#1" data-anim="fade" data-float></div>
+      <div class="abs" style="left:1400px;top:520px;font-size:120px" data-in="s10#3" data-anim="pop">☠️</div>
+      <div class="abs stamp" style="left:1520px;top:380px" data-in="s10#3+0.2" data-anim="pop">УУЛУУ</div>
+    </div>
+    <div class="vign"></div>
+  </section>
+
+  <!-- E. А вместе — соль на дасторконе -->
+  <section class="scene full" data-from="s11">
+    <div class="abs" style="inset:0;transform-origin:50% 60%" data-zoom="1,1.08" data-punch="s11#7">
+      <div class="bg" style="background:radial-gradient(ellipse at 50% 25%,#2A1E14,#08070A 70%)"></div>
+      <div class="abs" style="left:956px;top:0;width:8px;height:260px;background:#000"></div>
+      <div class="abs" style="left:880px;top:250px;width:160px;height:60px;background:#000;border-radius:80px 80px 0 0"></div>
+      <div class="cone" style="left:560px;top:300px;width:800px;height:520px;opacity:1"></div>
+      <div class="abs" style="left:260px;top:760px;width:1400px;height:60px;background:#1A120C;border-radius:10px"></div>
+      <div class="abs" style="left:300px;top:740px;width:1320px;height:24px;background:repeating-linear-gradient(90deg,#8A2E2E 0 60px,#C9A04A 60px 80px);opacity:.8" data-in="s11#4" data-anim="fade"></div>
+      <!-- нан -->
+      <div class="abs" style="left:600px;top:640px;width:260px;height:110px;border-radius:50%;background:radial-gradient(circle at 50% 40%,#E9B46A,#B5752F 70%);box-shadow:inset 0 0 0 26px rgba(0,0,0,.08)" data-in="s11#4" data-anim="up"></div>
+      <!-- туз -->
+      <div class="abs" style="left:1050px;top:660px;width:220px;height:90px;border-radius:0 0 110px 110px;background:#E8E2D6" data-in="s11#6" data-anim="up"></div>
+      <div class="abs" style="left:1065px;top:630px;width:190px;height:50px;border-radius:50%;background:radial-gradient(circle,#FFFFFF,#E9EEF5);box-shadow:0 0 40px rgba(255,255,255,.6)" data-in="s11#6" data-anim="up"></div>
+      <div class="abs lbl" style="left:1060px;top:480px;font-size:90px" data-in="s11#7" data-anim="pop">NaCl</div>
+    </div>
+    <div class="vign"></div>
+  </section>
+
+  <!-- F. Для ЖРТ: эстен кал -->
+  <section class="scene full" data-from="s12">
+    <div class="abs" style="inset:0;transform-origin:50% 50%" data-zoom="1,1.04">
+      <div class="bg" style="background:radial-gradient(ellipse at 50% 45%,#141838,#06070F 70%)"></div>
+      <div class="bokeh" data-n="10"></div>
+      <div class="abs card" style="left:430px;top:140px;width:1060px" data-in="s12#0" data-anim="up">
+        <div class="lbl" style="font-size:40px;margin-bottom:10px">📌 Эстен кал</div>
+        <div class="eq" data-in="s12#0+0.3" data-anim="fade">Na − e⁻ → Na<sup>+</sup></div>
+        <div class="eq" data-in="s12#1" data-anim="fade">Cl + e⁻ → Cl<sup>−</sup></div>
+        <div class="eq" data-in="s12#2" data-anim="fade">Na<sup>+</sup> + Cl<sup>−</sup> → <span style="color:var(--gold)">NaCl</span></div>
+        <div class="note" style="display:inline-block;margin-top:16px" data-in="s12#2+0.2" data-anim="fade">иондук байланыш</div>
+      </div>
+    </div>
+    <div class="vign"></div>
+  </section>
+
+  <!-- G. Закат: тагдыр -->
+  <section class="scene full" data-from="s13">
+    <div class="abs" style="inset:0;transform-origin:50% 60%" data-zoom="1,1.06">
+      <div class="bg" style="background:linear-gradient(#2A1E5C 0%,#7A3E7A 45%,#F29A6B 78%,#FFC88A 100%)"></div>
+      <div class="abs" style="left:1180px;top:560px;width:260px;height:260px;border-radius:50%;background:#FFD9A0;box-shadow:0 0 120px rgba(255,200,130,.9)"></div>
+      <svg class="abs" style="left:0;top:700px" width="1920" height="200" viewBox="0 0 1920 200"><path d="M0 200 L0 120 Q300 40 600 110 T1200 90 T1920 120 V200Z" fill="#3A2150"/></svg>
+      <div class="abs" style="left:0;right:0;top:860px;height:220px;background:#1A0F2C"></div>
+      <div class="char sil" data-char="aibek" style="left:700px;top:395px;width:260px" data-pose="s13:give" data-expr="s13:smile" data-face="right"></div>
+      <div class="char sil" data-char="girl" style="left:880px;top:405px;width:250px" data-pose="s13:give" data-expr="s13:smile" data-face="left"></div>
+      <div class="orb" style="left:905px;top:590px;width:40px;height:40px;margin:-20px" data-float></div>
+      <!-- финальная карточка -->
+      <div class="abs" style="inset:0;background:rgba(6,7,15,.92)" data-in="s13$+0.4" data-anim="fade"></div>
+      <img class="abs" src="../../assets/brand/kainap-logo-white.png" alt="" style="left:810px;top:300px;width:300px" data-in="s13$+0.6" data-anim="fade">
+      <div class="abs" style="left:0;right:0;top:520px;text-align:center;font-weight:900;font-size:110px;color:#fff;letter-spacing:8px" data-in="s13$+0.8" data-anim="up">KAINAP</div>
+      <div class="abs" style="left:0;right:0;top:660px;text-align:center;font-weight:800;font-size:38px;color:rgba(255,255,255,.7)" data-in="s13$+1.0" data-anim="fade">химия · биология · @kainap.kg</div>
+    </div>
+  </section>
+
+  <img class="corner-logo" src="../../assets/brand/kainap-logo-white.png" alt="">
+  <div class="cap"></div>
+</div>
+<script src="build/timings.js"></script>
+<script src="../../engine/engine.js"></script>
+<script src="../../engine/chars.js"></script>
+<script src="../../engine/fx.js"></script>
+</body>
+</html>

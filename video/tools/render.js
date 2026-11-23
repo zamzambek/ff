@@ -24,6 +24,8 @@ const build = path.join(project, 'build');
   await page.goto('file://' + path.join(project, 'scene.html'));
   await page.waitForFunction(() => window.ENGINE_READY === true);
   await page.evaluate(() => document.fonts.ready);
+  const size = await page.evaluate(() => { const r = document.getElementById('stage').getBoundingClientRect(); return { width: Math.round(r.width), height: Math.round(r.height) }; });
+  await page.setViewportSize(size);
 
   if (stills) {
     const dir = path.join(build, 'stills');

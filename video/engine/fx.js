@@ -74,6 +74,21 @@
     });
   });
 
+  document.querySelectorAll('.bokeh').forEach((box) => {
+    const n = +box.dataset.n || 14;
+    const items = [];
+    for (let i = 0; i < n; i++) {
+      const d = document.createElement('div');
+      const s = 40 + rnd(i, 11) * 110;
+      const warm = rnd(i, 12) > 0.5;
+      d.style.cssText = `position:absolute;left:${rnd(i, 13) * 100}%;top:${rnd(i, 14) * 100}%;width:${s}px;height:${s}px;border-radius:50%;` +
+        `background:radial-gradient(circle,${warm ? 'rgba(255,190,120,.16)' : 'rgba(150,170,255,.12)'},rgba(0,0,0,0) 70%);border:1px solid rgba(255,255,255,.04)`;
+      box.appendChild(d);
+      items.push({ d, ph: rnd(i, 15) * 6.28, sp: 0.2 + rnd(i, 16) * 0.3 });
+    }
+    fx.push((t) => { for (const b of items) b.d.style.transform = `translate(${Math.sin(t * b.sp + b.ph) * 30}px, ${Math.cos(t * b.sp * 0.8 + b.ph) * 20}px)`; });
+  });
+
   const prev = window.CHAR_UPDATE;
   window.CHAR_UPDATE = (t) => { if (prev) prev(t); fx.forEach((f) => f(t)); };
 })();

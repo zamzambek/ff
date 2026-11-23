@@ -65,7 +65,9 @@
       el('ellipse', { cx: x + (x < 120 ? -6 : 6), cy: 405, rx: 15, ry: 8, fill: INK }, lg);
     }
     // туловище / одежда
-    if (kind === 'tae') {
+    if (kind === 'girl') {
+      el('path', { d: 'M94 178 Q120 168 146 178 L166 318 Q120 330 74 318 Z', fill: '#E5484D', ...S, 'stroke-width': 7 }, body);
+    } else if (kind === 'tae') {
       el('path', { d: 'M92 178 Q120 166 148 178 L170 330 Q120 344 70 330 Z', fill: '#FFFFFF', ...S, 'stroke-width': 7 }, body);
       el('path', { d: 'M96 182 Q120 172 144 182 L150 268 Q120 278 90 268 Z', fill: '#E5484D', ...S, 'stroke-width': 7 }, body);
     } else {
@@ -89,7 +91,13 @@
     // голова-боб
     const head = el('g', {}, g);
     el('path', { d: 'M120 46 C164 46 178 82 176 116 C174 154 152 174 120 174 C88 174 66 154 64 116 C62 82 76 46 120 46 Z', fill: '#FFE1C4', ...S, 'stroke-width': 8 }, head);
-    if (kind === 'tae') {
+    if (kind === 'girl') {
+      // волосы и две косички
+      el('path', { d: 'M64 112 C58 40 182 40 176 112 C168 82 148 70 120 70 C92 70 72 82 64 112 Z', fill: '#2A1B12', ...S, 'stroke-width': 6 }, head);
+      el('path', { d: 'M70 120 C58 170 64 220 72 260 M170 120 C182 170 176 220 168 260', stroke: '#2A1B12', 'stroke-width': 16, 'stroke-linecap': 'round', fill: 'none' }, head);
+      el('circle', { cx: 72, cy: 264, r: 8, fill: '#E5484D' }, head);
+      el('circle', { cx: 168, cy: 264, r: 8, fill: '#E5484D' }, head);
+    } else if (kind === 'tae') {
       // элечек — белый тюрбан
       el('path', { d: 'M62 108 C56 40 184 40 178 108 C170 84 70 84 62 108 Z', fill: '#fff', ...S, 'stroke-width': 7 }, head);
       el('path', { d: 'M64 104 C60 150 72 176 86 186 L90 150 C80 140 74 124 76 104 Z M176 104 C180 150 168 176 154 186 L150 150 C160 140 166 124 164 104 Z', fill: '#fff', ...S, 'stroke-width': 6 }, head);
@@ -132,7 +140,7 @@
     const move = document.createElement('div');
     move.className = 'char-move';
     root.appendChild(move);
-    const human = kind === 'aibek' || kind === 'tae';
+    const human = kind === 'aibek' || kind === 'tae' || kind === 'girl';
     const parts = human ? buildHuman(move, kind) : buildMicrobe(move, kind);
     const d = root.dataset;
     const walk = (d.walk || '').split(',').filter(Boolean).map((w) => {

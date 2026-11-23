@@ -40,6 +40,7 @@
     return t;
   }
 
+  window.AT = at;
   const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
   const outCubic = (x) => 1 - Math.pow(1 - x, 3);
   const outBack = (x) => { const c1 = 1.9, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
@@ -56,7 +57,7 @@
   scenes.forEach((s) => {
     s.el.querySelectorAll('*').forEach((el, idx) => {
       const d = el.dataset;
-      const keys = ['in', 'out', 'hl', 'dim', 'shake', 'float', 'flicker', 'smoke'];
+      const keys = ['in', 'out', 'hl', 'dim', 'shake', 'float', 'flicker', 'smoke', 'scale', 'zoom', 'punch', 'spin'];
       if (!keys.some((k) => k in d)) return;
       const it = {
         el, d,
@@ -67,6 +68,10 @@
         tshake: at(d.shake),
         anim: d.anim || 'pop',
         phase: hash(idx + (el.className || '') + s.t0) * 6.28,
+        scene: s,
+        scaleKeys: d.scale ? d.scale.split(',').map((kv) => { const i = kv.lastIndexOf(':'); return [at(kv.slice(0, i)), parseFloat(kv.slice(i + 1))]; }).sort((a, b) => a[0] - b[0]) : null,
+        zoom: d.zoom ? d.zoom.split(',').map(Number) : null,
+        punches: d.punch ? d.punch.split(',').map(at) : [],
       };
       if (it.anim === 'draw') {
         const len = el.getTotalLength ? el.getTotalLength() : 1000;
@@ -181,6 +186,27 @@
       tf += ` translate(${Math.sin(ph * 6) * 14}px, ${-ph * 110}px) scale(${0.5 + ph * 1.1})`;
       op *= ph < 0.15 ? ph / 0.15 : (1 - ph);
     }
+    if (it.scaleKeys) {
+      // масштаб по ключам "время:значение" с плавными переходами 0.35 c
+      let v = it.scaleKeys[0][1];
+      for (let i = 1; i < it.scaleKeys.length; i++) {
+        const [kt, kv] = it.scaleKeys[i];
+        if (t >= kt) v = v + (kv - v) * outBack(clamp((t - kt) / 0.35));
+      }
+      tf += ` scale(${v})`;
+    }
+    if (it.zoom) {
+      // «камера»: медленный наезд за всё время сцены + толчки на ключевых словах
+      const u = clamp((t - it.scene.t0) / Math.max(0.1, it.scene.t1 - it.scene.t0));
+      let z = it.zoom[0] + (it.zoom[1] - it.zoom[0]) * u;
+      for (const pt of it.punches) if (t >= pt) z += 0.07 * Math.exp(-(t - pt) * 7) * Math.min(1, (t - pt) * 30);
+      tf += ` scale(${z})`;
+    } else if (it.punches.length) {
+      let z = 1;
+      for (const pt of it.punches) if (t >= pt) z += 0.12 * Math.exp(-(t - pt) * 7) * Math.min(1, (t - pt) * 30);
+      tf += ` scale(${z})`;
+    }
+    if ('spin' in it.d) tf += ` rotate(${t * parseFloat(it.d.spin || 20)}deg)`;
     if (it.thl != null) el.classList.toggle('hl', t >= it.thl && (it.thlOff == null || t < it.thlOff));
     if (it.tdim != null) el.classList.toggle('dim', t >= it.tdim);
     el.style.opacity = op;
@@ -202,6 +228,7 @@
       const sc = it.el.closest('.scene');
       if (sc.style.display !== 'none') renderItem(it, t);
     });
+    if (window.CHAR_UPDATE) window.CHAR_UPDATE(t);
     renderCaption(t);
   };
 

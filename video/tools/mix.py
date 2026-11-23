@@ -38,6 +38,31 @@ def whoosh(rng):
     return noise * env * 0.09
 
 
+def beat_bed(n, bpm=118, rng=None):
+    """Лёгкий синтезированный ритм (без чужой музыки): бочка, хэт и басовая партия."""
+    out = np.zeros(n, dtype=np.float32)
+    beat = 60 / bpm
+    kl = int(SR * 0.22)
+    tk = np.arange(kl) / SR
+    kick = np.sin(2 * np.pi * np.cumsum(50 + 90 * np.exp(-tk * 30)) / SR) * np.exp(-tk * 14) * 0.55
+    hl = int(SR * 0.05)
+    hat = rng.standard_normal(hl).astype(np.float32)
+    hat = (hat - np.convolve(hat, np.ones(6) / 6, "same")) * np.exp(-np.arange(hl) / SR * 90) * 0.12
+    bass_notes = [55.0, 55.0, 65.41, 73.42]  # A1 A1 C2 D2 — по такту
+    bl = int(SR * beat * 0.9)
+    tb = np.arange(bl) / SR
+    i, t = 0, 0.0
+    while t < n / SR:
+        add(out, kick, t)
+        add(out, hat, t + beat / 2)
+        f = bass_notes[(i // 4) % 4]
+        if i % 2 == 0:
+            add(out, (np.sin(2 * np.pi * f * tb) + 0.3 * np.sin(4 * np.pi * f * tb)) * np.exp(-tb * 5) * 0.22, t)
+        i += 1
+        t += beat
+    return out
+
+
 def add(buf, clip, t):
     i = int(t * SR)
     if i < 0 or i >= len(buf):
@@ -61,6 +86,12 @@ def main(project: Path, music: str | None):
             last = t
     for t in ev["whooshes"]:
         add(out, whoosh(rng), t)
+
+    if "--beat" in sys.argv:
+        bed = beat_bed(len(out), rng=rng)
+        fade = np.minimum(1, np.arange(len(out)) / (SR * 0.5)) * np.minimum(1, (len(out) - np.arange(len(out))) / (SR * 1.2))
+        env = np.convolve(np.abs(np.pad(voice, (0, len(out) - len(voice)))), np.ones(SR // 10) / (SR // 10), "same")
+        out += bed * fade * np.where(env > 0.015, 0.38, 0.7)
 
     if music:
         raw = subprocess.run(["ffmpeg", "-v", "error", "-i", music, "-f", "s16le", "-ac", "1", "-ar", str(SR), "-"],

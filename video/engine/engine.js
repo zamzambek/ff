@@ -107,13 +107,34 @@
   chunks.forEach((c, i) => (c.end = i + 1 < chunks.length ? chunks[i + 1].start : T.total));
 
   const cap = document.querySelector('.cap');
+  const PLAIN = document.body.classList.contains('cap-plain');
+  if (PLAIN) {
+    // кинематографичный режим: одна фраза целиком (до ~2 строк), без подсветки по словам
+    chunks.length = 0;
+    T.segments.forEach((s) => {
+      let cur = null;
+      s.words.forEach((w, i) => {
+        if (!cur || cur.words.map((x) => x.w).join(' ').length > 34) { cur = { start: w.start, words: [] }; chunks.push(cur); }
+        cur.words.push(w);
+        if (/[.?!:,—]$/.test(w.w.replace(/\*/g, '')) && cur.words.map((x) => x.w).join(' ').length > 14 && i < s.words.length - 1) cur = null;
+      });
+    });
+    chunks.forEach((c, i) => (c.end = i + 1 < chunks.length ? chunks[i + 1].start : c.words[c.words.length - 1].end + 0.6));
+  }
   let capShown = null;
   function renderCaption(t) {
     const c = chunks.find((c) => t >= c.start && t < c.end);
     if (!c) { cap.style.opacity = 0; capShown = null; return; }
     if (capShown !== c) {
-      cap.innerHTML = '<div class="cap-box">' + c.words.map((w) => '<span class="w">' + w.w + '</span>').join(' ') + '</div>';
+      cap.innerHTML = '<div class="cap-box">' + c.words.map((w) =>
+        '<span class="w' + (w.w.includes('*') ? ' key' : '') + '">' + w.w.replace(/\*/g, '') + '</span>').join(' ') + '</div>';
       capShown = c;
+    }
+    if (PLAIN) {
+      const p = clamp((t - c.start) / 0.3);
+      cap.style.opacity = outCubic(p);
+      cap.style.transform = `translateY(${(1 - outCubic(p)) * 14}px)`;
+      return;
     }
     const spans = cap.querySelectorAll('.w');
     c.words.forEach((w, i) => {
@@ -240,9 +261,11 @@
 
   // моменты появления элементов — для звуковых «попов» и «вжухов»
   window.collectEvents = function () {
+    const sfx = [...document.querySelectorAll('[data-sfx]')].map((e) => ({ t: +at(e.dataset.sfxAt || e.dataset.in).toFixed(3), name: e.dataset.sfx }));
+    if (document.body.dataset.pops === 'off') return { pops: [], whooshes: [], sfx, total: T.total };
     const pops = items.filter((it) => it.tin != null && !('silent' in it.d) && !it.el.closest('[data-silent]')).map((it) => +it.tin.toFixed(3));
     const whooshes = scenes.slice(1).map((s) => +(s.t0 - 0.12).toFixed(3));
-    return { pops: [...new Set(pops)].sort((a, b) => a - b), whooshes, total: T.total };
+    return { pops: [...new Set(pops)].sort((a, b) => a - b), whooshes, sfx, total: T.total };
   };
 
   window.ENGINE_READY = true;

@@ -63,6 +63,52 @@ def beat_bed(n, bpm=118, rng=None):
     return out
 
 
+def ambient_pad(n, rng):
+    """Тихая атмосферная подложка: медленные аккорды Am–F–C–G (синтез, без чужой музыки)."""
+    out = np.zeros(n, dtype=np.float32)
+    chords = [[220.0, 261.63, 329.63], [174.61, 220.0, 261.63], [130.81, 196.0, 261.63], [196.0, 246.94, 293.66]]
+    bar = 4.0
+    L = int(SR * (bar + 1.5))
+    tt = np.arange(L) / SR
+    env = np.minimum(1, tt / 1.2) * np.minimum(1, (L / SR - tt) / 1.5)
+    i, t = 0, 0.0
+    while t < n / SR:
+        sig = np.zeros(L, dtype=np.float32)
+        for f in chords[i % 4]:
+            for det in (-0.6, 0.6):
+                sig += np.sin(2 * np.pi * (f + det) * tt) * 0.05 + np.sin(2 * np.pi * (f / 2) * tt) * 0.02
+        add(out, sig * env, t)
+        i += 1
+        t += bar
+    return out
+
+
+def rain_bed(n, rng):
+    x = rng.standard_normal(n).astype(np.float32)
+    x = np.convolve(x, np.ones(4) / 4, "same") - np.convolve(x, np.ones(60) / 60, "same")
+    return x * 0.035
+
+
+def sfx_clip(name, rng):
+    if name == "whistle":
+        L = int(SR * 1.8); tt = np.arange(L) / SR
+        f = 1900 + 500 * np.minimum(1, tt / 0.8) + 25 * np.sin(2 * np.pi * 6 * tt)
+        env = np.minimum(1, tt / 0.5) * np.minimum(1, (1.8 - tt) / 0.5)
+        breath = rng.standard_normal(L).astype(np.float32) * 0.05
+        return (np.sin(2 * np.pi * np.cumsum(f) / SR) * 0.11 + breath * 0.3) * env
+    if name == "tick":
+        L = int(SR * 0.03); tt = np.arange(L) / SR
+        return np.sin(2 * np.pi * 2500 * tt) * np.exp(-tt * 300) * 0.15
+    if name == "boom":
+        L = int(SR * 1.5); tt = np.arange(L) / SR
+        return np.sin(2 * np.pi * np.cumsum(40 + 60 * np.exp(-tt * 6)) / SR) * np.exp(-tt * 2.5) * 0.5
+    if name == "flame":
+        L = int(SR * 1.2); x = rng.standard_normal(L).astype(np.float32)
+        x = np.convolve(x, np.ones(30) / 30, "same")
+        return x * np.minimum(1, np.arange(L) / (SR * 0.3)) * np.exp(-np.arange(L) / SR * 1.5) * 0.6
+    return np.zeros(1, dtype=np.float32)
+
+
 def add(buf, clip, t):
     i = int(t * SR)
     if i < 0 or i >= len(buf):
@@ -86,6 +132,17 @@ def main(project: Path, music: str | None):
             last = t
     for t in ev["whooshes"]:
         add(out, whoosh(rng), t)
+
+    for e in ev.get("sfx", []):
+        add(out, sfx_clip(e["name"], rng), e["t"])
+    if "--ambient" in sys.argv or "--rain" in sys.argv:
+        fade = np.minimum(1, np.arange(len(out)) / (SR * 1.0)) * np.minimum(1, (len(out) - np.arange(len(out))) / (SR * 2.0))
+        bed = np.zeros(len(out), dtype=np.float32)
+        if "--ambient" in sys.argv:
+            bed += ambient_pad(len(out), rng)
+        if "--rain" in sys.argv:
+            bed += rain_bed(len(out), rng)
+        out += bed * fade
 
     if "--beat" in sys.argv:
         bed = beat_bed(len(out), rng=rng)

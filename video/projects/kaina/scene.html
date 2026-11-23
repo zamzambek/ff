@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ky">
+<head>
+<meta charset="utf-8">
+<title>Бир градус — KAINAP</title>
+<link rel="stylesheet" href="../../engine/style.css">
+<style>
+  /* Кинематографичный силуэтный стиль: ночь, дождь, тёплый контровой свет, золотое ключевое слово */
+  :root { --bg: #07091C; --gold: #FFC46B; }
+  #stage { background: #07091C; }
+  .abs { position: absolute; }
+  .scene.full { top: 0; height: 1920px; display: block; }
+  .char { position: absolute; transform-origin: 50% 100%; }
+  .sil { filter: brightness(0) drop-shadow(5px 0 1px rgba(255,170,90,.95)) drop-shadow(-4px 0 1px rgba(140,160,255,.7)) drop-shadow(0 0 18px rgba(255,170,90,.25)); }
+  .sky { position: absolute; inset: 0; background: linear-gradient(#0A0D2B 0%, #151A45 55%, #232A63 100%); }
+  .glow { position: absolute; border-radius: 50%; background: radial-gradient(circle, rgba(255,196,107,.55), rgba(255,196,107,0) 70%); }
+  .rain { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  .steam { position: absolute; width: 0; height: 0; }
+  .cap { top: auto; bottom: 330px; }
+  .cap-box { background: none; box-shadow: none; color: #fff; font-size: 60px; line-height: 1.3; text-shadow: 0 4px 18px rgba(0,0,0,.8); padding: 0; }
+  .cap-box .w { padding: 0 4px; }
+  .cap-box .w.key { color: var(--gold); }
+  .deg { font-weight: 900; color: #fff; text-shadow: 0 0 40px rgba(255,120,80,.6); line-height: 1; }
+  .day { position: absolute; width: 150px; height: 170px; background: #F4F1EA; border-radius: 14px; display: grid; place-items: center; font-weight: 900; font-size: 84px; color: #1a1a2e; box-shadow: 0 10px 30px rgba(0,0,0,.5); }
+  .day::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 34px; background: #E5484D; border-radius: 14px 14px 0 0; }
+</style>
+</head>
+<body class="cap-plain" data-pops="off">
+<div id="stage">
+  <div class="watermark" style="color:rgba(255,255,255,.025)">
+    <span>@kainap.kg</span><span>@kainap.kg</span><span>@kainap.kg</span><span>@kainap.kg</span><span>@kainap.kg</span><span>@kainap.kg</span>
+    <span>@kainap.kg</span><span>@kainap.kg</span><span>@kainap.kg</span><span>@kainap.kg</span><span>@kainap.kg</span><span>@kainap.kg</span>
+  </div>
+
+  <!-- 1. Ночная кухня: чайник на синем огне -->
+  <section class="scene full" data-from="s1">
+    <div class="abs" style="inset:0;transform-origin:50% 55%" data-zoom="1,1.08">
+      <div class="sky" style="background:linear-gradient(#06081A,#0E1233)"></div>
+      <!-- окно с ночным городом и дождём -->
+      <div class="abs" style="left:150px;top:260px;width:780px;height:700px;overflow:hidden;border:16px solid #04050F;background:linear-gradient(#0D1240,#1E2766)">
+        <svg class="abs" style="left:0;bottom:0" width="780" height="420" viewBox="0 0 780 420"><path d="M0 420 V250 h60 v-90 h70 v130 h50 v-200 h80 v170 h60 v-120 h90 v150 h50 v-230 h70 v200 h60 v-110 h80 v140 h60 V420Z" fill="#070A24"/></svg>
+        <div class="rain" data-drops="90"></div>
+        <div class="abs" style="left:382px;top:0;bottom:0;width:16px;background:#04050F"></div>
+      </div>
+      <!-- столешница и плита -->
+      <div class="abs" style="left:0;right:0;top:1180px;height:760px;background:#04050F"></div>
+      <div class="abs glow" style="left:240px;top:960px;width:600px;height:380px;background:radial-gradient(circle,rgba(90,140,255,.45),rgba(90,140,255,0) 70%)" data-flicker></div>
+      <svg class="abs sil" style="left:330px;top:820px" width="420" height="360" viewBox="0 0 420 360">
+        <path d="M110 120 Q110 90 150 86 L270 86 Q310 90 310 120 L330 330 Q330 350 300 350 L120 350 Q90 350 90 330 Z" fill="#000"/>
+        <path d="M310 170 Q380 150 410 90 L420 100 Q400 190 320 230 Z" fill="#000"/>
+        <path d="M140 86 Q210 -20 280 86" stroke="#000" stroke-width="18" fill="none"/>
+        <rect x="180" y="62" width="60" height="26" rx="10" fill="#000"/>
+      </svg>
+      <!-- синее пламя -->
+      <div class="abs" style="left:420px;top:1168px;display:flex;gap:10px">
+        <div style="width:22px;height:34px;border-radius:50% 50% 40% 40%;background:#3F7BFF;box-shadow:0 0 18px #3F7BFF;transform-origin:50% 100%" data-flicker></div>
+        <div style="width:22px;height:40px;border-radius:50% 50% 40% 40%;background:#5A8CFF;box-shadow:0 0 18px #3F7BFF;transform-origin:50% 100%" data-flicker></div>
+        <div style="width:22px;height:34px;border-radius:50% 50% 40% 40%;background:#3F7BFF;box-shadow:0 0 18px #3F7BFF;transform-origin:50% 100%" data-flicker></div>
+        <div style="width:22px;height:40px;border-radius:50% 50% 40% 40%;background:#5A8CFF;box-shadow:0 0 18px #3F7BFF;transform-origin:50% 100%" data-flicker></div>
+        <div style="width:22px;height:34px;border-radius:50% 50% 40% 40%;background:#3F7BFF;box-shadow:0 0 18px #3F7BFF;transform-origin:50% 100%" data-flicker></div>
+        <div style="width:22px;height:40px;border-radius:50% 50% 40% 40%;background:#5A8CFF;box-shadow:0 0 18px #3F7BFF;transform-origin:50% 100%" data-flicker></div>
+      </div>
+      <div class="abs" data-in="s1" data-sfx="flame"></div>
+    </div>
+  </section>
+
+  <!-- 2. Крупно: термометр медленно растёт -->
+  <section class="scene full" data-from="s2">
+    <div class="abs" style="inset:0;transform-origin:50% 50%" data-zoom="1.04,1.12">
+      <div class="sky" style="background:linear-gradient(#06081A,#0E1233)"></div>
+      <div class="abs glow" style="left:80px;top:700px;width:700px;height:600px;background:radial-gradient(circle,rgba(90,140,255,.35),rgba(90,140,255,0) 70%)" data-flicker></div>
+      <svg class="abs sil" style="left:120px;top:640px;width:620px" viewBox="0 0 420 360">
+        <path d="M110 120 Q110 90 150 86 L270 86 Q310 90 310 120 L330 330 Q330 350 300 350 L120 350 Q90 350 90 330 Z" fill="#000"/>
+        <path d="M310 170 Q380 150 410 90 L420 100 Q400 190 320 230 Z" fill="#000"/>
+        <path d="M140 86 Q210 -20 280 86" stroke="#000" stroke-width="18" fill="none"/>
+        <rect x="180" y="62" width="60" height="26" rx="10" fill="#000"/>
+      </svg>
+      <!-- термометр -->
+      <div class="abs" style="left:800px;top:380px;width:70px;height:760px;border-radius:35px;border:8px solid rgba(255,255,255,.7);background:rgba(255,255,255,.06)">
+        <div class="abs" style="left:10px;right:10px;bottom:10px;height:700px;border-radius:25px;background:linear-gradient(#FF6B4A,#E5484D);transform-origin:50% 100%" data-scale="s2:0.25,s2#3:0.45,s2#10:0.62"></div>
+      </div>
+      <div class="abs" style="left:770px;top:1150px;width:130px;height:130px;border-radius:50%;background:#E5484D;border:8px solid rgba(255,255,255,.7)"></div>
+      <div class="abs deg" style="left:610px;top:560px;font-size:70px" data-in="s2#3" data-anim="fade" data-out="s2#9">40°</div>
+      <div class="abs deg" style="left:610px;top:460px;font-size:70px" data-in="s2#9" data-anim="fade">70°</div>
+    </div>
+  </section>
+
+  <!-- 3. Стол под лампой, календарь листается -->
+  <section class="scene full" data-from="s3">
+    <div class="abs" style="inset:0;transform-origin:50% 55%" data-zoom="1,1.07">
+      <div class="sky" style="background:linear-gradient(#05060F,#0B0D22)"></div>
+      <div class="abs" style="left:140px;top:300px;width:800px;height:560px;overflow:hidden;border:14px solid #030409;background:linear-gradient(#0D1240,#1A2260)">
+        <div class="rain" data-drops="80"></div>
+      </div>
+      <!-- лампа и конус света -->
+      <div class="abs" style="left:536px;top:0;width:8px;height:620px;background:#000"></div>
+      <div class="abs" style="left:450px;top:600px;width:180px;height:70px;background:#000;border-radius:90px 90px 0 0"></div>
+      <div class="abs" style="left:240px;top:665px;width:600px;height:700px;background:linear-gradient(rgba(255,214,140,.38),rgba(255,214,140,0));clip-path:polygon(40% 0,60% 0,100% 100%,0 100%)"></div>
+      <div class="abs" style="left:0;right:0;top:1200px;height:740px;background:#030409"></div>
+      <div class="abs" style="left:420px;top:1170px;width:240px;height:34px;background:#F4EBDA;border-radius:6px;box-shadow:0 0 40px rgba(255,214,140,.6)"></div>
+      <div class="char sil" data-char="aibek" style="left:120px;top:880px;width:330px" data-pose="s3:point" data-expr="s3:sus" data-face="right"></div>
+      <!-- календарь: дни бегут -->
+      <div class="day" style="left:800px;top:960px" data-in="s3#3" data-anim="fade" data-out="s3#4">1</div>
+      <div class="day" style="left:800px;top:960px" data-in="s3#4" data-anim="fade" data-out="s3#5">7</div>
+      <div class="day" style="left:800px;top:960px" data-in="s3#5" data-anim="fade" data-out="s3#6">15</div>
+      <div class="day" style="left:800px;top:960px" data-in="s3#6" data-anim="fade" data-out="s3#7">23</div>
+      <div class="day" style="left:800px;top:960px" data-in="s3#7" data-anim="fade">30</div>
+    </div>
+  </section>
+
+  <!-- 4. Окна гаснут, одно горит -->
+  <section class="scene full" data-from="s4">
+    <div class="abs" style="inset:0;transform-origin:50% 45%" data-zoom="1,1.1">
+      <div class="sky"></div>
+      <div class="abs" style="left:770px;top:260px;width:120px;height:120px;border-radius:50%;background:#F4F1EA;box-shadow:0 0 80px rgba(244,241,234,.5)"></div>
+      <div class="abs" style="left:110px;top:420px;width:860px;height:1500px;background:#05061A;padding:60px 50px">
+        <div class="windows" data-cols="7" data-rows="16" data-off="s4#1" data-keep="80"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Ночная дорога: остановился -->
+  <section class="scene full" data-from="s5">
+    <div class="abs" style="inset:0;transform-origin:50% 55%" data-zoom="1,1.06">
+      <div class="sky"></div>
+      <svg class="abs" style="left:0;top:700px" width="1080" height="460" viewBox="0 0 1080 460"><path d="M0 460 V300 h70 v-110 h60 v150 h80 v-230 h60 v200 h90 v-140 h70 v170 h60 v-260 h80 v230 h70 v-120 h90 v150 h70 v-90 h60 v100 h50 V460Z" fill="#0A0C26"/></svg>
+      <div class="abs" style="left:0;right:0;top:1150px;height:800px;background:#03040C"></div>
+      <div class="abs" style="left:0;right:0;top:1150px;height:4px;background:rgba(255,196,107,.35)"></div>
+      <div class="abs glow" style="left:620px;top:700px;width:500px;height:500px"></div>
+      <div class="rain" data-drops="160"></div>
+      <div class="char sil" data-char="aibek" style="left:300px;top:830px;width:200px" data-walk="s5#0-s5#4:-420" data-pose="s5:idle,s5#5:shrug" data-expr="s5:tired" data-face="right"></div>
+      <div class="abs deg" style="left:600px;top:460px;font-size:200px;color:#FF7B5A" data-in="s5#6" data-anim="pop">99°</div>
+    </div>
+  </section>
+
+  <!-- 6. Один градус -->
+  <section class="scene full" data-from="s6">
+    <div class="abs" style="inset:0;transform-origin:50% 40%" data-zoom="1.05,1.18">
+      <div class="sky" style="background:#05060F"></div>
+      <div class="abs" style="left:470px;top:260px;width:140px;height:1000px;border-radius:70px;border:12px solid rgba(255,255,255,.7);background:rgba(255,255,255,.05)">
+        <div class="abs" style="left:16px;right:16px;bottom:16px;height:930px;border-radius:50px;background:linear-gradient(#FF6B4A,#E5484D);transform-origin:50% 100%" data-scale="s6:0.97"></div>
+      </div>
+      <div class="abs" style="left:430px;top:290px;width:220px;height:6px;background:var(--gold);box-shadow:0 0 20px var(--gold)"></div>
+      <div class="abs deg" style="left:680px;top:250px;font-size:64px;color:var(--gold)">100°</div>
+      <div class="abs deg" style="left:680px;top:320px;font-size:64px;color:#FF7B5A">99°</div>
+      <div class="abs deg" style="left:150px;top:270px;font-size:120px;color:var(--gold)" data-in="s6#2" data-anim="pop" data-float>+1°</div>
+    </div>
+  </section>
+
+  <!-- 7. Пар! -->
+  <section class="scene full" data-from="s7">
+    <div class="abs" style="inset:0;transform-origin:50% 55%" data-zoom="1,1.1" data-punch="s7#6">
+      <div class="sky" style="background:linear-gradient(#06081A,#0E1233)"></div>
+      <div class="abs" style="inset:0;background:radial-gradient(circle at 50% 50%,rgba(255,196,107,.55),rgba(255,196,107,0) 60%)" data-in="s7#6" data-anim="fade"></div>
+      <svg class="abs sil" style="left:230px;top:760px;width:620px" viewBox="0 0 420 360">
+        <path d="M110 120 Q110 90 150 86 L270 86 Q310 90 310 120 L330 330 Q330 350 300 350 L120 350 Q90 350 90 330 Z" fill="#000"/>
+        <path d="M310 170 Q380 150 410 90 L420 100 Q400 190 320 230 Z" fill="#000"/>
+        <path d="M140 86 Q210 -20 280 86" stroke="#000" stroke-width="18" fill="none"/>
+        <rect x="180" y="62" width="60" height="26" rx="10" fill="#000"/>
+      </svg>
+      <div class="steam" style="left:830px;top:880px" data-puffs="14" data-power="1.6" data-from="s7#5"></div>
+      <div class="steam" style="left:540px;top:800px" data-puffs="10" data-power="1.2" data-from="s7#6"></div>
+      <div class="abs deg" style="left:0;right:0;top:420px;text-align:center;font-size:180px;color:var(--gold)" data-in="s7#6" data-anim="pop" data-sfx="whistle" data-sfx-at="s7#5">100°</div>
+    </div>
+  </section>
+
+  <!-- 8. Рассвет: иди дальше -->
+  <section class="scene full" data-from="s8">
+    <div class="abs" style="inset:0;transform-origin:50% 60%" data-zoom="1,1.08">
+      <div class="sky" style="background:linear-gradient(#2A1E5C 0%,#7A3E7A 45%,#F29A6B 80%,#FFC88A 100%)"></div>
+      <div class="abs" style="left:390px;top:860px;width:300px;height:300px;border-radius:50%;background:#FFD9A0;box-shadow:0 0 120px rgba(255,200,130,.9)" data-in="s8" data-anim="up"></div>
+      <div class="abs" style="left:520px;top:0;width:40px;height:1100px;background:linear-gradient(rgba(255,230,190,.0),rgba(255,230,190,.35));transform:rotate(18deg);transform-origin:50% 100%"></div>
+      <div class="abs" style="left:520px;top:0;width:40px;height:1100px;background:linear-gradient(rgba(255,230,190,.0),rgba(255,230,190,.3));transform:rotate(-22deg);transform-origin:50% 100%"></div>
+      <svg class="abs" style="left:0;top:860px" width="1080" height="360" viewBox="0 0 1080 360"><path d="M0 360 V200 h60 v-80 h70 v120 h60 v-190 h80 v170 h50 v-110 h90 v150 h60 v-220 h20 v-30 h10 v30 h20 v220 h60 v-130 h70 v160 h60 v-90 h80 v120 h50 v-60 h80 V360Z" fill="#2A1840"/></svg>
+      <div class="abs" style="left:0;right:0;top:1210px;height:720px;background:#1A0F2C"></div>
+      <div class="char sil" data-char="aibek" style="left:240px;top:930px;width:180px" data-walk="s8-s9$:-200" data-pose="s8:idle" data-expr="s8:smile" data-face="right"></div>
+    </div>
+  </section>
+
+  <!-- 9. KAINAP -->
+  <section class="scene full" data-from="s9$+0.25">
+    <div class="abs" style="inset:0;transform-origin:50% 45%" data-zoom="1,1.05">
+      <div class="sky" style="background:radial-gradient(circle at 50% 42%,#1B1F6B,#07091C 70%)"></div>
+      <div class="steam" style="left:540px;top:600px" data-puffs="10" data-power="0.8"></div>
+      <img class="abs" src="../../assets/brand/kainap-logo-white.png" alt="" style="left:340px;top:640px;width:400px" data-in="s9$+0.3" data-anim="fade">
+      <div class="abs" style="left:0;right:0;top:930px;text-align:center;font-weight:900;font-size:120px;color:#fff;letter-spacing:8px" data-in="s9$+0.5" data-anim="up">KAINAP</div>
+      <div class="abs" style="left:0;right:0;top:1080px;text-align:center;font-weight:800;font-size:40px;color:rgba(255,255,255,.7)" data-in="s9$+0.8" data-anim="fade">химия · биология · @kainap.kg</div>
+    </div>
+  </section>
+
+  <div class="cap"></div>
+</div>
+<script src="build/timings.js"></script>
+<script src="../../engine/engine.js"></script>
+<script src="../../engine/chars.js"></script>
+<script src="../../engine/fx.js"></script>
+</body>
+</html>

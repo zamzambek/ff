@@ -3,7 +3,7 @@
 #   tools/append_outro.sh <ролик.mp4> <секунда_обрезки> <выход.mp4> [концовка.mp4]
 # секунда_обрезки — где заканчивается основная часть (до собственной финальной карточки ролика).
 set -euo pipefail
-IN="$1"; CUT="$2"; OUT="$3"; OUTRO="${4:-$(dirname "$0")/../projects/outro2/build/outro2.mp4}"
+IN="$1"; CUT="$2"; OUT="$3"; OUTRO="${4:-$(dirname "$0")/../projects/outro3/build/outro3.mp4}"
 X=$(python3 -c "print($CUT-0.6)")
 ffmpeg -v error -y -i "$IN" -i "$OUTRO" -filter_complex \
  "[0:v]trim=0:$CUT,setpts=PTS-STARTPTS,fps=30,format=yuv420p[v0];[1:v]fps=30,format=yuv420p,setpts=PTS-STARTPTS[v1];\

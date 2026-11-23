@@ -1,0 +1,39 @@
+{
+  "title": "KAINAP — атмосферная концовка «Символ → логотип» (16:9)",
+  "language": "ky",
+  "note": "Продолжает силуэт-ролики без смены настроения. CTA — бесплатный пробный урок по ссылке в профиле.",
+  "tts": {
+    "provider": "elevenlabs",
+    "voice_id": "nPczCjzI2devNBz1zQrb",
+    "voice_name": "Brian",
+    "model_id": "eleven_v4",
+    "language_code": "ky",
+    "voice_settings": {
+      "speed": 0.97
+    }
+  },
+  "lead_seconds": 1.0,
+  "gap_seconds": 0.3,
+  "max_pause_seconds": 0.4,
+  "tail_seconds": 2.6,
+  "segments": [
+    {
+      "id": "s1",
+      "show": "Химия — бул жашоонун *тили*."
+    },
+    {
+      "id": "s2",
+      "show": "Аны жаттабай, *түшүнгүң* келсе —"
+    },
+    {
+      "id": "s3",
+      "show": "*KAINAP* менен баштап көр.",
+      "say": "Кайнап менен баштап көр."
+    },
+    {
+      "id": "s4",
+      "show": "Биринчи сабак — *акысыз*.",
+      "context": false
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ky">
+<head>
+<meta charset="utf-8">
+<title>KAINAP — финал</title>
+<link rel="stylesheet" href="../../engine/style.css">
+<style>
+  html, body, #stage { width: 1920px !important; height: 1080px !important; }
+  :root { --gold: #FFC46B; }
+  #stage { background: #06070F; }
+  .abs { position: absolute; }
+  .scene.full { top: 0; height: 1080px; display: block; }
+  .char { position: absolute; transform-origin: 50% 100%; }
+  .sil { filter: brightness(0) drop-shadow(5px 0 1px rgba(255,170,90,.95)) drop-shadow(-4px 0 1px rgba(140,160,255,.7)) drop-shadow(0 0 18px rgba(255,170,90,.25)); }
+  .bg { position: absolute; inset: 0; }
+  .vign { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 45%, rgba(0,0,0,.75) 100%); pointer-events: none; }
+  .bokeh { position: absolute; inset: 0; overflow: hidden; }
+  .steam { position: absolute; width: 0; height: 0; }
+  .cone { position: absolute; background: linear-gradient(rgba(255,210,150,.34), rgba(255,210,150,0)); clip-path: polygon(45% 0, 55% 0, 100% 100%, 0 100%); }
+  .bub { position: absolute; border-radius: 50%; border: 3px solid rgba(255,255,255,.85); }
+  .cap { top: auto; bottom: 60px; left: 200px; right: 200px; }
+  .cap-box { background: none; box-shadow: none; color: #fff; font-size: 50px; line-height: 1.3; text-shadow: 0 4px 18px rgba(0,0,0,.9); padding: 0; max-width: 1500px; }
+  .cap-box .w { padding: 0 3px; }
+  .cap-box .w.key { color: var(--gold); }
+  .corner-logo { position: absolute; right: 50px; top: 40px; width: 110px; opacity: .55; z-index: 8; }
+  .btn { display: inline-flex; align-items: center; gap: 14px; font-weight: 900; font-size: 44px; color: #1a1206; background: var(--gold); border-radius: 999px; padding: 16px 44px; box-shadow: 0 0 50px rgba(255,196,107,.45); }
+</style>
+</head>
+<body class="cap-plain" data-pops="off">
+<div id="stage">
+
+  <section class="scene full" data-from="s1">
+    <div class="abs" style="inset:0;transform-origin:62% 55%" data-zoom="1,1.1" data-punch="s3#3">
+      <div class="bg" style="background:radial-gradient(ellipse at 55% 30%,#1A1430,#06070F 70%)"></div>
+      <div class="bokeh" data-n="12"></div>
+      <!-- тёплая вспышка на «кайнатабыз» -->
+      <div class="abs" style="inset:0;background:radial-gradient(circle at 63% 55%,rgba(255,196,107,.5),rgba(255,196,107,0) 55%)" data-in="s3#3" data-anim="fade"></div>
+      <!-- лампа -->
+      <div class="abs" style="left:956px;top:0;width:8px;height:230px;background:#000"></div>
+      <div class="abs" style="left:880px;top:220px;width:160px;height:60px;background:#000;border-radius:80px 80px 0 0"></div>
+      <div class="cone" style="left:560px;top:270px;width:800px;height:560px"></div>
+      <div class="abs" style="left:0;right:0;top:820px;height:260px;background:#030308"></div>
+      <div class="abs" style="left:520px;top:800px;width:880px;height:26px;background:#120D0A;border-radius:6px"></div>
+      <div class="abs" style="left:780px;top:778px;width:200px;height:24px;background:#F4EBDA;border-radius:4px;box-shadow:0 0 40px rgba(255,214,140,.6)"></div>
+      <div class="char sil" data-char="aibek" style="left:470px;top:380px;width:250px" data-pose="s1:point,s3#3:cheer" data-expr="s1:sus,s3#3:happy" data-face="right"></div>
+      <!-- колба -->
+      <div class="abs" style="left:1100px;top:430px;width:260px;height:380px">
+        <svg width="260" height="380" viewBox="0 0 260 380" style="position:absolute;inset:0;overflow:visible">
+          <defs><clipPath id="fl"><path d="M100 20 h60 v120 a110 110 0 1 1 -60 0 z"/></clipPath></defs>
+          <g clip-path="url(#fl)">
+            <rect x="0" y="0" width="260" height="380" fill="rgba(255,255,255,.04)"/>
+            <rect x="0" y="190" width="260" height="200" fill="#3A3CF4" data-in="s1" data-anim="fade"/>
+          </g>
+          <path d="M100 20 h60 v120 a110 110 0 1 1 -60 0 z" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="6"/>
+          <path d="M90 20 h80" stroke="rgba(255,255,255,.85)" stroke-width="8" stroke-linecap="round"/>
+        </svg>
+        <!-- пузыри: сначала редкие, на «кайнатабыз» — кипение -->
+        <div class="bub" style="left:110px;top:300px;width:18px;height:18px" data-smoke></div>
+        <div class="bub" style="left:150px;top:310px;width:14px;height:14px" data-in="s2" data-smoke></div>
+        <div class="bub" style="left:90px;top:320px;width:22px;height:22px" data-in="s3#3" data-smoke></div>
+        <div class="bub" style="left:130px;top:330px;width:26px;height:26px" data-in="s3#3" data-smoke></div>
+        <div class="bub" style="left:170px;top:300px;width:20px;height:20px" data-in="s3#3" data-smoke></div>
+        <div class="bub" style="left:70px;top:290px;width:16px;height:16px" data-in="s3#3" data-smoke></div>
+        <div class="steam" style="left:130px;top:10px" data-puffs="14" data-power="1.3" data-from="s3#3"></div>
+      </div>
+      <div class="abs" style="left:1060px;top:830px;width:340px;height:30px;display:flex;justify-content:center;gap:8px">
+        <div style="width:22px;height:34px;border-radius:50% 50% 40% 40%;background:#3F7BFF;box-shadow:0 0 18px #3F7BFF;transform-origin:50% 100%" data-flicker></div>
+        <div style="width:22px;height:42px;border-radius:50% 50% 40% 40%;background:#5A8CFF;box-shadow:0 0 18px #3F7BFF;transform-origin:50% 100%" data-flicker></div>
+        <div style="width:22px;height:34px;border-radius:50% 50% 40% 40%;background:#3F7BFF;box-shadow:0 0 18px #3F7BFF;transform-origin:50% 100%" data-flicker></div>
+      </div>
+      <img class="abs" src="../../assets/brand/kainap-logo-white.png" alt="" style="left:1450px;top:380px;width:240px" data-in="s2#0" data-anim="fade" data-float>
+      <div class="abs" data-in="s3#3" data-sfx="whistle"></div>
+    </div>
+    <div class="vign"></div>
+  </section>
+
+  <!-- финальная карточка -->
+  <section class="scene full" data-from="s4">
+    <div class="abs" style="inset:0;transform-origin:50% 45%" data-zoom="1,1.04">
+      <div class="bg" style="background:radial-gradient(circle at 50% 40%,#1B1F6B,#06070F 70%)"></div>
+      <div class="bokeh" data-n="14"></div>
+      <div class="steam" style="left:960px;top:250px" data-puffs="10" data-power="0.7"></div>
+      <img class="abs" src="../../assets/brand/kainap-logo-white.png" alt="" style="left:800px;top:200px;width:320px" data-in="s4" data-anim="fade">
+      <div class="abs" style="left:0;right:0;top:420px;text-align:center;font-weight:900;font-size:120px;color:#fff;letter-spacing:10px" data-in="s4+0.15" data-anim="up">KAINAP</div>
+      <div class="abs" style="left:0;right:0;top:570px;text-align:center;font-weight:800;font-size:40px;color:rgba(255,255,255,.75)" data-in="s4+0.3" data-anim="fade">химия · биология · нөлдөн баштап</div>
+      <div class="abs" style="left:0;right:0;top:660px;text-align:center" data-in="s4#1" data-anim="pop"><div class="btn">💬 Директке жаз · @kainap.kg</div></div>
+    </div>
+    <div class="vign"></div>
+  </section>
+
+  <img class="corner-logo" src="../../assets/brand/kainap-logo-white.png" alt="">
+  <div class="cap"></div>
+</div>
+<script src="build/timings.js"></script>
+<script src="../../engine/engine.js"></script>
+<script src="../../engine/chars.js"></script>
+<script src="../../engine/fx.js"></script>
+</body>
+</html>

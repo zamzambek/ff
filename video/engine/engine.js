@@ -57,7 +57,7 @@
   scenes.forEach((s) => {
     s.el.querySelectorAll('*').forEach((el, idx) => {
       const d = el.dataset;
-      const keys = ['in', 'out', 'hl', 'dim', 'shake', 'float', 'flicker', 'smoke', 'scale', 'zoom', 'punch', 'spin', 'orbit', 'move', 'cam'];
+      const keys = ['in', 'out', 'hl', 'dim', 'shake', 'float', 'flicker', 'smoke', 'scale', 'zoom', 'punch', 'spin', 'orbit', 'move', 'cam', 'beat'];
       if (!keys.some((k) => k in d)) return;
       const it = {
         el, d,
@@ -214,10 +214,10 @@
       let [, z, cx, cy] = it.camKeys[0];
       for (let i = 1; i < it.camKeys.length; i++) {
         const [kt, kz, kx, ky, kd] = it.camKeys[i];
-        const u = clamp((t - kt) / (kd || 0.9)); const e = u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
+        const u = clamp((t - kt) / (kd || 1.8)); const e = 0.5 - 0.5 * Math.cos(Math.PI * u);
         z += (kz - z) * e; cx += (kx - cx) * e; cy += (ky - cy) * e;
       }
-      z *= 1 + 0.012 * (t - it.scene.t0);
+      z *= 1 + 0.008 * (t - it.scene.t0);
       const W = 1920, H = 1080;
       z = Math.max(1, z);
       cx = Math.min(W - W / 2 / z, Math.max(W / 2 / z, cx));   // камера не выходит за края мира
@@ -262,6 +262,12 @@
       const a = 2 * Math.PI * (t * sp + (ph || 0));
       tf = `translate(${Math.cos(a) * rx}px, ${Math.sin(a) * ry}px) ` + tf;
     }
+    if ('beat' in it.d) {
+      const per = 60 / (parseFloat(it.d.beat) || 70);
+      const ph = ((t % per) + per) % per;
+      const bump = (x, c, w) => Math.exp(-((x - c) * (x - c)) / (2 * w * w));
+      tf += ` scale(${1 + 0.16 * bump(ph, 0.08, 0.045) + 0.09 * bump(ph, 0.3, 0.05)})`;
+    }
     if ('spin' in it.d) tf += ` rotate(${t * parseFloat(it.d.spin || 20)}deg)`;
     if (it.thl != null) el.classList.toggle('hl', t >= it.thl && (it.thlOff == null || t < it.thlOff));
     if (it.tdim != null) el.classList.toggle('dim', t >= it.tdim);
@@ -269,8 +275,21 @@
     el.style.transform = tf;
   }
 
+  const XF = parseFloat(document.body.dataset.xfade || '0');
   window.renderAt = function (t) {
     renderBackground(t);
+    if (XF > 0) {
+      // растворение: следующая сцена проявляется поверх предыдущей, без провала в чёрное
+      scenes.forEach((s, i) => {
+        const a = i === 0 ? -1 : s.t0 - XF;
+        const visible = t >= a && t < s.t1;
+        s.el.style.display = visible ? 'block' : 'none';
+        if (!visible) return;
+        const u = i === 0 ? 1 : clamp((t - a) / XF);
+        s.el.style.opacity = u * u * (3 - 2 * u);
+        s.el.style.transform = '';
+      });
+    } else
     scenes.forEach((s, i) => {
       const visible = t >= s.t0 - 0.01 && t < s.t1;
       s.el.style.display = visible ? 'flex' : 'none';

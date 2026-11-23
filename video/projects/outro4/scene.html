@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ky">
+<head>
+<meta charset="utf-8">
+<title>KAINAP — концовка «Сердце → логотип»</title>
+<link rel="stylesheet" href="../../engine/style.css">
+<style>
+  html, body, #stage { width: 1920px !important; height: 1080px !important; }
+  :root { --gold: #FFC46B; --heart: #FF3B5C; }
+  #stage { background: #06070F; }
+  .abs { position: absolute; }
+  .scene.full { top: 0; height: 1080px; display: block; }
+  .bokeh { position: absolute; inset: 0; overflow: hidden; }
+  .vign { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 42%, rgba(0,0,0,0) 40%, rgba(0,0,0,.8) 100%); pointer-events: none; }
+  .orb { position: absolute; width: 46px; height: 46px; margin: -23px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #FFE0B0, var(--gold) 55%, #C9781A); box-shadow: 0 0 30px 10px rgba(255,196,107,.55), 0 0 100px 40px rgba(255,196,107,.22); }
+  .trail { position: absolute; width: 4px; margin-left: -2px; background: linear-gradient(rgba(255,196,107,.7), rgba(255,196,107,0)); transform-origin: 50% 0; }
+  .gl { fill: none; stroke: var(--gold); stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 10px rgba(255,196,107,.9)); }
+  .heart { position: absolute; filter: drop-shadow(0 0 14px rgba(255,59,92,.95)) drop-shadow(0 0 50px rgba(255,59,92,.55)); }
+  .halo { position: absolute; width: 420px; height: 420px; margin: -210px; border-radius: 50%; background: radial-gradient(circle, rgba(255,70,100,.35), rgba(255,70,100,0) 65%); }
+  .spark-dot { position: absolute; border-radius: 50%; background: radial-gradient(circle,#FFF4D6,#FFC46B 60%,rgba(255,196,107,0)); box-shadow: 0 0 14px rgba(255,196,107,.9); }
+  .star { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: #fff; }
+  .cap { top: auto; bottom: 60px; left: 200px; right: 200px; }
+  .cap-box { background: none; box-shadow: none; color: #fff; font-size: 50px; line-height: 1.3; text-shadow: 0 4px 18px rgba(0,0,0,.9); padding: 0; max-width: 1500px; }
+  .cap-box .w { padding: 0 3px; }
+  .cap-box .w.key { color: var(--gold); }
+</style>
+</head>
+<body class="cap-plain" data-pops="off">
+<div id="stage">
+  <section class="scene full" data-from="s1-1.0">
+    <div class="abs" style="inset:0;transform-origin:50% 40%" data-zoom="1,1.06">
+      <div class="abs" style="inset:0;background:linear-gradient(#12051A 0%,#240A22 55%,#3A0E22 100%)"></div>
+      <div class="abs" style="inset:0;background:radial-gradient(ellipse at 50% 32%,#1B1F5A,rgba(6,7,15,0) 70%)" data-in="s1#4" data-anim="fade"></div>
+      <div class="bokeh" data-n="16"></div>
+      <div class="star" style="left:200px;top:120px" data-float></div><div class="star" style="left:520px;top:80px"></div>
+      <div class="star" style="left:1300px;top:140px" data-float></div><div class="star" style="left:1650px;top:90px"></div>
+      <div class="star" style="left:1500px;top:300px"></div><div class="star" style="left:330px;top:340px" data-float></div>
+      <!-- сердце поднимается из финального кадра истории -->
+      <div class="halo" style="left:955px;top:600px" data-move="s1-1.0:0,0;s1-0.9:5,-220,2.4" data-out="s1#4"></div>
+      <div class="heart" data-beat="66" style="left:955px;top:600px;width:84px;height:77px;margin:-38px 0 0 -42px" data-move="s1-1.0:0,0;s1-0.9:5,-220,2.4" data-scale="s1-1:1,s1#3:1.25" data-out="s1#4" data-sfx="heartbeat" data-sfx-at="s1#2"></div>
+      <!-- вспышка и искры -->
+      <div class="abs" style="left:760px;top:180px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(255,220,170,.9),rgba(255,120,120,.25) 40%,rgba(0,0,0,0) 70%)" data-in="s1#4" data-anim="pop" data-out="s1#4+0.25"></div>
+      <div class="spark-dot" style="left:960px;top:380px;width:7px;height:7px;margin:-3px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:240,-9,1.1;s2#2:-42,-80,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:8px;height:8px;margin:-4px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:396,53,1.1;s2#2:120,79,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:8px;height:8px;margin:-4px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:251,80,1.1;s2#2:-131,-92,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:8px;height:8px;margin:-4px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:292,177,1.1;s2#2:123,88,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:13px;height:13px;margin:-7px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:241,173,1.1;s2#2:93,102,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:7px;height:7px;margin:-4px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:194,196,1.1;s2#2:69,12,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:10px;height:10px;margin:-5px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:75,158,1.1;s2#2:174,105,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:13px;height:13px;margin:-6px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:58,278,1.1;s2#2:29,109,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:7px;height:7px;margin:-4px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:-32,211,1.1;s2#2:40,-8,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:11px;height:11px;margin:-6px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:-104,258,1.1;s2#2:-183,-108,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:14px;height:14px;margin:-7px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:-151,203,1.1;s2#2:-12,-31,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:8px;height:8px;margin:-4px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:-188,166,1.1;s2#2:-119,44,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:13px;height:13px;margin:-7px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:-292,158,1.1;s2#2:-72,25,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:11px;height:11px;margin:-5px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:-204,78,1.1;s2#2:-108,79,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:6px;height:6px;margin:-3px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:-276,52,1.1;s2#2:-129,-1,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:14px;height:14px;margin:-7px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:-399,-11,1.1;s2#2:182,71,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:9px;height:9px;margin:-5px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:-276,-22,1.1;s2#2:186,82,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:8px;height:8px;margin:-4px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:-301,-117,1.1;s2#2:127,-44,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:9px;height:9px;margin:-4px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:-202,-100,1.1;s2#2:-47,130,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:9px;height:9px;margin:-4px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:-169,-108,1.1;s2#2:-132,84,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:8px;height:8px;margin:-4px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:-128,-142,1.1;s2#2:193,-10,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:7px;height:7px;margin:-4px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:-90,-149,1.1;s2#2:-133,56,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:7px;height:7px;margin:-3px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:-62,-218,1.1;s2#2:-100,139,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:10px;height:10px;margin:-5px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:41,-261,1.1;s2#2:-36,137,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:8px;height:8px;margin:-4px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:78,-204,1.1;s2#2:-185,-10,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:8px;height:8px;margin:-4px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:219,-223,1.1;s2#2:-1,-112,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:7px;height:7px;margin:-4px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:165,-142,1.1;s2#2:-107,106,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:9px;height:9px;margin:-5px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:305,-187,1.1;s2#2:26,138,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:10px;height:10px;margin:-5px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:331,-82,1.1;s2#2:116,74,1.3" data-out="s3#0+0.3"></div>
+<div class="spark-dot" style="left:960px;top:380px;width:13px;height:13px;margin:-7px" data-in="s1#4" data-anim="fade" data-move="s1#4:0,0;s1#4+0.02:251,-53,1.1;s2#2:150,114,1.3" data-out="s3#0+0.3"></div>
+      <!-- логотип собирается из искр -->
+      <div class="abs" style="left:610px;top:180px;width:700px;height:450px;border-radius:50%;background:radial-gradient(circle,rgba(255,196,107,.22),rgba(255,196,107,0) 65%)" data-in="s2#2" data-anim="fade"></div>
+      <img class="abs" src="../../assets/brand/kainap-logo-white.png" alt="" style="left:750px;top:248px;width:420px;filter:drop-shadow(0 0 22px rgba(255,196,107,.75))" data-in="s3#0" data-anim="fade">
+      <div class="abs" style="left:0;right:0;top:565px;text-align:center;font-weight:900;font-size:96px;color:#fff;letter-spacing:14px;text-shadow:0 0 30px rgba(255,196,107,.35)" data-in="s3#0+0.15" data-anim="fade">KAINAP</div>
+      <div class="abs" style="left:0;right:0;top:690px;text-align:center;font-weight:800;font-size:36px;color:rgba(255,255,255,.65);letter-spacing:4px" data-in="s3#2" data-anim="fade">химия · биология</div>
+      <div class="abs" style="left:0;right:0;top:760px;text-align:center;font-weight:900;font-size:44px;color:var(--gold)" data-in="s4#3" data-anim="up">акысыз сынамык сабак — профилде · @kainap.kg</div>
+    </div>
+    <div class="vign"></div>
+  </section>
+  <div class="cap"></div>
+</div>
+<script src="build/timings.js"></script>
+<script src="../../engine/engine.js"></script>
+<script src="../../engine/fx.js"></script>
+</body>
+</html>

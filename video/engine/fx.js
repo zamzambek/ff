@@ -130,6 +130,14 @@
     }
   });
 
+  // светящееся сердце: <div class="heart"> (размер — через width/height)
+  document.querySelectorAll('.heart').forEach((h, i) => {
+    h.innerHTML = `<svg viewBox="0 0 100 92" width="100%" height="100%" style="overflow:visible;display:block">
+      <defs><radialGradient id="hg${i}" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#FFE3E8"/><stop offset=".45" stop-color="#FF4D6D"/><stop offset="1" stop-color="#B0102C"/></radialGradient></defs>
+      <path d="M50 88 C20 66 2 50 2 28 C2 12 14 2 28 2 C38 2 46 8 50 16 C54 8 62 2 72 2 C86 2 98 12 98 28 C98 50 80 66 50 88 Z" fill="url(#hg${i})"/>
+      <ellipse cx="30" cy="24" rx="11" ry="7" fill="rgba(255,255,255,.55)" transform="rotate(-30 30 24)"/></svg>`;
+  });
+
   const prev = window.CHAR_UPDATE;
   window.CHAR_UPDATE = (t) => { if (prev) prev(t); fx.forEach((f) => f(t)); };
 })();

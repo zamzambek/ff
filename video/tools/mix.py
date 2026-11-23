@@ -96,6 +96,12 @@ def sfx_clip(name, rng):
         env = np.minimum(1, tt / 0.5) * np.minimum(1, (1.8 - tt) / 0.5)
         breath = rng.standard_normal(L).astype(np.float32) * 0.05
         return (np.sin(2 * np.pi * np.cumsum(f) / SR) * 0.11 + breath * 0.3) * env
+    if name == "riser":
+        L = int(SR * 1.25); tt = np.arange(L) / SR
+        x = rng.standard_normal(L).astype(np.float32)
+        k = np.convolve(x, np.ones(8) / 8, "same")
+        tone = np.sin(2 * np.pi * np.cumsum(200 + 900 * (tt / 1.25) ** 2) / SR)
+        return (k * 0.25 + tone * 0.08) * (tt / 1.25) ** 2
     if name == "tick":
         L = int(SR * 0.03); tt = np.arange(L) / SR
         return np.sin(2 * np.pi * 2500 * tt) * np.exp(-tt * 300) * 0.15

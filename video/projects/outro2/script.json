@@ -1,0 +1,31 @@
+{
+  "title": "KAINAP — динамичная концовка «Реакция → логотип» (16:9)",
+  "language": "ky",
+  "note": "CTA ведёт на бесплатный пробный урок (ссылка в профиле Instagram). Слоган взят из профиля: «Химия менен биологияны мага кой».",
+  "tts": {
+    "provider": "elevenlabs",
+    "voice_id": "nPczCjzI2devNBz1zQrb",
+    "voice_name": "Brian",
+    "model_id": "eleven_v4",
+    "language_code": "ky",
+    "voice_settings": {
+      "speed": 1.08
+    }
+  },
+  "lead_seconds": 1.45,
+  "gap_seconds": 0.15,
+  "max_pause_seconds": 0.2,
+  "tail_seconds": 1.6,
+  "segments": [
+    {
+      "id": "s1",
+      "show": "Химия менен биологияны — *мага кой*."
+    },
+    {
+      "id": "s2",
+      "show": "*Акысыз* сынамык сабак. Шилтеме — *профилде*.",
+      "say": "Акысыз сынамык сабак. Шилтеме профилде.",
+      "context": false
+    }
+  ]
+}

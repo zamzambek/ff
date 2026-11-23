@@ -72,7 +72,7 @@
         scaleKeys: d.scale ? d.scale.split(',').map((kv) => { const i = kv.lastIndexOf(':'); return [at(kv.slice(0, i)), parseFloat(kv.slice(i + 1))]; }).sort((a, b) => a[0] - b[0]) : null,
         zoom: d.zoom ? d.zoom.split(',').map(Number) : null,
         punches: d.punch ? d.punch.split(',').map(at) : [],
-        moveKeys: d.move ? d.move.split(';').map((kv) => { const i = kv.lastIndexOf(':'); const [x, y] = kv.slice(i + 1).split(',').map(Number); return [at(kv.slice(0, i)), x, y]; }).sort((a, b) => a[0] - b[0]) : null,
+        moveKeys: d.move ? d.move.split(';').map((kv) => { const i = kv.lastIndexOf(':'); const [x, y, d] = kv.slice(i + 1).split(',').map(Number); return [at(kv.slice(0, i)), x, y, d]; }).sort((a, b) => a[0] - b[0]) : null,
       };
       if (it.anim === 'draw') {
         const len = el.getTotalLength ? el.getTotalLength() : 1000;
@@ -212,8 +212,8 @@
       // плавное перемещение между ключами (по 0.6 c на переход, ease in-out)
       let x = it.moveKeys[0][1], y = it.moveKeys[0][2];
       for (let i = 1; i < it.moveKeys.length; i++) {
-        const [kt, kx, ky] = it.moveKeys[i];
-        const dur = Math.max(0.3, Math.min(1.2, kt - it.moveKeys[i - 1][0]));
+        const [kt, kx, ky, kd] = it.moveKeys[i];
+        const dur = kd || Math.max(0.3, Math.min(1.2, kt - it.moveKeys[i - 1][0]));
         const u = clamp((t - kt) / dur); const e = u * u * (3 - 2 * u);
         x += (kx - x) * e; y += (ky - y) * e;
       }

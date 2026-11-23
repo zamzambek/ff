@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ky">
+<head>
+<meta charset="utf-8">
+<title>KAINAP — концовка «Реакция»</title>
+<link rel="stylesheet" href="../../engine/style.css">
+<style>
+  html, body, #stage { width: 1920px !important; height: 1080px !important; }
+  :root { --gold: #FFC46B; --brand: #3A3CF4; }
+  #stage { background: #05060E; }
+  .abs { position: absolute; }
+  .scene.full { top: 0; height: 1080px; display: block; }
+  .cap { display: none; }
+  .atom { position: absolute; width: 64px; height: 64px; margin: -32px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, #8F91FF 55%, #3A3CF4); box-shadow: 0 0 30px rgba(120,125,255,.8); }
+  .bubble { position: absolute; border-radius: 50%; border: 5px solid rgba(255,255,255,.85); background: rgba(255,255,255,.12); }
+  .kin { position: absolute; left: 0; right: 0; text-align: center; font-weight: 900; color: #fff; letter-spacing: 4px; text-shadow: 0 10px 0 rgba(10,10,80,.35); white-space: nowrap; }
+  .btn { display: inline-flex; align-items: center; gap: 18px; font-weight: 900; font-size: 64px; color: #12133F; background: var(--gold); border-radius: 999px; padding: 22px 64px; border: 6px solid #12133F; box-shadow: 0 14px 0 rgba(10,10,80,.35), 0 0 60px rgba(255,196,107,.5); }
+  .hexbg { position: absolute; inset: -200px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='104' viewBox='0 0 120 104'%3E%3Cpath d='M30 2h60l30 50-30 50H30L0 52z' fill='none' stroke='white' stroke-opacity='.08' stroke-width='3'/%3E%3C/svg%3E"); }
+</style>
+</head>
+<body data-pops="off">
+<div id="stage">
+  <section class="scene full" data-from="s1-1.45">
+    <div class="abs" style="inset:0;transform-origin:50% 45%" data-zoom="1,1.06" data-punch="s1-0.15,s1#4,s2#0">
+      <!-- после вспышки: фирменный синий, шестиугольники, кипение -->
+      <div class="abs" style="inset:0;background:radial-gradient(120% 90% at 50% 30%,#4B4DFF 0%,#3A3CF4 45%,#2526B8 100%)" data-in="s1-0.15" data-anim="fade"></div>
+      <div class="hexbg" data-in="s1-0.1" data-anim="fade" data-float></div>
+      <div data-in="s1-0.1" data-anim="fade" class="abs" style="inset:0">
+        <div class="bubble" style="left:80px;top:980px;width:40px;height:40px" data-smoke></div>
+        <div class="bubble" style="left:260px;top:1000px;width:26px;height:26px" data-smoke></div>
+        <div class="bubble" style="left:420px;top:990px;width:50px;height:50px" data-smoke></div>
+        <div class="bubble" style="left:610px;top:1010px;width:30px;height:30px" data-smoke></div>
+        <div class="bubble" style="left:820px;top:995px;width:44px;height:44px" data-smoke></div>
+        <div class="bubble" style="left:1040px;top:1005px;width:28px;height:28px" data-smoke></div>
+        <div class="bubble" style="left:1230px;top:985px;width:48px;height:48px" data-smoke></div>
+        <div class="bubble" style="left:1420px;top:1000px;width:32px;height:32px" data-smoke></div>
+        <div class="bubble" style="left:1620px;top:990px;width:42px;height:42px" data-smoke></div>
+        <div class="bubble" style="left:1810px;top:1005px;width:28px;height:28px" data-smoke></div>
+      </div>
+      <!-- реакция: атомы слетаются в шестиугольник -->
+      <svg class="abs" style="left:0;top:0" width="1920" height="1080" data-out="s1-0.12">
+        <path d="M960 210 L1064 270 L1064 390 L960 450 L856 390 L856 270 Z" fill="none" stroke="rgba(160,165,255,.9)" stroke-width="10" stroke-linejoin="round" data-in="s1-0.75" data-anim="draw"/>
+      </svg>
+      <div class="atom" style="left:960px;top:210px" data-move="s1-1.45:-700,-500;s1-1.35:0,0,0.8" data-out="s1-0.12" data-sfx="riser" data-sfx-at="s1-1.4"></div>
+      <div class="atom" style="left:1064px;top:270px" data-move="s1-1.45:820,-380;s1-1.35:0,0,0.8" data-out="s1-0.12"></div>
+      <div class="atom" style="left:1064px;top:390px" data-move="s1-1.45:760,420;s1-1.35:0,0,0.8" data-out="s1-0.12"></div>
+      <div class="atom" style="left:960px;top:450px" data-move="s1-1.45:120,640;s1-1.35:0,0,0.8" data-out="s1-0.12"></div>
+      <div class="atom" style="left:856px;top:390px" data-move="s1-1.45:-820,380;s1-1.35:0,0,0.8" data-out="s1-0.12"></div>
+      <div class="atom" style="left:856px;top:270px" data-move="s1-1.45:-760,-260;s1-1.35:0,0,0.8" data-out="s1-0.12"></div>
+      <!-- вспышка -->
+      <div class="abs" style="inset:0;background:#fff" data-in="s1-0.2" data-anim="fade" data-out="s1-0.08" data-sfx="boom"></div>
+      <!-- логотип -->
+      <div class="abs" style="left:760px;top:130px;width:400px;background:#fff;border-radius:60px;padding:34px;box-shadow:0 16px 0 rgba(10,10,80,.35)" data-in="s1-0.1" data-anim="pop" data-scale="s1:1,s2#0:0.82">
+        <img src="../../assets/brand/kainap-logo.png" alt="KAINAP" style="width:100%;display:block">
+      </div>
+      <!-- кинетический текст -->
+      <div class="kin" style="top:560px;font-size:96px" data-in="s1#0" data-anim="left" data-out="s1#4-0.05">ХИМИЯ</div>
+      <div class="kin" style="top:680px;font-size:96px" data-in="s1#1" data-anim="right" data-out="s1#4-0.05">МЕНЕН БИОЛОГИЯНЫ</div>
+      <div class="kin" style="top:580px;font-size:190px;color:var(--gold)" data-in="s1#4" data-anim="pop" data-shake="s1#4+0.05" data-out="s2#0-0.05">МАГА КОЙ!</div>
+      <div class="abs" style="left:0;right:0;top:580px;display:flex;justify-content:center" data-in="s2#0" data-anim="pop" data-float>
+        <div class="btn">🎁 АКЫСЫЗ СЫНАМЫК САБАК</div>
+      </div>
+      <div class="kin" style="top:800px;font-size:56px" data-in="s2#3" data-anim="up">шилтеме — профилде 👆 <span style="color:var(--gold)">@kainap.kg</span></div>
+    </div>
+  </section>
+  <div class="cap"></div>
+</div>
+<script src="build/timings.js"></script>
+<script src="../../engine/engine.js"></script>
+<script src="../../engine/fx.js"></script>
+</body>
+</html>

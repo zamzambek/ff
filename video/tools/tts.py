@@ -67,6 +67,56 @@ def precise_words(show: str, spans, t0: float):
     return word_timings(show, t0 + spans[0][1], t0 + spans[-1][2])
 
 
+def compress_pauses(build: Path, segs, total: float, max_pause: float):
+    """Укорачивает все паузы длиннее max_pause (и внутри фраз тоже) и сдвигает тайминги слов."""
+    import numpy as np
+    x = np.frombuffer(read_frames(build / "voice.wav"), np.int16).astype(np.float32) / 32768
+    hop = SR // 100
+    rms = np.sqrt(np.convolve(x ** 2, np.ones(hop) / hop, "same")[::hop] + 1e-12)
+    silent = 20 * np.log10(rms) < -40
+    speech_end = segs[-1]["end"]
+    cuts, i = [], 0
+    while i < len(silent):
+        if silent[i]:
+            j = i
+            while j < len(silent) and silent[j]:
+                j += 1
+            a, b = i / 100, j / 100
+            if a > 0.05 and b < speech_end and b - a > max_pause + 0.03:
+                cuts.append((a + max_pause / 2, b - max_pause / 2))
+            i = j
+        else:
+            i += 1
+    if not cuts:
+        return segs, total
+
+    def warp(tt):
+        shift = 0.0
+        for a, b in cuts:
+            if tt >= b:
+                shift += b - a
+            elif tt > a:
+                shift += tt - a
+        return round(tt - shift, 3)
+
+    keep, prev = [], 0
+    for a, b in cuts:
+        keep.append(x[prev:int(a * SR)])
+        prev = int(b * SR)
+    keep.append(x[prev:])
+    y = np.concatenate(keep)
+    with wave.open(str(build / "voice.wav"), "wb") as w:
+        w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR)
+        w.writeframes((y * 32767).astype(np.int16).tobytes())
+    for s in segs:
+        s["start"], s["end"] = warp(s["start"]), warp(s["end"])
+        for wd in s["words"]:
+            wd["start"], wd["end"] = warp(wd["start"]), warp(wd["end"])
+    removed = sum(b - a for a, b in cuts)
+    print(f"сжато пауз: {len(cuts)}, убрано {removed:.1f} c")
+    return segs, round(total - removed, 3)
+
+
 def write_timings(build, segs, total):
     timings = {"fps": 30, "total": round(total, 3), "segments": segs}
     js = json.dumps(timings, ensure_ascii=False, indent=1)
@@ -149,7 +199,7 @@ def main(project: Path):
     seg_dir.mkdir(parents=True, exist_ok=True)
     gap = float(script.get("gap_seconds", 0.28))
     tail = float(script.get("tail_seconds", 1.5))
-    lead = 0.35  # тишина перед первой фразой
+    lead = float(script.get("lead_seconds", 0.15))  # тишина перед первой фразой
 
     take = next((project / "voice" / f"take{e}" for e in AUDIO_EXT if (project / "voice" / f"take{e}").exists()), None)
     if take:
@@ -189,6 +239,14 @@ def main(project: Path):
             (seg_dir / f"{sid}.mp3").write_bytes(mp3)
             to_pcm(seg_dir / f"{sid}.mp3", out, trim=False)
             spans = elevenlabs.word_spans(chars)
+            # обрезаем тишину по таймингам первой и последней буквы, чтобы не было пустот
+            if spans:
+                cut0 = max(0.0, spans[0][1] - 0.04)
+                cut1 = spans[-1][2] + 0.1
+                fr = read_frames(out)[int(cut0 * SR) * 2:int(cut1 * SR) * 2]
+                with wave.open(str(out), "wb") as w:
+                    w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR); w.writeframes(fr)
+                spans = [(wd, s - cut0, e - cut0) for wd, s, e in spans]
             used_el += 1
         else:
             raw = seg_dir / f"{sid}.espeak.wav"
@@ -216,6 +274,8 @@ def main(project: Path):
         w.setframerate(SR)
         w.writeframes(bytes(pcm))
 
+    if script.get("max_pause_seconds"):
+        segs, total = compress_pauses(build, segs, total, float(script["max_pause_seconds"]))
     write_timings(build, segs, total)
     print(f"сегментов: {len(segs)}, записей диктора: {used_rec}, ElevenLabs: {used_el}, длительность: {total:.1f} c")
 

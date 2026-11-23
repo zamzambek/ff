@@ -59,6 +59,14 @@ def word_timings(text: str, start: float, end: float):
     return out
 
 
+def pronounce(text: str, table: dict) -> str:
+    """Подсказки произношения для синтезатора (только озвучка, субтитры не меняются).
+    Ключ — часть слова: «кычкылтек» заменится и в «кычкылтекти», «кычкылтектен»."""
+    for k, v in table.items():
+        text = text.replace(k, v).replace(k.capitalize(), v.capitalize())
+    return text
+
+
 def precise_words(show: str, spans, t0: float):
     """Точные тайминги слов от ElevenLabs. Если в субтитре другие слова (формулы), делим по длине."""
     words = show.split()
@@ -232,9 +240,12 @@ def main(project: Path):
         elif el_cfg:
             sys.path.insert(0, str(Path(__file__).parent))
             import elevenlabs
-            say = seg.get("say", seg["show"])
-            prev = all_segs[k - 1].get("say", all_segs[k - 1]["show"]) if k else None
-            nxt = all_segs[k + 1].get("say", all_segs[k + 1]["show"]) if k + 1 < len(all_segs) else None
+            fix = lambda x: pronounce(x, script.get("pronounce", {}))
+            say = fix(seg.get("say", seg["show"]))
+            prev = fix(all_segs[k - 1].get("say", all_segs[k - 1]["show"])) if k else None
+            nxt = fix(all_segs[k + 1].get("say", all_segs[k + 1]["show"])) if k + 1 < len(all_segs) else None
+            if seg.get("context") is False:  # фраза звучит лучше без соседнего контекста
+                prev = nxt = None
             mp3, chars = elevenlabs.synth(el_cfg, say, prev, nxt, cache_dir=build / "el-cache")
             (seg_dir / f"{sid}.mp3").write_bytes(mp3)
             to_pcm(seg_dir / f"{sid}.mp3", out, trim=False)

@@ -86,7 +86,7 @@ def ambient_pad(n, rng):
 def rain_bed(n, rng):
     x = rng.standard_normal(n).astype(np.float32)
     x = np.convolve(x, np.ones(4) / 4, "same") - np.convolve(x, np.ones(60) / 60, "same")
-    return x * 0.035
+    return x * 0.017  # дождь тихо, на фоне
 
 
 def sfx_clip(name, rng):

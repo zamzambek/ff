@@ -1,2 +1,4 @@
 video/projects/*/build/
 __pycache__/
+video/projects/*/voice/*
+!video/projects/*/voice/.gitkeep

@@ -59,6 +59,81 @@ def word_timings(text: str, start: float, end: float):
     return out
 
 
+def write_timings(build, segs, total):
+    timings = {"fps": 30, "total": round(total, 3), "segments": segs}
+    js = json.dumps(timings, ensure_ascii=False, indent=1)
+    (build / "timings.json").write_text(js, encoding="utf-8")
+    (build / "timings.js").write_text("window.TIMINGS = " + js + ";\n", encoding="utf-8")
+
+
+VOWELS = set("аеёиоуыэюяөүАЕЁИОУЫЭЮЯӨҮ")
+SPOKEN = {"KAINAP": 2}  # слова латиницей/цифрами: сколько слогов звучит
+
+
+def vowel_count(word: str) -> float:
+    core = re.sub(r"[^\w₀-₉]", "", word)
+    if core in SPOKEN:
+        return SPOKEN[core]
+    n = sum(ch in VOWELS for ch in core)
+    n += sum(ch.isascii() and ch.isalpha() for ch in core)          # C, O, H… читаются «цэ», «о», «аш»
+    n += 2 * sum(ch in "₀₁₂₃₄₅₆₇₈₉" for ch in core)                 # ₂ → «эки»
+    digits = re.sub(r"\D", "", core)
+    n += 1.5 * len(digits)                                          # 200 → «эки жүз»
+    return max(n, 1)
+
+
+def syllable_peaks(wav: Path):
+    """Примерные центры слогов: пики громкости речевой полосы."""
+    import numpy as np
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", str(wav), "-af", "highpass=f=250,lowpass=f=2500",
+                          "-ac", "1", "-ar", "16000", "-f", "s16le", "-"], check=True, capture_output=True).stdout
+    x = np.frombuffer(raw, np.int16).astype(np.float32) / 32768
+    hop, win = 160, 400
+    n = len(x) // hop - 3
+    e = np.array([np.sqrt(np.mean(x[i * hop:i * hop + win] ** 2) + 1e-12) for i in range(n)])
+    db = np.convolve(20 * np.log10(e), np.hanning(9) / np.hanning(9).sum(), "same")
+    floor = np.percentile(db, 95) - 30
+    peaks = []
+    for i in range(12, len(db) - 13):
+        if db[i] > floor and db[i] >= db[i - 1] and db[i] >= db[i + 1] \
+                and db[i] - db[i - 12:i].min() > 3 and db[i] - db[i + 1:i + 13].min() > 3:
+            t = i * 0.01
+            if not peaks or t - peaks[-1] > 0.09:
+                peaks.append(t)
+    return peaks
+
+
+def take_mode(script, take: Path, build: Path, lead: float, tail: float):
+    """Одна запись на весь текст: слова раскладываются по слогам записи."""
+    import numpy as np
+    clean = build / "take.wav"
+    to_pcm(take, clean, trim=True)
+    frames = read_frames(clean)
+    speech = len(frames) / 2 / SR
+    peaks = syllable_peaks(clean)
+    words = [(si, w, vowel_count(w)) for si, seg in enumerate(script["segments"]) for w in seg["show"].split()]
+    total_v = sum(v for _, _, v in words)
+    # k-й слог текста → время: линейная интерполяция по найденным пикам (их обычно меньше, чем гласных)
+    grid = np.linspace(0, total_v, len(peaks))
+    at = lambda k: float(np.interp(k, grid, peaks))
+    segs = [{"id": s["id"], "show": s["show"], "words": []} for s in script["segments"]]
+    acc = 0.0
+    for si, w, v in words:
+        start = max(0.0, at(acc) - 0.12) if acc > 0 else 0.0
+        end = at(acc + v - 1) + 0.15 if acc + v < total_v else speech
+        segs[si]["words"].append({"w": w, "start": round(lead + start, 3), "end": round(lead + end, 3)})
+        acc += v
+    for s in segs:
+        s["start"], s["end"] = s["words"][0]["start"], s["words"][-1]["end"]
+    pcm = b"\x00\x00" * int(SR * lead) + frames + b"\x00\x00" * int(SR * tail)
+    with wave.open(str(build / "voice.wav"), "wb") as w:
+        w.setnchannels(1)
+        w.setsampwidth(2)
+        w.setframerate(SR)
+        w.writeframes(pcm)
+    return segs, lead + speech + tail
+
+
 def main(project: Path):
     script = json.loads((project / "script.json").read_text(encoding="utf-8"))
     build = project / "build"
@@ -67,6 +142,13 @@ def main(project: Path):
     gap = float(script.get("gap_seconds", 0.28))
     tail = float(script.get("tail_seconds", 1.5))
     lead = 0.35  # тишина перед первой фразой
+
+    take = next((project / "voice" / f"take{e}" for e in AUDIO_EXT if (project / "voice" / f"take{e}").exists()), None)
+    if take:
+        segs, total = take_mode(script, take, build, lead, tail)
+        write_timings(build, segs, total)
+        print(f"один дубль: {take.name}, сегментов: {len(segs)}, длительность: {total:.1f} c")
+        return
 
     if not shutil.which("espeak-ng"):
         print("! espeak-ng не найден: нужны записи для всех сегментов", file=sys.stderr)
@@ -109,10 +191,7 @@ def main(project: Path):
         w.setframerate(SR)
         w.writeframes(bytes(pcm))
 
-    timings = {"fps": 30, "total": round(total, 3), "segments": segs}
-    js = json.dumps(timings, ensure_ascii=False, indent=1)
-    (build / "timings.json").write_text(js, encoding="utf-8")
-    (build / "timings.js").write_text("window.TIMINGS = " + js + ";\n", encoding="utf-8")
+    write_timings(build, segs, total)
     print(f"сегментов: {len(segs)}, записей диктора: {used_rec}, длительность: {total:.1f} c")
 
 

@@ -1,5 +1,5 @@
 /* KAINAP motion — базовые стили кадра 1080×1920.
-   Цвета бренда ещё не утверждены: меняйте только токены в :root. */
+   Фирменный цвет взят из логотипа: #3A3CF4. Цвета меняются только в :root. */
 @font-face { font-family: 'Nunito'; font-weight: 600; src: url(../assets/fonts/nunito-cyrillic-ext-600-normal.woff2) format('woff2'); unicode-range: U+0460-052F; }
 @font-face { font-family: 'Nunito'; font-weight: 700; src: url(../assets/fonts/nunito-cyrillic-ext-700-normal.woff2) format('woff2'); unicode-range: U+0460-052F; }
 @font-face { font-family: 'Nunito'; font-weight: 800; src: url(../assets/fonts/nunito-cyrillic-ext-800-normal.woff2) format('woff2'); unicode-range: U+0460-052F; }
@@ -14,20 +14,21 @@
 @font-face { font-family: 'Nunito'; font-weight: 900; src: url(../assets/fonts/nunito-latin-900-normal.woff2) format('woff2'); }
 
 :root {
-  --bg: #EEE8FB;
+  --brand: #3A3CF4;         /* синий из логотипа KAINAP */
+  --bg: #EDEFFE;
   --ink: #1F1A33;
   --muted: #8A82A3;
   --card: #FFFFFF;
   --accent: #F6B93B;        /* жёлтая плашка-маркер */
   --accent-ink: #D98200;    /* оранжевый текст-акцент */
-  --purple: #7A5AF8;
+  --purple: var(--brand);
   --green: #1FA971;
   --red: #E5484D;
   --blue: #2F80ED;
-  --blob-a: #C6F1DD;
-  --blob-b: #FDD9C6;
-  --blob-c: #D8CCFC;
-  --shadow: 0 10px 0 rgba(60, 40, 120, .06), 0 18px 40px rgba(60, 40, 120, .12);
+  --blob-a: #CFF3E4;
+  --blob-b: #FFE3C7;
+  --blob-c: #D3D6FD;
+  --shadow: 0 10px 0 rgba(40, 44, 150, .06), 0 18px 40px rgba(40, 44, 150, .13);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -48,10 +49,10 @@ body { font-family: 'Nunito', 'Noto Color Emoji', sans-serif; color: var(--ink);
 
 /* ---------- шапка ---------- */
 .header { position: absolute; top: 150px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; gap: 18px; z-index: 5; }
-.brand { display: flex; align-items: center; gap: 16px; background: var(--card); border-radius: 999px; padding: 12px 30px 12px 12px; box-shadow: var(--shadow); font-weight: 900; font-size: 34px; letter-spacing: 1px; }
-.brand .logo { width: 58px; height: 58px; border-radius: 16px; background: var(--ink); color: var(--accent); display: grid; place-items: center; font-size: 34px; }
+.brand { display: flex; align-items: center; gap: 16px; background: var(--card); border-radius: 999px; padding: 14px 32px 14px 26px; color: var(--brand); box-shadow: var(--shadow); font-weight: 900; font-size: 34px; letter-spacing: 1px; }
+.brand .logo { height: 54px; width: auto; display: block; }
 .brand .dot { color: var(--muted); }
-.brand .subj { color: var(--purple); }
+.brand .subj { color: var(--ink); }
 .subtitle { font-weight: 800; font-size: 32px; color: var(--ink); }
 .subtitle .handle { color: var(--accent-ink); }
 

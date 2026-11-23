@@ -1,0 +1,112 @@
+/* KAINAP motion — базовые стили кадра 1080×1920.
+   Цвета бренда ещё не утверждены: меняйте только токены в :root. */
+@font-face { font-family: 'Nunito'; font-weight: 600; src: url(../assets/fonts/nunito-cyrillic-ext-600-normal.woff2) format('woff2'); unicode-range: U+0460-052F; }
+@font-face { font-family: 'Nunito'; font-weight: 700; src: url(../assets/fonts/nunito-cyrillic-ext-700-normal.woff2) format('woff2'); unicode-range: U+0460-052F; }
+@font-face { font-family: 'Nunito'; font-weight: 800; src: url(../assets/fonts/nunito-cyrillic-ext-800-normal.woff2) format('woff2'); unicode-range: U+0460-052F; }
+@font-face { font-family: 'Nunito'; font-weight: 900; src: url(../assets/fonts/nunito-cyrillic-ext-900-normal.woff2) format('woff2'); unicode-range: U+0460-052F; }
+@font-face { font-family: 'Nunito'; font-weight: 600; src: url(../assets/fonts/nunito-cyrillic-600-normal.woff2) format('woff2'); unicode-range: U+0400-045F; }
+@font-face { font-family: 'Nunito'; font-weight: 700; src: url(../assets/fonts/nunito-cyrillic-700-normal.woff2) format('woff2'); unicode-range: U+0400-045F; }
+@font-face { font-family: 'Nunito'; font-weight: 800; src: url(../assets/fonts/nunito-cyrillic-800-normal.woff2) format('woff2'); unicode-range: U+0400-045F; }
+@font-face { font-family: 'Nunito'; font-weight: 900; src: url(../assets/fonts/nunito-cyrillic-900-normal.woff2) format('woff2'); unicode-range: U+0400-045F; }
+@font-face { font-family: 'Nunito'; font-weight: 600; src: url(../assets/fonts/nunito-latin-600-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Nunito'; font-weight: 700; src: url(../assets/fonts/nunito-latin-700-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Nunito'; font-weight: 800; src: url(../assets/fonts/nunito-latin-800-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Nunito'; font-weight: 900; src: url(../assets/fonts/nunito-latin-900-normal.woff2) format('woff2'); }
+
+:root {
+  --bg: #EEE8FB;
+  --ink: #1F1A33;
+  --muted: #8A82A3;
+  --card: #FFFFFF;
+  --accent: #F6B93B;        /* жёлтая плашка-маркер */
+  --accent-ink: #D98200;    /* оранжевый текст-акцент */
+  --purple: #7A5AF8;
+  --green: #1FA971;
+  --red: #E5484D;
+  --blue: #2F80ED;
+  --blob-a: #C6F1DD;
+  --blob-b: #FDD9C6;
+  --blob-c: #D8CCFC;
+  --shadow: 0 10px 0 rgba(60, 40, 120, .06), 0 18px 40px rgba(60, 40, 120, .12);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+body { font-family: 'Nunito', 'Noto Color Emoji', sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+#stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+
+/* ---------- фон ---------- */
+.blob { position: absolute; border-radius: 50%; filter: blur(2px); }
+.blob.a { width: 760px; height: 760px; left: -330px; top: -300px; background: var(--blob-a); }
+.blob.b { width: 640px; height: 640px; right: -230px; top: 360px; background: var(--blob-b); }
+.blob.c { width: 980px; height: 980px; right: -260px; top: 1060px; background: var(--blob-c); }
+.watermark { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 240px;
+  font-weight: 800; font-size: 40px; color: rgba(31, 26, 51, .022); transform: rotate(-12deg) scale(1.3); pointer-events: none; }
+.watermark span { display: flex; align-items: center; justify-content: center; }
+.spark { position: absolute; width: 46px; height: 46px; }
+.spark svg { width: 100%; height: 100%; }
+
+/* ---------- шапка ---------- */
+.header { position: absolute; top: 150px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; gap: 18px; z-index: 5; }
+.brand { display: flex; align-items: center; gap: 16px; background: var(--card); border-radius: 999px; padding: 12px 30px 12px 12px; box-shadow: var(--shadow); font-weight: 900; font-size: 34px; letter-spacing: 1px; }
+.brand .logo { width: 58px; height: 58px; border-radius: 16px; background: var(--ink); color: var(--accent); display: grid; place-items: center; font-size: 34px; }
+.brand .dot { color: var(--muted); }
+.brand .subj { color: var(--purple); }
+.subtitle { font-weight: 800; font-size: 32px; color: var(--ink); }
+.subtitle .handle { color: var(--accent-ink); }
+
+/* ---------- сцены ---------- */
+.scene { position: absolute; left: 0; right: 0; top: 330px; height: 990px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 36px; opacity: 0; }
+.pill { background: var(--card); border-radius: 999px; padding: 14px 36px; font-weight: 800; font-size: 36px; box-shadow: var(--shadow); white-space: nowrap; }
+.pill.yellow { background: var(--accent); color: var(--ink); }
+.pill.green { background: #DDF6EA; color: var(--green); box-shadow: none; }
+.pill.red { background: #FDE3E3; color: var(--red); box-shadow: none; }
+.pill.purple { background: var(--purple); color: #fff; }
+.pill.sm { font-size: 30px; padding: 10px 28px; }
+.row { display: flex; align-items: center; justify-content: center; gap: 40px; }
+.col { display: flex; flex-direction: column; align-items: center; gap: 22px; }
+.card { background: var(--card); border-radius: 36px; padding: 30px 40px; box-shadow: var(--shadow); }
+.f { font-weight: 900; font-size: 120px; line-height: 1; letter-spacing: -2px; white-space: nowrap; }
+.f sub { font-size: .55em; vertical-align: -0.25em; }
+.f.md { font-size: 84px; }
+.f.sm { font-size: 64px; }
+.muted { color: var(--muted); }
+.label { font-weight: 800; font-size: 30px; color: var(--muted); }
+.big-title { font-weight: 900; font-size: 92px; color: var(--purple); }
+.vs { font-weight: 900; font-size: 54px; color: var(--muted); }
+
+/* выделения, переключаемые движком по времени */
+.hlc { transition: none; }
+.hlc.hl { color: var(--accent-ink); }
+.dim { opacity: .3 !important; }
+.mark { border-radius: 14px; padding: 0 10px; }
+.mark.hl { background: var(--accent); }
+
+/* ---------- атомы и молекулы ---------- */
+.mol { display: flex; align-items: center; }
+.atom { width: 120px; height: 120px; border-radius: 50%; display: grid; place-items: center; font-weight: 900; font-size: 48px; position: relative; flex: none; }
+.atom.s { width: 84px; height: 84px; font-size: 34px; }
+.atom.xs { width: 60px; height: 60px; font-size: 26px; }
+.atom.C { background: radial-gradient(circle at 32% 28%, #8E8BA0, #3C3950 60%, #24212F); color: #fff; }
+.atom.O { background: radial-gradient(circle at 32% 28%, #FF9AA0, #E8323C 60%, #B21E27); color: #fff; }
+.atom.H { background: radial-gradient(circle at 32% 28%, #FFFFFF, #ECEAF3 60%, #C9C5D8); color: var(--ink); }
+.atom::after { content: ''; position: absolute; left: 22%; top: 14%; width: 28%; height: 18%; border-radius: 50%; background: rgba(255,255,255,.55); filter: blur(2px); }
+.bond { height: 14px; width: 34px; background: #CFC8E4; border-radius: 7px; flex: none; }
+.bond.double { height: 30px; background: linear-gradient(#CFC8E4 0 10px, transparent 10px 20px, #CFC8E4 20px); }
+.bond.triple { height: 42px; background: linear-gradient(#CFC8E4 0 10px, transparent 10px 16px, #CFC8E4 16px 26px, transparent 26px 32px, #CFC8E4 32px); }
+
+/* ---------- субтитры ---------- */
+.cap { position: absolute; left: 70px; right: 70px; top: 1340px; display: flex; justify-content: center; z-index: 6; }
+.cap-box { background: var(--card); border-radius: 30px; padding: 20px 34px; box-shadow: var(--shadow); max-width: 900px;
+  font-weight: 900; font-size: 52px; line-height: 1.28; text-align: center; }
+.cap-box .w { display: inline-block; padding: 0 8px; margin: 2px 0; border-radius: 12px; }
+.cap-box .w.on { background: var(--accent); }
+.cap-box .w.past { color: var(--ink); }
+.cap-box .w.future { color: #B4ADC9; }
+
+/* ---------- маскот: колба, которая «кайнайт» ---------- */
+.mascot { position: absolute; right: 110px; bottom: 170px; width: 170px; height: 190px; z-index: 4; }
+.mascot .neck { position: absolute; left: 62px; top: 0; width: 46px; height: 64px; background: #fff; border: 8px solid var(--ink); border-bottom: none; border-radius: 10px 10px 0 0; }
+.mascot .body { position: absolute; left: 0; top: 52px; width: 170px; height: 138px; background: var(--accent); border: 8px solid var(--ink); border-radius: 46% 46% 40px 40px / 40% 40% 40px 40px; overflow: hidden; }
+.mascot .eye { position: absolute; top: 46px; width: 16px; height: 22px; background: var(--ink); border-radius: 50%; }
+.mascot .bub { position: absolute; border-radius: 50%; background: #fff; border: 5px solid var(--ink); }

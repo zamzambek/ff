@@ -1,0 +1,229 @@
+/* KAINAP motion engine.
+ * Всё, что видно в кадре, — чистая функция от времени t: window.renderAt(t).
+ * Поэтому рендер покадровый, без пропусков и одинаковый при каждом запуске.
+ *
+ * Время в атрибутах привязано к озвучке (window.TIMINGS из build/timings.json):
+ *   "s3"        — начало сегмента s3
+ *   "s3$"       — конец сегмента s3
+ *   "s3@0.5"    — середина сегмента s3 (доля 0..1)
+ *   "s3#4"      — начало 5-го слова сегмента s3 (счёт с 0)
+ *   "s3#4+0.2"  — плюс/минус смещение в секундах (работает с любой формой)
+ *
+ * Атрибуты элементов:
+ *   data-in="время"     появление;  data-anim="pop|up|down|left|right|fade|grow|fly|draw"
+ *   data-out="время"    исчезновение (fade + уменьшение)
+ *   data-hl="время"     с этого момента класс .hl (data-hl-off — снять)
+ *   data-dim="время"    с этого момента класс .dim
+ *   data-shake="время"  короткая тряска
+ *   data-float          лёгкое покачивание;  data-flicker — пламя;  data-smoke — дым по кругу
+ *   data-fly="dx,dy"    откуда прилетает для anim=fly
+ *   data-silent         не добавлять «поп» в звуковые эффекты
+ * Сцена: <section class="scene" data-from="s5">, видна до начала следующей сцены.
+ */
+(function () {
+  const T = window.TIMINGS;
+  if (!T) throw new Error('TIMINGS не загружены');
+  const seg = {};
+  T.segments.forEach((s) => (seg[s.id] = s));
+
+  function at(spec) {
+    if (spec == null || spec === '') return null;
+    const m = String(spec).trim().match(/^([a-z0-9_]+)(\$)?(?:#(\d+))?(?:@([\d.]+))?([+-][\d.]+)?$/i);
+    if (!m) throw new Error('Неверное время: ' + spec);
+    const s = seg[m[1]];
+    if (!s) throw new Error('Нет сегмента: ' + m[1]);
+    let t = s.start;
+    if (m[2]) t = s.end;
+    if (m[3] != null) t = s.words[Math.min(+m[3], s.words.length - 1)].start;
+    if (m[4] != null) t = s.start + parseFloat(m[4]) * (s.end - s.start);
+    if (m[5]) t += parseFloat(m[5]);
+    return t;
+  }
+
+  const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+  const outCubic = (x) => 1 - Math.pow(1 - x, 3);
+  const outBack = (x) => { const c1 = 1.9, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
+  const hash = (str) => { let h = 0; for (const c of str) h = (h * 31 + c.charCodeAt(0)) | 0; return (h >>> 0) / 4294967295; };
+
+  const IN_DUR = 0.42, OUT_DUR = 0.3, SCENE_OUT = 0.28;
+
+  // ---- сцены и элементы ----
+  const scenes = [...document.querySelectorAll('.scene')].map((el) => ({ el, t0: at(el.dataset.from) }));
+  scenes.sort((a, b) => a.t0 - b.t0);
+  scenes.forEach((s, i) => (s.t1 = i + 1 < scenes.length ? scenes[i + 1].t0 : T.total + 10));
+
+  const items = [];
+  scenes.forEach((s) => {
+    s.el.querySelectorAll('*').forEach((el, idx) => {
+      const d = el.dataset;
+      const keys = ['in', 'out', 'hl', 'dim', 'shake', 'float', 'flicker', 'smoke'];
+      if (!keys.some((k) => k in d)) return;
+      const it = {
+        el, d,
+        tin: 'in' in d ? at(d.in) : null,
+        tout: at(d.out),
+        thl: at(d.hl), thlOff: at(d.hlOff),
+        tdim: at(d.dim),
+        tshake: at(d.shake),
+        anim: d.anim || 'pop',
+        phase: hash(idx + (el.className || '') + s.t0) * 6.28,
+      };
+      if (it.anim === 'draw') {
+        const len = el.getTotalLength ? el.getTotalLength() : 1000;
+        it.len = len; el.style.strokeDasharray = len;
+      }
+      if (it.anim === 'fly') it.fly = (d.fly || '0,-300').split(',').map(Number);
+      items.push(it);
+    });
+  });
+
+  // ---- субтитры: группы по 2–4 слова, равномерно внутри предложения ----
+  const chunks = [];
+  T.segments.forEach((s) => {
+    const sentences = [[]];
+    s.words.forEach((w, i) => {
+      sentences[sentences.length - 1].push(w);
+      if (/[.?!:]$/.test(w.w) && i < s.words.length - 1) sentences.push([]);
+    });
+    sentences.forEach((ws) => {
+      const lens = ws.map((w) => w.w.length + 1);
+      const chars = lens.reduce((a, b) => a + b, 0);
+      const n = Math.max(Math.ceil(chars / 24), Math.ceil(ws.length / 4));
+      const target = chars / n;
+      let acc = 0, idx = -1;
+      ws.forEach((w, i) => {
+        const k = Math.min(n - 1, Math.floor((acc + lens[i] / 2) / target));
+        if (k !== idx) { chunks.push({ start: w.start, words: [] }); idx = k; }
+        chunks[chunks.length - 1].words.push(w);
+        acc += lens[i];
+      });
+    });
+  });
+  chunks.forEach((c, i) => (c.end = i + 1 < chunks.length ? chunks[i + 1].start : T.total));
+
+  const cap = document.querySelector('.cap');
+  let capShown = null;
+  function renderCaption(t) {
+    const c = chunks.find((c) => t >= c.start && t < c.end);
+    if (!c) { cap.style.opacity = 0; capShown = null; return; }
+    if (capShown !== c) {
+      cap.innerHTML = '<div class="cap-box">' + c.words.map((w) => '<span class="w">' + w.w + '</span>').join(' ') + '</div>';
+      capShown = c;
+    }
+    const spans = cap.querySelectorAll('.w');
+    c.words.forEach((w, i) => {
+      const on = t >= w.start && (i + 1 < c.words.length ? t < c.words[i + 1].start : t < w.end + 0.25);
+      spans[i].className = 'w ' + (on ? 'on' : t >= w.start ? 'past' : 'future');
+    });
+    const p = clamp((t - c.start) / 0.22);
+    cap.style.opacity = 1;
+    cap.style.transform = `scale(${0.9 + 0.1 * outBack(p)})`;
+  }
+
+  // ---- фон ----
+  const blobs = [...document.querySelectorAll('.blob')];
+  const sparks = [...document.querySelectorAll('.spark')];
+  const mascot = document.querySelector('.mascot');
+  const bubbles = mascot ? [...mascot.querySelectorAll('.bub')] : [];
+
+  function renderBackground(t) {
+    blobs.forEach((b, i) => {
+      const k = i + 1;
+      b.style.transform = `translate(${Math.sin(t * 0.25 * k + k) * 28}px, ${Math.cos(t * 0.2 * k + k * 2) * 24}px) scale(${1 + Math.sin(t * 0.3 + k) * 0.025})`;
+    });
+    sparks.forEach((s, i) => {
+      const v = 0.5 + 0.5 * Math.sin(t * 2.2 + i * 1.7);
+      s.style.transform = `scale(${0.6 + 0.5 * v}) rotate(${Math.sin(t + i) * 20}deg)`;
+      s.style.opacity = 0.45 + 0.55 * v;
+    });
+    if (mascot) {
+      mascot.style.transform = `translateY(${Math.sin(t * 2.1) * 8}px) rotate(${Math.sin(t * 1.3) * 5}deg)`;
+      bubbles.forEach((b, i) => {
+        const ph = (t * 0.7 + i / bubbles.length) % 1;
+        b.style.transform = `translate(${Math.sin(ph * 9 + i) * 10}px, ${-ph * 120}px) scale(${0.5 + ph})`;
+        b.style.opacity = ph < 0.1 ? ph * 10 : 1 - ph;
+      });
+    }
+  }
+
+  // ---- элементы ----
+  function renderItem(it, t) {
+    const { el } = it;
+    let op = 1, tf = '';
+    if (it.tin != null) {
+      const p = clamp((t - it.tin) / IN_DUR);
+      const e = outCubic(p), b = outBack(p);
+      switch (it.anim) {
+        case 'pop': tf += `scale(${Math.max(0, 0.3 + 0.7 * b)})`; op = clamp(p * 4); break;
+        case 'up': tf += `translateY(${(1 - e) * 70}px)`; op = clamp(p * 2.5); break;
+        case 'down': tf += `translateY(${-(1 - e) * 70}px)`; op = clamp(p * 2.5); break;
+        case 'left': tf += `translateX(${-(1 - e) * 120}px)`; op = clamp(p * 2.5); break;
+        case 'right': tf += `translateX(${(1 - e) * 120}px)`; op = clamp(p * 2.5); break;
+        case 'grow': tf += `scaleX(${e})`; op = clamp(p * 4); break;
+        case 'fade': op = e; break;
+        case 'fly': tf += `translate(${(1 - e) * it.fly[0]}px, ${(1 - e) * it.fly[1]}px) scale(${0.6 + 0.4 * b})`; op = clamp(p * 3); break;
+        case 'draw': el.style.strokeDashoffset = it.len * (1 - e); op = p > 0 ? 1 : 0; break;
+      }
+    }
+    if (it.tout != null) {
+      const q = clamp((t - it.tout) / OUT_DUR);
+      op *= 1 - q;
+      tf += ` scale(${1 - 0.35 * outCubic(q)})`;
+    }
+    if (it.tshake != null && t >= it.tshake && t < it.tshake + 0.6) {
+      const k = 1 - (t - it.tshake) / 0.6;
+      tf += ` translateX(${Math.sin((t - it.tshake) * 55) * 14 * k}px) rotate(${Math.sin((t - it.tshake) * 40) * 3 * k}deg)`;
+    }
+    if ('float' in it.d) tf += ` translateY(${Math.sin(t * 2 + it.phase) * 9}px)`;
+    if ('flicker' in it.d) tf += ` scaleY(${1 + 0.1 * Math.sin(t * 13 + it.phase) + 0.06 * Math.sin(t * 7.3)}) scaleX(${1 + 0.05 * Math.sin(t * 11 + it.phase)})`;
+    if ('smoke' in it.d) {
+      const ph = (t * 0.45 + it.phase / 6.28) % 1;
+      tf += ` translate(${Math.sin(ph * 6) * 14}px, ${-ph * 110}px) scale(${0.5 + ph * 1.1})`;
+      op *= ph < 0.15 ? ph / 0.15 : (1 - ph);
+    }
+    if (it.thl != null) el.classList.toggle('hl', t >= it.thl && (it.thlOff == null || t < it.thlOff));
+    if (it.tdim != null) el.classList.toggle('dim', t >= it.tdim);
+    el.style.opacity = op;
+    el.style.transform = tf;
+  }
+
+  window.renderAt = function (t) {
+    renderBackground(t);
+    scenes.forEach((s, i) => {
+      const visible = t >= s.t0 - 0.01 && t < s.t1;
+      s.el.style.display = visible ? 'flex' : 'none';
+      if (!visible) return;
+      const last = i === scenes.length - 1;
+      const q = last ? 0 : clamp((t - (s.t1 - SCENE_OUT)) / SCENE_OUT);
+      s.el.style.opacity = 1 - q;
+      s.el.style.transform = `translateY(${-40 * outCubic(q)}px) scale(${1 - 0.04 * q})`;
+    });
+    items.forEach((it) => {
+      const sc = it.el.closest('.scene');
+      if (sc.style.display !== 'none') renderItem(it, t);
+    });
+    renderCaption(t);
+  };
+
+  // моменты появления элементов — для звуковых «попов» и «вжухов»
+  window.collectEvents = function () {
+    const pops = items.filter((it) => it.tin != null && !('silent' in it.d) && !it.el.closest('[data-silent]')).map((it) => +it.tin.toFixed(3));
+    const whooshes = scenes.slice(1).map((s) => +(s.t0 - 0.12).toFixed(3));
+    return { pops: [...new Set(pops)].sort((a, b) => a - b), whooshes, total: T.total };
+  };
+
+  window.ENGINE_READY = true;
+
+  // Предпросмотр в браузере: scene.html?play (клик — старт со звуком), ?t=12.5 — стоп-кадр
+  const q = new URLSearchParams(location.search);
+  if (q.has('t')) window.renderAt(parseFloat(q.get('t')));
+  else if (q.has('play')) {
+    const audio = new Audio('build/voice.wav');
+    window.renderAt(0);
+    document.body.addEventListener('click', () => {
+      audio.currentTime = 0; audio.play();
+      const loop = () => { window.renderAt(audio.currentTime); if (!audio.ended) requestAnimationFrame(loop); };
+      requestAnimationFrame(loop);
+    });
+  }
+})();

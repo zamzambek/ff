@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="ky">
+<head>
+<meta charset="utf-8">
+<title>CO vs CO2 — KAINAP</title>
+<link rel="stylesheet" href="../../engine/style.css">
+<style>
+  /* стили только этого ролика */
+  .formula-xl { font-size: 230px; }
+  .legend { display: flex; gap: 22px; }
+  .legend .card { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 26px 30px; min-width: 250px; }
+  .legend .card .k { font-weight: 900; font-size: 34px; }
+  .counter { display: flex; align-items: center; gap: 18px; font-weight: 900; font-size: 40px; }
+  .counter .n { color: var(--accent-ink); font-size: 56px; }
+  .icon-card { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 24px 34px; }
+  .icon-card .ico { font-size: 84px; line-height: 1; }
+  .icon-card .t { font-weight: 800; font-size: 32px; }
+
+  .rbc-wrap { position: relative; width: 620px; height: 600px; }
+  .rbc { position: absolute; left: 60px; top: 40px; width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle at 50% 50%, #F0707A 0 26%, #D8303D 48%, #B81F2C 70%, #8F1622 100%);
+    box-shadow: inset 0 -20px 40px rgba(0,0,0,.25), 0 24px 50px rgba(180, 30, 45, .3); display: grid; place-items: center; }
+  .rbc .pill { font-size: 26px; padding: 10px 22px; }
+  .slot { position: absolute; width: 150px; height: 80px; display: flex; justify-content: center; align-items: center; }
+  .slot .mol { position: absolute; }
+  .x200 { position: absolute; right: -10px; top: 0; background: var(--accent); border-radius: 28px; padding: 10px 26px; font-weight: 900; font-size: 84px; box-shadow: var(--shadow); }
+
+  .stove { position: relative; width: 360px; height: 360px; z-index: 0; }
+  .scene > .pill { position: relative; z-index: 2; }
+  .stove .pipe { position: absolute; left: 236px; top: 0; width: 56px; height: 120px; background: #5A5670; border-radius: 8px 8px 0 0; }
+  .stove .body { position: absolute; left: 20px; top: 110px; width: 320px; height: 240px; border-radius: 30px; background:
+      repeating-linear-gradient(0deg, transparent 0 36px, rgba(0,0,0,.08) 36px 40px), linear-gradient(#D7704E, #B5523A); box-shadow: var(--shadow); }
+  .stove .door { position: absolute; left: 80px; top: 70px; width: 160px; height: 120px; border-radius: 70px 70px 14px 14px; background: #2A1F2E; overflow: hidden; display: flex; align-items: flex-end; justify-content: center; gap: 2px; }
+  .flame { width: 46px; height: 86px; border-radius: 50% 50% 45% 45% / 65% 65% 35% 35%; background: radial-gradient(circle at 50% 75%, #FFF4B0, #FFB33A 45%, #FF6A2A 80%); transform-origin: 50% 100%; }
+  .flame.s { width: 34px; height: 62px; }
+  .smoke { position: absolute; left: 236px; top: -10px; width: 60px; height: 60px; border-radius: 50%; background: #BDB6CF; }
+  .eq { display: flex; align-items: center; gap: 26px; padding: 22px 34px; width: 900px; justify-content: space-between; }
+
+  .tip { display: flex; align-items: center; gap: 26px; width: 920px; padding: 28px 34px; }
+  .tip .ico { font-size: 70px; width: 110px; height: 110px; border-radius: 30px; background: var(--bg); display: grid; place-items: center; flex: none; }
+  .tip .t { font-weight: 800; font-size: 40px; line-height: 1.25; }
+  .tip .t b { color: var(--accent-ink); font-weight: 900; }
+  .tip .num { font-weight: 900; font-size: 96px; color: var(--red); margin-left: auto; }
+
+  .quiz .card { display: flex; flex-direction: column; align-items: center; gap: 26px; padding: 34px 40px; min-width: 400px; }
+  .kainap { font-weight: 900; font-size: 150px; letter-spacing: 4px; }
+  .kainap span { color: var(--accent-ink); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <!-- фон -->
+  <div class="blob a"></div><div class="blob b"></div><div class="blob c"></div>
+  <div class="watermark">
+    <span>@kainap.kg</span><span>@kainap.kg</span><span>@kainap.kg</span><span>@kainap.kg</span><span>@kainap.kg</span><span>@kainap.kg</span>
+    <span>@kainap.kg</span><span>@kainap.kg</span><span>@kainap.kg</span><span>@kainap.kg</span><span>@kainap.kg</span><span>@kainap.kg</span>
+    <span>@kainap.kg</span><span>@kainap.kg</span><span>@kainap.kg</span><span>@kainap.kg</span><span>@kainap.kg</span><span>@kainap.kg</span>
+    <span>@kainap.kg</span><span>@kainap.kg</span><span>@kainap.kg</span><span>@kainap.kg</span><span>@kainap.kg</span><span>@kainap.kg</span>
+  </div>
+  <div class="spark" style="left:90px;top:300px"><svg viewBox="0 0 24 24"><path fill="#7A5AF8" d="M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z"/></svg></div>
+  <div class="spark" style="right:150px;top:470px;width:34px;height:34px"><svg viewBox="0 0 24 24"><path fill="#F06292" d="M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z"/></svg></div>
+  <div class="spark" style="left:110px;bottom:330px"><svg viewBox="0 0 24 24"><path fill="#F6B93B" d="M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z"/></svg></div>
+  <div class="spark" style="left:500px;bottom:150px;width:36px;height:36px"><svg viewBox="0 0 24 24"><path fill="#7A5AF8" d="M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z"/></svg></div>
+  <div class="spark" style="left:220px;bottom:120px;width:30px;height:30px"><svg viewBox="0 0 24 24"><path fill="#1FA971" d="M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z"/></svg></div>
+
+  <!-- шапка -->
+  <div class="header">
+    <div class="brand"><div class="logo">K</div>KAINAP <span class="dot">·</span> <span class="subj">ХИМИЯ</span></div>
+    <div class="subtitle">CO жана CO₂ <span class="dot muted">·</span> <span class="handle">@kainap.kg</span></div>
+  </div>
+
+  <!-- A. Хук: два газа, разница в один атом -->
+  <section class="scene" data-from="s1">
+    <div class="row" style="gap:50px;align-items:flex-start">
+      <div class="col" data-in="s1#0" data-shake="s4#3">
+        <div class="f">CO</div>
+        <div class="mol"><div class="atom C">C</div><div class="bond triple"></div><div class="atom O">O</div></div>
+        <div class="pill red sm" data-in="s4#2">☠️ өмүргө коркунуч</div>
+      </div>
+      <div class="vs" data-in="s1#1" style="margin-top:40px">vs</div>
+      <div class="col" data-in="s1#2">
+        <div class="f">CO<sub class="hlc" data-hl="s2#2">2</sub></div>
+        <div class="mol"><div class="atom O" data-shake="s2#3">O</div><div class="bond double"></div><div class="atom C">C</div><div class="bond double"></div><div class="atom O">O</div></div>
+        <div class="pill green sm" data-in="s3#4">😮‍💨 дем менен чыгат</div>
+      </div>
+    </div>
+    <div class="pill yellow" data-in="s2#2" style="margin-top:40px;font-size:46px">айырмасы — 1 гана атом</div>
+  </section>
+
+  <!-- B. Как читать формулу -->
+  <section class="scene" data-from="s5">
+    <div class="pill" data-in="s5#1">Формуланы окуу</div>
+    <div class="f formula-xl" data-in="s5#2"><span class="hlc" data-hl="s6#0" data-hl-off="s6#3">C</span><span class="hlc" data-hl="s6#3" data-hl-off="s7#0">O</span><sub class="hlc" data-hl="s7#3">2</sub></div>
+    <div class="legend">
+      <div class="card" data-in="s6#0" data-anim="up"><div class="atom C s">C</div><div class="k">көмүртек</div></div>
+      <div class="card" data-in="s6#3" data-anim="up"><div class="atom O s">O</div><div class="k">кычкылтек</div></div>
+      <div class="card" data-in="s7#3" data-anim="up"><div class="f sm" style="color:var(--accent-ink)">₂</div><div class="k">индекс</div></div>
+    </div>
+    <div class="pill yellow" data-in="s7#7" style="font-size:42px">индекс = атомдордун саны</div>
+  </section>
+
+  <!-- C. CO2 -->
+  <section class="scene" data-from="s8">
+    <div class="f md" data-in="s8#1">CO<sub>2</sub></div>
+    <div class="mol" data-in="s8#1+0.1"><div class="atom O">O</div><div class="bond double"></div><div class="atom C">C</div><div class="bond double"></div><div class="atom O">O</div></div>
+    <div class="row" style="gap:24px">
+      <div class="card counter" data-in="s8#3" data-anim="left"><span class="n">1</span><div class="atom C xs">C</div>көмүртек</div>
+      <div class="card counter" data-in="s8#6" data-anim="right"><span class="n">2</span><div class="atom O xs">O</div>кычкылтек</div>
+    </div>
+    <div class="pill green" data-in="s9#1" style="font-size:44px">көмүр кычкыл газы</div>
+    <div class="row" style="gap:30px">
+      <div class="card icon-card" data-in="s9#6"><div class="ico">🫁</div><div class="t">дем чыгаруу</div></div>
+      <div class="card icon-card" data-in="s9#10"><div class="ico">🥤</div><div class="t">газдалган суусундук</div></div>
+    </div>
+  </section>
+
+  <!-- D. CO -->
+  <section class="scene" data-from="s10">
+    <div class="f md" data-in="s10#2">CO</div>
+    <div class="mol" data-in="s10#2+0.1" data-dim="s11#10"><div class="atom C">C</div><div class="bond triple"></div><div class="atom O">O</div></div>
+    <div class="row" style="gap:24px">
+      <div class="card counter" data-in="s10#5" data-anim="left"><span class="n">1</span><div class="atom C xs">C</div>көмүртек</div>
+      <div class="card counter" data-in="s10#8" data-anim="right"><span class="n">1</span><div class="atom O xs">O</div>кычкылтек</div>
+    </div>
+    <div class="pill red" data-in="s11#1" style="font-size:44px">ис газы</div>
+    <div class="row" style="gap:20px">
+      <div class="pill sm" data-in="s11#4">👁️ түсү жок</div>
+      <div class="pill sm" data-in="s11#6">👃 жыты жок</div>
+      <div class="pill sm red" data-in="s11#12">⚠️ сезилбейт</div>
+    </div>
+  </section>
+
+  <!-- E. Гемоглобин -->
+  <section class="scene" data-from="s12">
+    <div class="pill" data-in="s12#0">Канда эмне болот?</div>
+    <div class="rbc-wrap">
+      <div class="rbc" data-in="s12#0+0.1" data-shake="s14#4"><div class="pill" data-in="s12#2">гемоглобин</div></div>
+      <!-- 4 места для кислорода -->
+      <div class="slot" style="left:235px;top:60px">
+        <div class="mol" data-in="s12#1" data-anim="fly" data-fly="0,-300" data-out="s13#8"><div class="atom O xs">O</div><div class="atom O xs" style="margin-left:-8px">O</div></div>
+        <div class="mol" data-in="s13#8+0.05" data-anim="fly" data-fly="-200,-300"><div class="atom C xs">C</div><div class="atom O xs" style="margin-left:-8px">O</div></div>
+      </div>
+      <div class="slot" style="left:450px;top:255px">
+        <div class="mol" data-in="s12#1+0.15" data-anim="fly" data-fly="300,0" data-out="s13#8+0.1"><div class="atom O xs">O</div><div class="atom O xs" style="margin-left:-8px">O</div></div>
+        <div class="mol" data-in="s13#8+0.2" data-anim="fly" data-fly="300,-200"><div class="atom C xs">C</div><div class="atom O xs" style="margin-left:-8px">O</div></div>
+      </div>
+      <div class="slot" style="left:235px;top:440px">
+        <div class="mol" data-in="s12#1+0.3" data-anim="fly" data-fly="0,300" data-out="s13#8+0.2"><div class="atom O xs">O</div><div class="atom O xs" style="margin-left:-8px">O</div></div>
+        <div class="mol" data-in="s13#8+0.35" data-anim="fly" data-fly="200,300"><div class="atom C xs">C</div><div class="atom O xs" style="margin-left:-8px">O</div></div>
+      </div>
+      <div class="slot" style="left:20px;top:255px">
+        <div class="mol" data-in="s12#1+0.45" data-anim="fly" data-fly="-300,0" data-out="s13#8+0.3"><div class="atom O xs">O</div><div class="atom O xs" style="margin-left:-8px">O</div></div>
+        <div class="mol" data-in="s13#8+0.5" data-anim="fly" data-fly="-300,200"><div class="atom C xs">C</div><div class="atom O xs" style="margin-left:-8px">O</div></div>
+      </div>
+      <div class="x200" data-in="s13#5">×200</div>
+    </div>
+    <div class="pill red" data-in="s14#3" style="font-size:44px">денеге кычкылтек жетпейт</div>
+  </section>
+
+  <!-- F. Откуда берётся угарный газ -->
+  <section class="scene" data-from="s15" style="gap:26px">
+    <div class="pill" data-in="s15#0">Ис газы кайдан чыгат?</div>
+    <div class="stove" data-in="s15#0+0.15">
+      <div class="smoke" data-smoke></div><div class="smoke" data-smoke></div><div class="smoke" data-smoke></div>
+      <div class="pipe"></div>
+      <div class="body"><div class="door">
+        <div class="flame s" data-flicker></div><div class="flame" data-flicker></div><div class="flame s" data-flicker></div>
+      </div></div>
+    </div>
+    <div class="card eq" data-in="s15#4" data-anim="left">
+      <div class="f sm">C + O<sub>2</sub> = CO<sub>2</sub></div>
+      <div class="pill green sm">O₂ жетиштүү ✓</div>
+    </div>
+    <div class="card eq" data-in="s16#0" data-anim="left">
+      <div class="f sm">2C + O<sub>2</sub> = <span class="mark" data-hl="s16#4">2CO</span></div>
+      <div class="pill red sm">O₂ жетишсиз ✗</div>
+    </div>
+  </section>
+
+  <!-- G. Правила безопасности -->
+  <section class="scene" data-from="s17" style="gap:30px">
+    <div class="pill yellow" data-in="s17#1" style="font-size:44px">Кышында эсте!</div>
+    <div class="card tip" data-in="s17#3" data-anim="left">
+      <div class="ico">🔥</div><div class="t">Көмүр <b>толук күйүп бүтмөйүнчө</b> мештин морун жаппа</div>
+    </div>
+    <div class="card tip" data-in="s18#0" data-anim="left">
+      <div class="ico">🤕</div><div class="t">Баш ооруса, айланса — <b>дароо таза абага</b> чык</div>
+    </div>
+    <div class="card tip" data-in="s18#9" data-anim="left">
+      <div class="ico">📞</div><div class="t">Тез жардам</div><div class="num">103</div>
+    </div>
+  </section>
+
+  <!-- H. Проверь себя -->
+  <section class="scene quiz" data-from="s19">
+    <div class="big-title" data-in="s19#1">Өзүңдү текшер</div>
+    <div class="row" style="gap:30px">
+      <div class="card" data-in="s19#3">
+        <div class="f md">H<sub>2</sub>O</div>
+        <div class="mol"><div class="atom H s">H</div><div class="bond"></div><div class="atom O s">O</div><div class="bond"></div><div class="atom H s">H</div></div>
+      </div>
+      <div class="card" data-in="s19#5">
+        <div class="f md">H<sub>2</sub>O<sub>2</sub></div>
+        <div class="mol"><div class="atom H s">H</div><div class="bond"></div><div class="atom O s">O</div><div class="bond"></div><div class="atom O s">O</div><div class="bond"></div><div class="atom H s">H</div></div>
+      </div>
+    </div>
+    <div class="pill purple" data-in="s19#6" style="font-size:46px">Кайсынысын ичсе болот? 🤔</div>
+    <div class="pill" data-in="s19#9">💬 жообун комментарийге жаз</div>
+  </section>
+
+  <!-- I. Призыв к действию -->
+  <section class="scene" data-from="s20">
+    <div class="row" style="gap:24px">
+      <div class="pill yellow" data-in="s20#3" style="font-size:44px">🔖 Сактап кой</div>
+      <div class="pill purple" data-in="s20#6" style="font-size:44px">📨 Досуңа жөнөт</div>
+    </div>
+    <div class="kainap" data-in="s20#8" style="margin-top:60px">KAI<span>NAP</span></div>
+    <div class="pill" data-in="s20#10">химия · биология · кыргызча жана орусча</div>
+    <div class="subtitle" data-in="s20#11" style="font-size:44px"><span class="handle">@kainap.kg</span></div>
+  </section>
+
+  <!-- маскот: колба «кайнап жатат» -->
+  <div class="mascot">
+    <div class="neck"></div>
+    <div class="body"><div class="eye" style="left:52px"></div><div class="eye" style="left:100px"></div></div>
+    <div class="bub" style="left:72px;top:30px;width:20px;height:20px"></div>
+    <div class="bub" style="left:88px;top:40px;width:14px;height:14px"></div>
+    <div class="bub" style="left:78px;top:36px;width:16px;height:16px"></div>
+  </div>
+
+  <div class="cap"></div>
+</div>
+<script src="build/timings.js"></script>
+<script src="../../engine/engine.js"></script>
+</body>
+</html>

@@ -57,7 +57,7 @@
   scenes.forEach((s) => {
     s.el.querySelectorAll('*').forEach((el, idx) => {
       const d = el.dataset;
-      const keys = ['in', 'out', 'hl', 'dim', 'shake', 'float', 'flicker', 'smoke', 'scale', 'zoom', 'punch', 'spin'];
+      const keys = ['in', 'out', 'hl', 'dim', 'shake', 'float', 'flicker', 'smoke', 'scale', 'zoom', 'punch', 'spin', 'orbit'];
       if (!keys.some((k) => k in d)) return;
       const it = {
         el, d,
@@ -205,6 +205,12 @@
       let z = 1;
       for (const pt of it.punches) if (t >= pt) z += 0.12 * Math.exp(-(t - pt) * 7) * Math.min(1, (t - pt) * 30);
       tf += ` scale(${z})`;
+    }
+    if ('orbit' in it.d) {
+      // движение по эллипсу: data-orbit="rx,ry,оборотов_в_сек,фаза"
+      const [rx, ry, sp, ph] = it.d.orbit.split(',').map(Number);
+      const a = 2 * Math.PI * (t * sp + (ph || 0));
+      tf = `translate(${Math.cos(a) * rx}px, ${Math.sin(a) * ry}px) ` + tf;
     }
     if ('spin' in it.d) tf += ` rotate(${t * parseFloat(it.d.spin || 20)}deg)`;
     if (it.thl != null) el.classList.toggle('hl', t >= it.thl && (it.thlOff == null || t < it.thlOff));

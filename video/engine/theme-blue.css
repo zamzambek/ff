@@ -1,0 +1,19 @@
+/* Фирменная синяя тема KAINAP (по логотипу): синий фон, шестиугольники-молекулы, белые плашки. */
+:root { --bg: #3A3CF4; --blob-a: #4D50FF; --blob-b: #2E30D8; --blob-c: #2729C4; --shadow: 0 10px 0 rgba(10,10,80,.18), 0 18px 40px rgba(10,10,80,.25); }
+#stage { background: radial-gradient(120% 80% at 50% 20%, #4B4DFF 0%, #3A3CF4 45%, #2526B8 100%); }
+.watermark { color: rgba(255,255,255,.035); }
+.hexbg { position: absolute; inset: -200px; border-radius: 0; filter: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='104' viewBox='0 0 120 104'%3E%3Cpath d='M30 2h60l30 50-30 50H30L0 52z' fill='none' stroke='white' stroke-opacity='.07' stroke-width='3'/%3E%3C/svg%3E"); }
+.subtitle { color: #fff; }
+.subtitle .handle { color: #FFC83D; }
+.subtitle .dot { color: rgba(255,255,255,.5); }
+.scene.full { top: 0; height: 1920px; display: block; }
+.abs { position: absolute; }
+.char { position: absolute; transform-origin: 50% 100%; }
+.tag { font-weight: 900; font-size: 40px; padding: 12px 30px; border-radius: 999px; background: #fff; color: var(--ink); box-shadow: var(--shadow); white-space: nowrap; }
+.tag.y { background: #FFC83D; }
+.tag.g { background: #DDF6EA; color: #138A5A; }
+.tag.r { background: #FFE3E3; color: #D33; }
+.huge { font-weight: 900; color: #fff; text-shadow: 0 10px 0 rgba(10,10,80,.35); line-height: 1; }
+.kainap-big { font-weight: 900; font-size: 130px; color: #fff; letter-spacing: 6px; }
+.big-title.w { color: #fff; text-shadow: 0 8px 0 rgba(10,10,80,.35); }

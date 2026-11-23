@@ -59,6 +59,14 @@ def word_timings(text: str, start: float, end: float):
     return out
 
 
+def precise_words(show: str, spans, t0: float):
+    """Точные тайминги слов от ElevenLabs. Если в субтитре другие слова (формулы), делим по длине."""
+    words = show.split()
+    if len(words) == len(spans):
+        return [{"w": w, "start": round(t0 + s, 3), "end": round(t0 + e, 3)} for w, (_, s, e) in zip(words, spans)]
+    return word_timings(show, t0 + spans[0][1], t0 + spans[-1][2])
+
+
 def write_timings(build, segs, total):
     timings = {"fps": 30, "total": round(total, 3), "segments": segs}
     js = json.dumps(timings, ensure_ascii=False, indent=1)
@@ -153,18 +161,35 @@ def main(project: Path):
     if not shutil.which("espeak-ng"):
         print("! espeak-ng не найден: нужны записи для всех сегментов", file=sys.stderr)
 
+    el_cfg = script.get("tts") if (script.get("tts") or {}).get("provider") == "elevenlabs" else None
+    if el_cfg and not el_cfg.get("voice_id"):
+        sys.exit("В script.json → tts.voice_id не указан голос ElevenLabs (список: python3 tools/elevenlabs.py voices)")
+
     pcm = bytearray(b"\x00\x00" * int(SR * lead))
     t = lead
     segs = []
-    used_rec = 0
-    for seg in script["segments"]:
+    used_rec = used_el = 0
+    all_segs = script["segments"]
+    for k, seg in enumerate(all_segs):
         sid = seg["id"]
         out = seg_dir / f"{sid}.wav"
         rec = next((project / "voice" / f"{sid}{e}" for e in AUDIO_EXT
                     if (project / "voice" / f"{sid}{e}").exists()), None)
+        spans = None
         if rec:
             to_pcm(rec, out, trim=True)
             used_rec += 1
+        elif el_cfg:
+            sys.path.insert(0, str(Path(__file__).parent))
+            import elevenlabs
+            say = seg.get("say", seg["show"])
+            prev = all_segs[k - 1].get("say", all_segs[k - 1]["show"]) if k else None
+            nxt = all_segs[k + 1].get("say", all_segs[k + 1]["show"]) if k + 1 < len(all_segs) else None
+            mp3, chars = elevenlabs.synth(el_cfg, say, prev, nxt, cache_dir=build / "el-cache")
+            (seg_dir / f"{sid}.mp3").write_bytes(mp3)
+            to_pcm(seg_dir / f"{sid}.mp3", out, trim=False)
+            spans = elevenlabs.word_spans(chars)
+            used_el += 1
         else:
             raw = seg_dir / f"{sid}.espeak.wav"
             run(["espeak-ng", "-v", "ky", "-s", "178", "-p", "45", "-g", "2",
@@ -177,7 +202,7 @@ def main(project: Path):
             "start": round(t, 3),
             "end": round(t + dur, 3),
             "show": seg["show"],
-            "words": word_timings(seg["show"], t, t + dur),
+            "words": precise_words(seg["show"], spans, t) if spans else word_timings(seg["show"], t, t + dur),
         })
         pcm += frames
         pcm += b"\x00\x00" * int(SR * gap)
@@ -192,7 +217,7 @@ def main(project: Path):
         w.writeframes(bytes(pcm))
 
     write_timings(build, segs, total)
-    print(f"сегментов: {len(segs)}, записей диктора: {used_rec}, длительность: {total:.1f} c")
+    print(f"сегментов: {len(segs)}, записей диктора: {used_rec}, ElevenLabs: {used_el}, длительность: {total:.1f} c")
 
 
 if __name__ == "__main__":

@@ -89,6 +89,47 @@
     fx.push((t) => { for (const b of items) b.d.style.transform = `translate(${Math.sin(t * b.sp + b.ph) * 30}px, ${Math.cos(t * b.sp * 0.8 + b.ph) * 20}px)`; });
   });
 
+  // огонь вдоль низа: <div class="fire" data-n="40" data-from="s9#5">
+  document.querySelectorAll('.fire').forEach((box) => {
+    const n = +box.dataset.n || 40, from = box.dataset.from ? window.AT(box.dataset.from) : -1e9;
+    const fl = [];
+    for (let i = 0; i < n; i++) {
+      const d = document.createElement('div');
+      const w = 40 + rnd(i, 21) * 70, h = 90 + rnd(i, 22) * 190;
+      d.style.cssText = `position:absolute;bottom:0;left:${(i / n) * 100 + (rnd(i, 23) - 0.5) * 3}%;width:${w}px;height:${h}px;margin-left:${-w / 2}px;` +
+        `border-radius:50% 50% 40% 40% / 70% 70% 30% 30%;transform-origin:50% 100%;` +
+        `background:radial-gradient(ellipse at 50% 85%,#FFF2B0 0%,#FFB33A 30%,#FF5A1F 60%,rgba(200,30,10,0) 80%);mix-blend-mode:screen`;
+      box.appendChild(d);
+      fl.push({ d, ph: rnd(i, 24) * 6.28, sp: 7 + rnd(i, 25) * 6 });
+    }
+    fx.push((t) => {
+      const grow = Math.min(1, Math.max(0, (t - from) / 0.8));
+      for (const f of fl) f.d.style.transform = `scaleY(${grow * (0.75 + 0.25 * Math.sin(t * f.sp + f.ph) + 0.1 * Math.sin(t * 17 + f.ph))}) scaleX(${0.9 + 0.1 * Math.sin(t * 9 + f.ph)})`;
+    });
+  });
+
+  // ночной город: <div class="skyline" data-seed="1" data-color="#0A0C26" data-win="rgba(255,205,120,.8)" data-h="420">
+  document.querySelectorAll('.skyline').forEach((box) => {
+    const seed = +box.dataset.seed || 1, H = +box.dataset.h || 400;
+    const col = box.dataset.color || '#0A0C26', win = box.dataset.win || 'rgba(255,205,120,.75)';
+    let x = 0, i = 0;
+    const W = box.clientWidth || 1920;
+    while (x < W) {
+      const bw = 70 + rnd(seed * 100 + i, 31) * 110, bh = H * (0.35 + rnd(seed * 100 + i, 32) * 0.65);
+      const b = document.createElement('div');
+      b.style.cssText = `position:absolute;bottom:0;left:${x}px;width:${bw}px;height:${bh}px;background:${col}`;
+      for (let wy = 18; wy < bh - 20; wy += 34) for (let wx = 12; wx < bw - 16; wx += 26) {
+        if (rnd(seed * 1000 + i * 97 + wy + wx, 33) > 0.72) {
+          const w = document.createElement('div');
+          w.style.cssText = `position:absolute;left:${wx}px;top:${wy}px;width:10px;height:14px;background:${win}`;
+          b.appendChild(w);
+        }
+      }
+      box.appendChild(b);
+      x += bw + 6; i++;
+    }
+  });
+
   const prev = window.CHAR_UPDATE;
   window.CHAR_UPDATE = (t) => { if (prev) prev(t); fx.forEach((f) => f(t)); };
 })();

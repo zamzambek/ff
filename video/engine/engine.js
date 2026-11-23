@@ -57,7 +57,7 @@
   scenes.forEach((s) => {
     s.el.querySelectorAll('*').forEach((el, idx) => {
       const d = el.dataset;
-      const keys = ['in', 'out', 'hl', 'dim', 'shake', 'float', 'flicker', 'smoke', 'scale', 'zoom', 'punch', 'spin', 'orbit', 'move'];
+      const keys = ['in', 'out', 'hl', 'dim', 'shake', 'float', 'flicker', 'smoke', 'scale', 'zoom', 'punch', 'spin', 'orbit', 'move', 'cam'];
       if (!keys.some((k) => k in d)) return;
       const it = {
         el, d,
@@ -72,6 +72,7 @@
         scaleKeys: d.scale ? d.scale.split(',').map((kv) => { const i = kv.lastIndexOf(':'); return [at(kv.slice(0, i)), parseFloat(kv.slice(i + 1))]; }).sort((a, b) => a[0] - b[0]) : null,
         zoom: d.zoom ? d.zoom.split(',').map(Number) : null,
         punches: d.punch ? d.punch.split(',').map(at) : [],
+        camKeys: d.cam ? d.cam.split(';').map((kv) => { const i = kv.lastIndexOf(':'); const [z, x, y, du] = kv.slice(i + 1).split(',').map(Number); return [at(kv.slice(0, i)), z, x, y, du]; }).sort((a, b) => a[0] - b[0]) : null,
         moveKeys: d.move ? d.move.split(';').map((kv) => { const i = kv.lastIndexOf(':'); const [x, y, d] = kv.slice(i + 1).split(',').map(Number); return [at(kv.slice(0, i)), x, y, d]; }).sort((a, b) => a[0] - b[0]) : null,
       };
       if (it.anim === 'draw') {
@@ -117,7 +118,7 @@
       s.words.forEach((w, i) => {
         if (!cur || cur.words.map((x) => x.w).join(' ').length > 34) { cur = { start: w.start, words: [] }; chunks.push(cur); }
         cur.words.push(w);
-        if (/[.?!:,—]$/.test(w.w.replace(/\*/g, '')) && cur.words.map((x) => x.w).join(' ').length > 14 && i < s.words.length - 1) cur = null;
+        if (/[.?!:,—]$/.test(w.w.replace(/[*~^]/g, '')) && cur.words.map((x) => x.w).join(' ').length > 14 && i < s.words.length - 1) cur = null;
       });
     });
     chunks.forEach((c, i) => (c.end = i + 1 < chunks.length ? chunks[i + 1].start : c.words[c.words.length - 1].end + 0.6));
@@ -128,7 +129,7 @@
     if (!c) { cap.style.opacity = 0; capShown = null; return; }
     if (capShown !== c) {
       cap.innerHTML = '<div class="cap-box">' + c.words.map((w) =>
-        '<span class="w' + (w.w.includes('*') ? ' key' : '') + '">' + w.w.replace(/\*/g, '') + '</span>').join(' ') + '</div>';
+        '<span class="w' + (w.w.includes('*') ? ' key' : '') + (w.w.includes('~') ? ' blue' : '') + (w.w.includes('^') ? ' red' : '') + '">' + w.w.replace(/[*~^]/g, '') + '</span>').join(' ') + '</div>';
       capShown = c;
     }
     if (PLAIN) {
@@ -207,6 +208,22 @@
       const ph = (t * 0.45 + it.phase / 6.28) % 1;
       tf += ` translate(${Math.sin(ph * 6) * 14}px, ${-ph * 110}px) scale(${0.5 + ph * 1.1})`;
       op *= ph < 0.15 ? ph / 0.15 : (1 - ph);
+    }
+    if (it.camKeys) {
+      // камера: плавный наезд/панорама на точку (cx,cy) с зумом z; между ключами — лёгкий дрейф
+      let [, z, cx, cy] = it.camKeys[0];
+      for (let i = 1; i < it.camKeys.length; i++) {
+        const [kt, kz, kx, ky, kd] = it.camKeys[i];
+        const u = clamp((t - kt) / (kd || 0.9)); const e = u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
+        z += (kz - z) * e; cx += (kx - cx) * e; cy += (ky - cy) * e;
+      }
+      z *= 1 + 0.012 * (t - it.scene.t0);
+      const W = 1920, H = 1080;
+      z = Math.max(1, z);
+      cx = Math.min(W - W / 2 / z, Math.max(W / 2 / z, cx));   // камера не выходит за края мира
+      cy = Math.min(H - H / 2 / z, Math.max(H / 2 / z, cy));
+      el.style.transformOrigin = '0 0';
+      tf = `translate(${W / 2 - cx * z}px, ${H / 2 - cy * z}px) scale(${z}) ` + tf;
     }
     if (it.moveKeys) {
       // плавное перемещение между ключами (по 0.6 c на переход, ease in-out)

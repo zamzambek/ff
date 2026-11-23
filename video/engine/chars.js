@@ -24,6 +24,8 @@
     point: { L: 14, R: -110 },
     cheer: { L: 155, R: -155 },
     wave:  { L: 14, R: -150 },
+    chest: { L: 14, R: 38 },
+    hold2: { L: 80, R: -14 },
   };
   const MOUTH = {
     neutral: 'M108 132 h24',

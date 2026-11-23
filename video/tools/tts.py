@@ -241,9 +241,9 @@ def main(project: Path):
             sys.path.insert(0, str(Path(__file__).parent))
             import elevenlabs
             fix = lambda x: pronounce(x, script.get("pronounce", {}))
-            say = fix(seg.get("say", seg["show"])).replace("*", "")
-            prev = fix(all_segs[k - 1].get("say", all_segs[k - 1]["show"])).replace("*", "") if k else None
-            nxt = fix(all_segs[k + 1].get("say", all_segs[k + 1]["show"])).replace("*", "") if k + 1 < len(all_segs) else None
+            say = fix(seg.get("say", seg["show"])).translate(str.maketrans("", "", "*~^"))
+            prev = fix(all_segs[k - 1].get("say", all_segs[k - 1]["show"])).translate(str.maketrans("", "", "*~^")) if k else None
+            nxt = fix(all_segs[k + 1].get("say", all_segs[k + 1]["show"])).translate(str.maketrans("", "", "*~^")) if k + 1 < len(all_segs) else None
             if seg.get("context") is False:  # фраза звучит лучше без соседнего контекста
                 prev = nxt = None
             mp3, chars = elevenlabs.synth(el_cfg, say, prev, nxt, cache_dir=build / "el-cache")
@@ -262,7 +262,7 @@ def main(project: Path):
         else:
             raw = seg_dir / f"{sid}.espeak.wav"
             run(["espeak-ng", "-v", "ky", "-s", "178", "-p", "45", "-g", "2",
-                 "-w", str(raw), seg.get("say", seg["show"]).replace("*", "")])
+                 "-w", str(raw), seg.get("say", seg["show"]).translate(str.maketrans("", "", "*~^"))])
             to_pcm(raw, out, trim=True)
         frames = read_frames(out)
         dur = len(frames) / 2 / SR

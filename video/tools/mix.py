@@ -102,6 +102,12 @@ def sfx_clip(name, rng):
         k = np.convolve(x, np.ones(8) / 8, "same")
         tone = np.sin(2 * np.pi * np.cumsum(200 + 900 * (tt / 1.25) ** 2) / SR)
         return (k * 0.25 + tone * 0.08) * (tt / 1.25) ** 2
+    if name == "heartbeat":
+        L = int(SR * 0.9); tt = np.arange(L) / SR; out = np.zeros(L, dtype=np.float32)
+        for st, a in ((0.0, 0.55), (0.24, 0.4)):
+            k = tt[tt >= st] - st
+            out[tt >= st] += np.sin(2 * np.pi * 52 * k) * np.exp(-k * 18) * a
+        return out
     if name == "tick":
         L = int(SR * 0.03); tt = np.arange(L) / SR
         return np.sin(2 * np.pi * 2500 * tt) * np.exp(-tt * 300) * 0.15

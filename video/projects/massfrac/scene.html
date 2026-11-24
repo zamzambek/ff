@@ -59,9 +59,15 @@
   .track { position: absolute; height: 40px; width: 400px; border-radius: 20px; background: #E6E8F4; overflow: hidden; }
   .fill { height: 100%; border-radius: 20px; transform-origin: 0 50%; }
   .divider { position: absolute; left: 538px; width: 4px; top: 500px; height: 920px; background: repeating-linear-gradient(transparent 0 14px, #D9DBEE 14px 28px); }
+
+  /* палитры акцента под синий логотип */
+  :root { --accglow: rgba(255,138,0,.35); }
+  body[data-palette="cyan"]   { --acc: #0AA5E8; --acc2: #5CD6FF; --mark: #CDEEFF; --sun: #D9F3FF; --accglow: rgba(10,165,232,.35); }
+  body[data-palette="violet"] { --acc: #7C4DFF; --acc2: #B9A2FF; --mark: #E3DAFF; --sun: #ECE6FF; --accglow: rgba(124,77,255,.35); }
+  body[data-palette="cyan"]   { --acc: #0DB39E; --acc2: #5FE3CF; --mark: #CFF5EE; --sun: #D8F6F0; --accglow: rgba(13,179,158,.35); }
 </style>
 </head>
-<body class="cap-plain" data-pops="off" data-smooth>
+<body class="cap-plain" data-pops="off" data-smooth data-palette="cyan">
 <div id="stage">
   <div class="dots"></div>
   <div class="blob p"></div><div class="blob s"></div>
@@ -121,15 +127,15 @@
       <div class="abs" style="left:520px;top:1290px;width:520px;height:130px;background:linear-gradient(90deg,rgba(246,247,252,0),rgba(246,247,252,.65))" data-in="s10#3" data-anim="fade"></div>
     </div>
 
-    <!-- Эстен кал -->
-    <div class="abs serif" style="left:0;right:0;top:250px;text-align:center;font-size:132px;color:var(--navy)" data-in="s11" data-anim="up"><span class="hl" data-sweep="s11+0.3" data-sweep-dur="0.8">Эстен кал!</span></div>
+    <!-- Эстеп кал -->
+    <div class="abs serif" style="left:0;right:0;top:250px;text-align:center;font-size:132px;color:var(--navy)" data-in="s11" data-anim="up"><span class="hl" data-sweep="s11+0.3" data-sweep-dur="0.8">Эстеп кал!</span></div>
     <div class="tbl" style="top:480px" data-in="s11+0.2" data-anim="up">
       <div class="tr" style="justify-content:center;font-size:64px;border-bottom:2px solid #EEF0FA">ω = <span class="serif" style="color:var(--acc);margin:0 12px">m(элемент)</span> / <span class="serif" style="margin-left:12px">m(зат)</span></div>
       <div class="tr" data-in="s11#2" data-anim="up"><span>H₂O</span><span class="arr">16 / 18</span><span><span class="hl">89%</span></span></div>
       <div class="tr" data-in="s11#4" data-anim="up"><span>CO₂</span><span class="arr">32 / 44</span><span><span class="hl">73%</span></span></div>
     </div>
     <div class="abs" style="left:0;right:0;top:1060px;text-align:center" data-in="s11#5" data-anim="up"><span class="note" style="font-size:42px">атомдун саны эмес — <b style="color:var(--acc)">массасы</b></span></div>
-    <div class="abs" style="left:0;right:0;top:1200px;text-align:center" data-in="s12#3" data-anim="up"><span class="cta" style="background:var(--acc);color:#fff;box-shadow:0 14px 34px rgba(255,138,0,.35)">ЖРТга KAINAP менен даярдан</span></div>
+    <div class="abs" style="left:0;right:0;top:1200px;text-align:center" data-in="s12#3" data-anim="up"><span class="cta" style="background:var(--acc);color:#fff;box-shadow:0 14px 34px var(--accglow)">ЖРТга KAINAP менен даярдан</span></div>
     <div class="abs" style="left:0;right:0;top:1340px;text-align:center" data-in="s12#0" data-anim="up"><span class="cta" style="background:var(--navy);color:#fff;font-size:42px;padding:20px 44px">🔖 Сактап кой</span></div>
   </section>
 

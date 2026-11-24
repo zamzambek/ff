@@ -19,7 +19,7 @@
   .brand3 { display: flex; align-items: center; gap: 18px; background: #fff; border-radius: 999px; padding: 14px 34px 14px 20px; box-shadow: 0 10px 30px rgba(20,21,106,.10); }
   .brand3 img { height: 74px; display: block; }
   .brand3 .nm { font-weight: 900; font-size: 54px; letter-spacing: 3px; color: var(--navy); line-height: 1; }
-  .brand3 .nm span { color: var(--brand); }
+  .brand3 .nm span { color: inherit; }
   .series { background: var(--navy); color: #fff; font-weight: 900; font-size: 36px; padding: 20px 34px; border-radius: 999px; letter-spacing: 1px; box-shadow: 0 10px 30px rgba(20,21,106,.22); }
   .series b { color: var(--acc2); }
   /* карточка вопроса */
@@ -27,7 +27,7 @@
   .qcard .meta { display: flex; align-items: center; gap: 16px; font-weight: 800; font-size: 30px; color: var(--muted); letter-spacing: 2px; }
   .qcard .meta b { width: 48px; height: 48px; border-radius: 12px; background: var(--acc); color: #fff; display: grid; place-items: center; font-size: 30px; letter-spacing: 0; }
   .qcard .q { margin-top: 16px; font-weight: 900; font-size: 52px; line-height: 1.25; color: var(--navy); }
-  .hl { background: linear-gradient(transparent 56%, var(--mark) 56%); padding: 0 6px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+  .hl { background: linear-gradient(transparent 56%, var(--mark) 56%) no-repeat; padding: 0 6px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
   /* формула */
   .sym { position: absolute; font-weight: 900; font-size: 250px; line-height: 1; color: var(--navy); letter-spacing: -6px; }
   .slot { position: absolute; width: 96px; height: 118px; margin: -59px 0 0 -48px; border: 6px dashed var(--muted); border-radius: 20px; display: grid; place-items: center; font-weight: 900; font-size: 70px; color: var(--muted); }
@@ -54,7 +54,7 @@
   <section class="scene full" data-from="s1-0.15">
     <div class="qcard" data-out="s11-0.1">
       <div class="meta"><b>1</b>ЖРТ · ХИМИЯ</div>
-      <div class="q"><span class="hl">Алюминий менен кычкылтек:</span><br><span class="hl">формуласы кандай?</span></div>
+      <div class="q"><span class="hl" data-sweep="s2#0" data-sweep-dur="1.1">Алюминий менен кычкылтек:</span><br><span class="hl" data-sweep="s2#3" data-sweep-dur="0.9">формуласы кандай?</span></div>
     </div>
 
     <!-- основная формула: Al ? O ? -->

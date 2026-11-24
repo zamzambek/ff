@@ -59,7 +59,7 @@
   scenes.forEach((s) => {
     s.el.querySelectorAll('*').forEach((el, idx) => {
       const d = el.dataset;
-      const keys = ['in', 'out', 'hl', 'dim', 'shake', 'float', 'flicker', 'smoke', 'scale', 'zoom', 'punch', 'spin', 'orbit', 'move', 'cam', 'beat', 'rot'];
+      const keys = ['in', 'out', 'hl', 'dim', 'shake', 'float', 'flicker', 'smoke', 'scale', 'zoom', 'punch', 'spin', 'orbit', 'move', 'cam', 'beat', 'rot', 'sweep'];
       if (!keys.some((k) => k in d)) return;
       const it = {
         el, d,
@@ -280,6 +280,11 @@
       tf += ` scale(${1 + 0.16 * bump(ph, 0.08, 0.045) + 0.09 * bump(ph, 0.3, 0.05)})`;
     }
     if ('spin' in it.d) tf += ` rotate(${t * parseFloat(it.d.spin || 20)}deg)`;
+    if ('sweep' in it.d) {
+      // маркер «прорисовывается» слева направо под текстом
+      const t0 = at(it.d.sweep), u = clamp((t - t0) / (parseFloat(it.d.sweepDur) || 0.7));
+      el.style.backgroundSize = `${(SMOOTH ? easeIO(u) : u) * 100}% 100%`;
+    }
     if (it.thl != null) el.classList.toggle('hl', t >= it.thl && (it.thlOff == null || t < it.thlOff));
     if (it.tdim != null) el.classList.toggle('dim', t >= it.tdim);
     el.style.opacity = op;

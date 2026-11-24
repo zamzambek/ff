@@ -59,7 +59,7 @@
   scenes.forEach((s) => {
     s.el.querySelectorAll('*').forEach((el, idx) => {
       const d = el.dataset;
-      const keys = ['in', 'out', 'hl', 'dim', 'shake', 'float', 'flicker', 'smoke', 'scale', 'zoom', 'punch', 'spin', 'orbit', 'move', 'cam', 'beat', 'rot', 'sweep'];
+      const keys = ['in', 'out', 'hl', 'dim', 'shake', 'float', 'flicker', 'smoke', 'scale', 'zoom', 'punch', 'spin', 'orbit', 'move', 'cam', 'beat', 'rot', 'sweep', 'count', 'buzz', 'wiggle', 'glow'];
       if (!keys.some((k) => k in d)) return;
       const it = {
         el, d,
@@ -220,8 +220,10 @@
         const u = clamp((t - kt) / (kd || 1.8)); const e = 0.5 - 0.5 * Math.cos(Math.PI * u);
         z += (kz - z) * e; cx += (kx - cx) * e; cy += (ky - cy) * e;
       }
-      z *= 1 + 0.008 * (t - it.scene.t0);
-      const W = 1920, H = 1080;
+      let lastKey = it.scene.t0;
+      for (const k of it.camKeys) if (t >= k[0]) lastKey = k[0];
+      z *= 1 + Math.min(0.04, 0.008 * (t - lastKey));   // лёгкий наезд от последнего движения камеры
+      const W = stageW, H = stageH;
       z = Math.max(1, z);
       cx = Math.min(W - W / 2 / z, Math.max(W / 2 / z, cx));   // камера не выходит за края мира
       cy = Math.min(H - H / 2 / z, Math.max(H / 2 / z, cy));
@@ -280,6 +282,35 @@
       tf += ` scale(${1 + 0.16 * bump(ph, 0.08, 0.045) + 0.09 * bump(ph, 0.3, 0.05)})`;
     }
     if ('spin' in it.d) tf += ` rotate(${t * parseFloat(it.d.spin || 20)}deg)`;
+    if ('count' in it.d) {
+      // счётчик: data-count="время:от:до:длит:знаков" + data-prefix / data-suffix
+      const [ts, a, b, du, dec] = it.d.count.split('|');
+      const u = clamp((t - at(ts)) / parseFloat(du || 1.2));
+      const v = parseFloat(a) + (parseFloat(b) - parseFloat(a)) * (1 - Math.pow(1 - u, 3));
+      const txt = (it.d.prefix || '') + v.toFixed(parseInt(dec || 0)).replace('.', ',') + (it.d.suffix || '');
+      if (el.textContent !== txt) el.textContent = txt;
+    }
+    if ('wiggle' in it.d) {
+      // постоянное «живое» дрожание атома
+      const a = parseFloat(it.d.wiggle) || 3;
+      tf += ` translate(${Math.sin(t * 7.1 + it.phase) * a + Math.sin(t * 13.3 + it.phase * 2) * a * 0.4}px, ${Math.cos(t * 6.3 + it.phase) * a}px)`;
+    }
+    if ('buzz' in it.d) {
+      // сильная вибрация в интервалах: data-buzz="t0-t1,t2-t3"
+      for (const r of it.d.buzz.split(',')) {
+        const [a0, a1] = r.split('~').map(at);
+        if (t >= a0 && t < a1) {
+          const k = Math.min(1, (t - a0) / 0.15, (a1 - t) / 0.2);
+          tf += ` translate(${Math.sin(t * 90 + it.phase) * 7 * k}px, ${Math.cos(t * 77 + it.phase) * 5 * k}px)`;
+        }
+      }
+    }
+    if ('glow' in it.d) {
+      // свечение-кольцо в интервале: data-glow="t0~t1"
+      const [g0, g1] = it.d.glow.split('~').map(at);
+      const k = clamp(Math.min((t - g0) / 0.4, (g1 - t) / 0.5));
+      el.style.boxShadow = k > 0 ? `0 0 0 ${10 + 6 * Math.sin(t * 8)}px rgba(10,165,232,${0.35 * k}), 0 0 ${40 * k}px rgba(10,165,232,${0.6 * k})` : '';
+    }
     if ('sweep' in it.d) {
       // маркер «прорисовывается» слева направо под текстом
       const t0 = at(it.d.sweep), u = clamp((t - t0) / (parseFloat(it.d.sweepDur) || 0.7));
@@ -292,6 +323,7 @@
   }
 
   const XF = parseFloat(document.body.dataset.xfade || '0');
+  const stageEl = document.getElementById('stage'); const stageW = stageEl.clientWidth, stageH = stageEl.clientHeight;
   window.renderAt = function (t) {
     renderBackground(t);
     if (XF > 0) {

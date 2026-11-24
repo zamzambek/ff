@@ -96,6 +96,30 @@ def sfx_clip(name, rng):
         env = np.minimum(1, tt / 0.5) * np.minimum(1, (1.8 - tt) / 0.5)
         breath = rng.standard_normal(L).astype(np.float32) * 0.05
         return (np.sin(2 * np.pi * np.cumsum(f) / SR) * 0.11 + breath * 0.3) * env
+    if name == "ding":
+        L = int(SR * 1.4); tt = np.arange(L) / SR
+        x = sum(np.sin(2 * np.pi * fr * tt) * np.exp(-tt * d) * a for fr, d, a in ((1568, 3.2, .5), (2349, 4.5, .25), (3136, 6, .12)))
+        return (x * np.minimum(1, tt / 0.003) * 0.16).astype(np.float32)
+    if name == "tickroll":
+        L = int(SR * 1.3); out = np.zeros(L, dtype=np.float32); t0 = 0.0; k = 0
+        while t0 < 1.2:
+            i = int(t0 * SR); n2 = int(SR * 0.012); tt = np.arange(n2) / SR
+            out[i:i + n2] += (np.sin(2 * np.pi * (2200 + 40 * k) * tt) * np.exp(-tt * 400) * 0.09)[: L - i]
+            t0 += 0.05 + 0.1 * (t0 / 1.2) ** 2; k += 1
+        return out
+    if name == "buzz":
+        L = int(SR * 0.9); tt = np.arange(L) / SR
+        x = np.sign(np.sin(2 * np.pi * 70 * tt)) * 0.5 + np.sin(2 * np.pi * 140 * tt) * 0.3
+        x = np.convolve(x, np.ones(30) / 30, "same") * (1 + 0.5 * np.sin(2 * np.pi * 18 * tt))
+        return (x * np.minimum(1, tt / 0.05) * np.minimum(1, (0.9 - tt) / 0.25) * 0.09).astype(np.float32)
+    if name == "swoosh":
+        L = int(SR * 0.55); x = rng.standard_normal(L).astype(np.float32); tt = np.arange(L) / SR
+        lo = np.convolve(x, np.ones(40) / 40, "same"); hi = np.convolve(x, np.ones(6) / 6, "same")
+        m = (tt / 0.55)
+        return ((lo * (1 - m) + hi * m) * np.sin(np.pi * m) ** 2 * 0.22).astype(np.float32)
+    if name == "softpop":
+        L = int(SR * 0.09); tt = np.arange(L) / SR
+        return (np.sin(2 * np.pi * np.cumsum(700 - 3000 * tt) / SR) * np.exp(-tt * 60) * 0.07).astype(np.float32)
     if name == "riser":
         L = int(SR * 1.25); tt = np.arange(L) / SR
         x = rng.standard_normal(L).astype(np.float32)
@@ -175,6 +199,72 @@ def curious_bed(n, rng, bpm=96, drums_from=2.5, accent_at=None):
     return out
 
 
+def lowpass_fft(x, cutoff):
+    X = np.fft.rfft(x); fr = np.fft.rfftfreq(len(x), 1 / SR)
+    X *= 1 / np.sqrt(1 + (fr / cutoff) ** 4)
+    return np.fft.irfft(X, len(x)).astype(np.float32)
+
+
+def reverb_fft(x, decay=1.8, mix=0.25, rng=None):
+    L = int(SR * decay); tt = np.arange(L) / SR
+    ir = (rng.standard_normal(L) * np.exp(-tt * 6.9 / decay)).astype(np.float32)
+    ir = lowpass_fft(ir, 5000); ir /= np.sqrt(np.sum(ir ** 2)) + 1e-9
+    N = 1 << int(np.ceil(np.log2(len(x) + L)))
+    wet = np.fft.irfft(np.fft.rfft(x, N) * np.fft.rfft(ir, N), N)[: len(x)]
+    return (x * (1 - mix) + wet * mix * 3).astype(np.float32)
+
+
+def curious_bed2(n, rng, bpm=100, drums_from=2.5, accent_at=None, riser_at=None):
+    """Тёплый «научный» грув: широкий пэд (детюн-пилы через фильтр), электропиано,
+    арпеджио с эхом, мягкий бас, бит с шейкером, реверберация. Dm9–B♭maj7–Gm9–A7sus→A7."""
+    beat = 60 / bpm; bar = 4 * beat
+    f = lambda m: 440.0 * 2 ** ((m - 69) / 12)
+    prog = [[38, 53, 57, 60, 64], [34, 50, 53, 57, 62], [31, 50, 53, 57, 58], [33, 50, 52, 55, 61]]
+    pad = np.zeros(n, np.float32); keys = np.zeros(n, np.float32); arp = np.zeros(n, np.float32)
+    bass = np.zeros(n, np.float32); drums = np.zeros(n, np.float32)
+    def saw(fr, L):
+        t = np.arange(L) / SR; return 2 * ((fr * t) % 1) - 1
+    i, t = 0, 0.0
+    while t < n / SR:
+        ch = prog[i % 4]; L = int(SR * (bar + 0.6)); tt = np.arange(L) / SR
+        env = np.minimum(1, tt / 0.6) * np.minimum(1, (L / SR - tt) / 0.6)
+        x = sum(saw(f(m) * d, L) for m in ch[1:] for d in (0.996, 1.004))
+        add(pad, (x * env * 0.03).astype(np.float32), t)
+        for k, m in enumerate(ch[1:4]):                                  # электропиано
+            Lk = int(SR * bar); tk = np.arange(Lk) / SR
+            e = np.sin(2 * np.pi * f(m) * tk) + 0.3 * np.sin(4 * np.pi * f(m) * tk) * np.exp(-tk * 5)
+            add(keys, (e * np.exp(-tk * 1.2) * np.minimum(1, tk / 0.01) * 0.05).astype(np.float32), t + k * 0.015)
+        Lb = int(SR * bar * 0.95); tb = np.arange(Lb) / SR                # бас
+        add(bass, (np.tanh(1.6 * np.sin(2 * np.pi * f(ch[0]) * tb)) * np.minimum(1, tb / 0.02) * np.exp(-tb * 0.6) * 0.16).astype(np.float32), t)
+        pat = [1, 2, 3, 4, 3, 2, 4, 3]                                    # арпеджио + эхо 3/16
+        for k in range(8):
+            m = ch[pat[k]] + 12; Lp = int(SR * 0.5); tp = np.arange(Lp) / SR
+            pl = sum(np.sin(2 * np.pi * f(m) * h * tp) * np.exp(-tp * (7 + 5 * h)) / h for h in range(1, 5))
+            pl = (pl * np.minimum(1, tp / 0.003) * 0.05).astype(np.float32)
+            tt0 = t + k * beat / 2
+            add(arp, pl, tt0); add(arp, pl * 0.45, tt0 + 3 * beat / 4); add(arp, pl * 0.2, tt0 + 1.5 * beat)
+        if t >= drums_from - 0.01:
+            for b in range(4):
+                tb0 = t + b * beat
+                Lk = int(SR * 0.28); tk = np.arange(Lk) / SR
+                if b in (0, 2) or (b == 3 and i % 2):
+                    add(drums, (np.sin(2 * np.pi * np.cumsum(48 + 70 * np.exp(-tk * 30)) / SR) * np.exp(-tk * 10) * 0.42).astype(np.float32), tb0 + (beat / 2 if b == 3 else 0))
+                if b in (1, 3):
+                    nz = rng.standard_normal(int(SR * 0.2)).astype(np.float32); nz -= np.convolve(nz, np.ones(10) / 10, "same")
+                    add(drums, nz * np.exp(-np.arange(len(nz)) / SR * 18) * 0.10, tb0)
+                for h in range(4):                                       # шейкер 16-ми
+                    nz = rng.standard_normal(int(SR * 0.04)).astype(np.float32); nz -= np.convolve(nz, np.ones(3) / 3, "same")
+                    add(drums, nz * np.exp(-np.arange(len(nz)) / SR * 70) * (0.035 if h % 2 else 0.02), tb0 + h * beat / 4)
+        i += 1; t += bar
+    pad = lowpass_fft(pad, 1400)
+    music = reverb_fft(pad + keys + arp, 2.2, 0.35, rng) + lowpass_fft(bass, 300) + drums
+    if accent_at is not None:
+        L = int(SR * 2.5); tt = np.arange(L) / SR
+        hit = sum(np.sin(2 * np.pi * f(m) * tt) for m in (62, 69, 74, 77)) * np.exp(-tt * 1.5) * 0.05
+        add(music, hit.astype(np.float32), accent_at)
+    return music
+
+
 def add(buf, clip, t):
     i = int(t * SR)
     if i < 0 or i >= len(buf):
@@ -210,7 +300,7 @@ def main(project: Path, music: str | None):
             bed += rain_bed(len(out), rng)
         out += bed * fade
 
-    if "--curious" in sys.argv:
+    if "--curious" in sys.argv or "--curious2" in sys.argv:
         tl = json.loads((build / "timings.json").read_text())
         seg = {x["id"]: x for x in tl["segments"]}
         a = sys.argv[sys.argv.index("--accent") + 1] if "--accent" in sys.argv else None
@@ -219,7 +309,7 @@ def main(project: Path, music: str | None):
             sid, _, wi = a.partition("#")
             acc = seg[sid]["words"][int(wi or 0)]["start"]
         drums = seg["s2"]["start"] if "s2" in seg else 2.5
-        bed = curious_bed(len(out), rng, drums_from=drums, accent_at=acc)
+        bed = (curious_bed2 if "--curious2" in sys.argv else curious_bed)(len(out), rng, drums_from=drums, accent_at=acc)
         fade = np.minimum(1, np.arange(len(out)) / (SR * 0.4)) * np.minimum(1, (len(out) - np.arange(len(out))) / (SR * 1.5))
         env = np.convolve(np.abs(np.pad(voice, (0, len(out) - len(voice)))), np.ones(SR // 8) / (SR // 8), "same")
         duck = np.convolve(np.where(env > 0.015, 0.3, 1.0), np.ones(SR // 6) / (SR // 6), "same")  # плавное приглушение

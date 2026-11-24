@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="ky">
+<head>
+<meta charset="utf-8">
+<title>ЖРТ-лайфхак #2 — KAINAP</title>
+<link rel="stylesheet" href="../../engine/style.css">
+<style>
+  :root { --navy: #14156A; --brand: #3A3CF4; --acc: #FF8A00; --acc2: #FFB21E; --mark: #FFE3A0; --pale: #E4E6FF; --sun: #FFEFC6; --muted: #8C8EB4; --red: #E5484D; }
+  #stage { background: #F6F7FC; }
+  .dots { position: absolute; inset: 0; background-image: radial-gradient(rgba(20,21,106,.09) 2.2px, transparent 2.2px); background-size: 36px 36px; }
+  .blob { filter: none; }
+  .blob.p { width: 700px; height: 700px; right: -300px; top: -220px; background: var(--pale); }
+  .blob.s { width: 640px; height: 640px; left: -340px; top: 1380px; background: var(--sun); }
+  .abs { position: absolute; }
+  .scene.full { top: 0; height: 1920px; display: block; }
+  .serif { font-family: 'Lora', Georgia, serif; font-style: italic; font-weight: 700; }
+  /* шапка */
+  .head { position: absolute; left: 56px; right: 56px; top: 64px; display: flex; align-items: center; justify-content: space-between; z-index: 5; }
+  .brand3 { display: flex; align-items: center; gap: 18px; background: #fff; border-radius: 999px; padding: 14px 34px 14px 20px; box-shadow: 0 10px 30px rgba(20,21,106,.10); }
+  .brand3 img { height: 74px; display: block; }
+  .brand3 .nm { font-weight: 900; font-size: 54px; letter-spacing: 3px; color: var(--navy); line-height: 1; }
+  .brand3 .nm span { color: inherit; }
+  .series { background: var(--navy); color: #fff; font-weight: 900; font-size: 36px; padding: 20px 34px; border-radius: 999px; letter-spacing: 1px; box-shadow: 0 10px 30px rgba(20,21,106,.22); }
+  .series b { color: var(--acc2); }
+  /* карточка вопроса */
+  .qcard { position: absolute; left: 56px; right: 56px; top: 220px; background: #fff; border-radius: 40px; padding: 34px 44px 40px; box-shadow: 0 16px 44px rgba(20,21,106,.12); z-index: 5; }
+  .qcard .meta { display: flex; align-items: center; gap: 16px; font-weight: 800; font-size: 30px; color: var(--muted); letter-spacing: 2px; }
+  .qcard .meta b { width: 48px; height: 48px; border-radius: 12px; background: var(--acc); color: #fff; display: grid; place-items: center; font-size: 30px; letter-spacing: 0; }
+  .qcard .q { margin-top: 16px; font-weight: 900; font-size: 52px; line-height: 1.25; color: var(--navy); }
+  .hl { background: linear-gradient(transparent 56%, var(--mark) 56%) no-repeat; padding: 0 6px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+  /* формула */
+  .sym { position: absolute; font-weight: 900; font-size: 250px; line-height: 1; color: var(--navy); letter-spacing: -6px; }
+  .slot { position: absolute; width: 96px; height: 118px; margin: -59px 0 0 -48px; border: 6px dashed var(--muted); border-radius: 20px; display: grid; place-items: center; font-weight: 900; font-size: 70px; color: var(--muted); }
+  .val { position: absolute; width: 200px; height: 130px; margin: -65px 0 0 -100px; display: grid; place-items: center; font-family: 'Lora', serif; font-style: italic; font-weight: 700; font-size: 104px; color: var(--acc); }
+  .note { font-weight: 900; font-size: 44px; padding: 14px 32px; border-radius: 22px; background: #fff; color: var(--navy); box-shadow: 0 10px 28px rgba(20,21,106,.12); white-space: nowrap; }
+  .tbl { position: absolute; left: 56px; right: 56px; background: #fff; border-radius: 40px; padding: 34px 48px; box-shadow: 0 16px 44px rgba(20,21,106,.12); }
+  .tr { display: flex; align-items: center; justify-content: space-between; font-size: 56px; font-weight: 900; color: var(--navy); padding: 20px 0; border-bottom: 2px solid #EEF0FA; white-space: nowrap; }
+  .tr:last-child { border-bottom: 0; }
+  .tr .l sup { font-family: 'Lora', serif; font-style: italic; color: var(--acc); font-size: .6em; }
+  .tr .arr { color: var(--muted); font-weight: 700; }
+  .cta { display: inline-block; font-weight: 900; font-size: 48px; padding: 26px 54px; border-radius: 999px; white-space: nowrap; }
+  /* субтитры */
+  .cap { top: 1500px; left: 56px; right: 56px; }
+  .cap-box { background: var(--navy); color: #fff; border-radius: 28px; padding: 20px 40px; font-size: 58px; line-height: 1.25; box-shadow: 0 14px 34px rgba(20,21,106,.28); }
+  .cap-box .w { padding: 0 4px; }
+  .cap-box .w.key { color: var(--acc2); }
+
+  .atom { position: absolute; border-radius: 50%; display: grid; place-items: center; font-weight: 900; color: #fff; border: 6px solid var(--navy); }
+  .atom.O { background: radial-gradient(circle at 35% 30%, #FF8A8E, #E5484D 65%); }
+  .atom.H { background: radial-gradient(circle at 35% 30%, #FFFFFF, #E4E6F2 70%); color: var(--navy); }
+  .atom.C { background: radial-gradient(circle at 35% 30%, #6C6E8E, #2B2D45 70%); }
+  .bond { position: absolute; height: 14px; background: var(--navy); border-radius: 7px; transform-origin: 0 50%; }
+  .mass { position: absolute; width: 90px; margin-left: -45px; text-align: center; font-family: 'Lora', serif; font-style: italic; font-weight: 700; font-size: 46px; color: var(--acc); }
+  .colname { position: absolute; width: 440px; text-align: center; font-weight: 900; font-size: 92px; color: var(--navy); }
+  .frac { position: absolute; width: 440px; text-align: center; }
+  .frac .n { display: block; font-weight: 900; font-size: 74px; color: var(--navy); line-height: 1.05; }
+  .frac .line { display: block; height: 7px; width: 170px; margin: 8px auto; background: var(--navy); border-radius: 4px; }
+  .pct { position: absolute; width: 440px; text-align: center; font-weight: 900; font-size: 120px; line-height: 1; }
+  .track { position: absolute; height: 30px; width: 400px; border-radius: 20px; background: #E6E8F4; overflow: hidden; }
+  .fill { height: 100%; border-radius: 20px; transform-origin: 0 50%; }
+  .divider { position: absolute; left: 538px; width: 4px; top: 500px; height: 920px; background: repeating-linear-gradient(transparent 0 14px, #D9DBEE 14px 28px); }
+
+  /* палитры акцента под синий логотип */
+  :root { --accglow: rgba(255,138,0,.35); }
+  body[data-palette="cyan"]   { --acc: #0AA5E8; --acc2: #5CD6FF; --mark: #CDEEFF; --sun: #D9F3FF; --accglow: rgba(10,165,232,.35); }
+  body[data-palette="violet"] { --acc: #7C4DFF; --acc2: #B9A2FF; --mark: #E3DAFF; --sun: #ECE6FF; --accglow: rgba(124,77,255,.35); }
+  body[data-palette="mint"]   { --acc: #0DB39E; --acc2: #5FE3CF; --mark: #CFF5EE; --sun: #D8F6F0; --accglow: rgba(13,179,158,.35); }
+
+  .world { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+  .atom { transition: none; }
+  .fl { position: absolute; width: 200px; margin-left: -100px; text-align: center; font-weight: 900; font-size: 78px; line-height: 1; color: var(--navy); }
+  .fline { position: absolute; height: 7px; width: 190px; margin-left: -95px; background: var(--navy); border-radius: 4px; transform-origin: 50% 50%; }
+  .pct2 { position: absolute; width: 440px; margin-left: -220px; text-align: center; font-weight: 900; font-size: 124px; line-height: 1; color: var(--brand); }
+  .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 20px; transform-origin: 0 50%; }
+  .track { position: absolute; height: 30px; width: 400px; border-radius: 15px; background: #E6E8F4; overflow: hidden; }
+</style>
+</head>
+<body class="cap-plain" data-pops="off" data-smooth data-palette="cyan">
+<div id="stage">
+  <div class="dots"></div>
+  <div class="blob p"></div><div class="blob s"></div>
+
+  <section class="scene full" data-from="s1-0.15">
+    <div class="world" data-out="s11-0.25" data-cam="s1-0.15:1.0,540,1000;s1:1.1,540,900,2.4;s2#5:1.22,330,880,1.5;s2#7:1.22,760,880,1.5;s3#1:1.5,780,720,1.7;s4#0:1.08,540,930,1.6;s5#2:1.1,540,960,1.4;s6#0:1.1,360,965,1.8;s8#0:1.1,720,965,1.8;s10#0:1.0,540,960,1.7">
+      <div class="abs" data-in="s2#5" data-sfx="swoosh"></div><div class="abs" data-in="s3#1" data-sfx="swoosh"></div>
+      <div class="abs" data-in="s6#0" data-sfx="swoosh"></div><div class="abs" data-in="s8#0" data-sfx="swoosh"></div><div class="abs" data-in="s10#0" data-sfx="swoosh"></div>
+      <div class="divider" data-in="s1+0.3" data-anim="fade" data-out="s10#3"></div>
+
+      <!-- H2O -->
+      <div class="abs" style="left:0;top:0;width:540px;height:900px;transform-origin:300px 650px" data-in="s1-0.1" data-anim="up" data-sfx="softpop" data-scale="s1:1,s10#3:1.12,s10#5:1.04" data-buzz="s4#2~s4#3+0.2">
+        <div class="bond" style="left:300px;top:640px;width:118px;transform:rotate(140deg)"></div>
+        <div class="bond" style="left:300px;top:640px;width:118px;transform:rotate(40deg)"></div>
+        <div class="atom O" style="left:228px;top:568px;width:144px;height:144px;font-size:62px" data-wiggle="2.5" data-glow="s6#1~s6#5">O</div>
+        <div class="atom H" style="left:160px;top:680px;width:92px;height:92px;font-size:42px" data-wiggle="3" data-glow="s6#5~s6#9">H</div>
+        <div class="atom H" style="left:348px;top:680px;width:92px;height:92px;font-size:42px" data-wiggle="3" data-glow="s6#5~s6#9">H</div>
+        <div class="colname" style="left:80px;top:800px">H₂O</div>
+      </div>
+      <!-- CO2 -->
+      <div class="abs" style="left:0;top:0;width:1080px;height:900px" data-in="s1+0.2" data-anim="up" data-sfx="softpop" data-dim="s10#3" data-buzz="s4#2~s4#3+0.2">
+        <div class="bond" style="left:660px;top:633px;width:240px;height:10px"></div>
+        <div class="bond" style="left:660px;top:653px;width:240px;height:10px"></div>
+        <div class="atom O" style="left:596px;top:588px;width:120px;height:120px;font-size:54px" data-wiggle="2.5" data-buzz="s3#6~s3#8+0.4" data-glow="s3#6~s3#8+0.6">O</div>
+        <div class="atom C" style="left:726px;top:592px;width:112px;height:112px;font-size:52px" data-wiggle="2" data-glow="s8#6~s8#9">C</div>
+        <div class="atom O" style="left:848px;top:588px;width:120px;height:120px;font-size:54px" data-wiggle="2.5" data-buzz="s3#6~s3#8+0.4" data-glow="s3#6~s3#8+0.6">O</div>
+        <div class="colname" style="left:560px;top:800px">CO₂</div>
+      </div>
+      <div class="abs" data-in="s3#6" data-sfx="buzz"></div>
+
+      <!-- ловушка -->
+      <div class="abs" style="left:560px;width:440px;text-align:center;top:470px" data-in="s3#6" data-anim="up" data-out="s4#0" data-sfx="softpop"><span class="note" style="font-size:42px">2 атом O 🤔</span></div>
+      <div class="abs" style="left:0;right:0;top:990px;text-align:center" data-in="s4#2" data-anim="up" data-out="s5#1" data-sfx="softpop"><span class="note" style="font-size:46px">саны эмес — <b style="color:var(--acc)">массасы</b> ⚖️</span></div>
+      <div class="abs" style="left:0;right:0;top:960px;text-align:center" data-in="s5#2" data-anim="up" data-sfx="softpop" data-out="s6#0"><span class="note" style="font-size:50px;padding:18px 40px">ω(O) = <span class="serif" style="color:var(--acc)">m(O)</span> / <span class="serif">m(зат)</span></span></div>
+
+      <!-- H2O: массы слетают в дробь -->
+      <div class="mass" style="left:300px;top:515px;color:var(--acc)" data-in="s6#3" data-anim="up" data-sfx="softpop" data-move="s6#3:0,0;s6#4+0.1:0,520,1.0" data-scale="s6#3:1,s6#4+0.1:1.65">16</div>
+      <div class="mass" style="left:128px;top:700px;font-size:38px;color:var(--muted)" data-in="s6#5" data-anim="up" data-move="s6#5:0,0;s6#6:172,440,0.9" data-out="s6#6+0.85">1</div>
+      <div class="mass" style="left:472px;top:700px;font-size:38px;color:var(--muted)" data-in="s6#5" data-anim="up" data-move="s6#5:0,0;s6#6:-172,440,0.9" data-out="s6#6+0.85">1</div>
+      <div class="fline" style="left:300px;top:1112px" data-in="s6#4+0.6" data-anim="grow"></div>
+      <div class="fl" style="left:300px;top:1137px;font-size:56px;color:var(--muted)" data-in="s6#6+0.8" data-anim="fade" data-out="s6#8">16+1+1</div>
+      <div class="fl" style="left:300px;top:1132px" data-in="s6#8" data-anim="up" data-sfx="softpop">18</div>
+      <div class="pct2" style="left:300px;top:1232px" data-in="s7#6" data-anim="fade" data-count="s7#6|0|89|1.3|0" data-prefix="≈ " data-suffix="%" data-sfx="tickroll">≈ 0%</div>
+      <div class="abs" data-in="s7#6+1.3" data-sfx="ding"></div>
+
+      <!-- CO2: две 16 сливаются в 32 -->
+      <div class="mass" style="left:656px;top:520px;color:var(--acc)" data-in="s8#3" data-anim="up" data-sfx="softpop" data-move="s8#3:0,0;s8#4:124,524,1.0" data-scale="s8#3:1,s8#4:1.5" data-out="s8#4+0.95">16</div>
+      <div class="mass" style="left:908px;top:520px;color:var(--acc)" data-in="s8#3" data-anim="up" data-move="s8#3:0,0;s8#4:-128,524,1.0" data-scale="s8#3:1,s8#4:1.5" data-out="s8#4+0.95">16</div>
+      <div class="fl" style="left:780px;top:1027px;color:var(--acc)" data-in="s8#4+0.9" data-anim="pop" data-sfx="softpop">32</div>
+      <div class="mass" style="left:782px;top:510px;font-size:38px;color:var(--muted)" data-in="s8#6" data-anim="up" data-move="s8#6:0,0;s8#7:0,632,0.9" data-out="s8#7+0.85">12</div>
+      <div class="fline" style="left:780px;top:1112px" data-in="s8#4+0.6" data-anim="grow"></div>
+      <div class="fl" style="left:780px;top:1137px;font-size:56px;color:var(--muted)" data-in="s8#7+0.8" data-anim="fade" data-out="s8#8">32+12</div>
+      <div class="fl" style="left:780px;top:1132px" data-in="s8#8" data-anim="up" data-sfx="softpop">44</div>
+      <div class="pct2" style="left:780px;top:1232px" data-in="s9#6" data-anim="fade" data-count="s9#6|0|73|1.2|0" data-prefix="≈ " data-suffix="%" data-sfx="tickroll">≈ 0%</div>
+      <div class="abs" data-in="s9#6+1.2" data-sfx="ding"></div>
+
+      <!-- сравнение и победитель -->
+      <div class="track" style="left:100px;top:1400px" data-in="s10#0" data-anim="fade"><div class="fill" style="width:89%;background:var(--brand)" data-in="s10#1" data-anim="grow" data-sfx="swoosh"></div></div>
+      <div class="track" style="left:580px;top:1400px" data-in="s10#0" data-anim="fade"><div class="fill" style="width:73%;background:var(--muted)" data-in="s10#1+0.2" data-anim="grow"></div></div>
+      <div class="abs" style="left:90px;top:470px;width:420px;height:440px;border-radius:40px;border:8px solid #1FA971;box-shadow:0 0 0 12px rgba(31,169,113,.12)" data-in="s10#3" data-anim="pop" data-sfx="ding"></div>
+      <div class="abs" style="left:150px;top:420px" data-in="s10#3+0.2" data-anim="up"><span class="note" style="background:#1FA971;color:#fff;font-size:40px">✓ СУУ көп</span></div>
+    </div>
+
+    <div class="qcard" data-out="s11-0.25">
+      <div class="meta"><b>2</b>ЖРТ · ХИМИЯ</div>
+      <div class="q"><span class="hl" data-sweep="s2#2" data-sweep-dur="1.2">Кычкылтектин массалык үлүшү</span><br><span class="hl" data-sweep="s2#5" data-sweep-dur="1.0">кайсында көп: H₂O же CO₂?</span></div>
+    </div>
+
+    <!-- Эстеп кал -->
+    <div class="abs serif" style="left:0;right:0;top:250px;text-align:center;font-size:132px;color:var(--navy)" data-in="s11" data-anim="up" data-sfx="swoosh"><span class="hl" data-sweep="s11+0.3" data-sweep-dur="0.8">Эстеп кал!</span></div>
+    <div class="tbl" style="top:480px" data-in="s11+0.2" data-anim="up">
+      <div class="tr" style="justify-content:center;font-size:64px">ω = <span class="serif" style="color:var(--acc);margin:0 12px">m(элемент)</span> / <span class="serif" style="margin-left:12px">m(зат)</span></div>
+      <div class="tr" data-in="s11#2" data-anim="up" data-sfx="softpop"><span>H₂O</span><span class="arr">16 / 18</span><span><span class="hl">89%</span></span></div>
+      <div class="tr" data-in="s11#4" data-anim="up" data-sfx="softpop"><span>CO₂</span><span class="arr">32 / 44</span><span><span class="hl">73%</span></span></div>
+    </div>
+    <div class="abs" style="left:0;right:0;top:1060px;text-align:center" data-in="s11#5" data-anim="up"><span class="note" style="font-size:42px">атомдун саны эмес — <b style="color:var(--acc)">массасы</b></span></div>
+    <div class="abs" style="left:0;right:0;top:1200px;text-align:center" data-in="s12#3" data-anim="up" data-sfx="softpop"><span class="cta" style="background:var(--acc);color:#fff;box-shadow:0 14px 34px var(--accglow)">ЖРТга KAINAP менен даярдан</span></div>
+    <div class="abs" style="left:0;right:0;top:1340px;text-align:center" data-in="s12#0" data-anim="up"><span class="cta" style="background:var(--navy);color:#fff;font-size:42px;padding:20px 44px">🔖 Сактап кой</span></div>
+  </section>
+
+  <div class="head">
+    <div class="brand3"><img src="../../assets/brand/kainap-logo.png" alt=""><div class="nm">KAI<span>NAP</span></div></div>
+    <div class="series">ЖРТ-ЛАЙФХАК <b>#2</b></div>
+  </div>
+  <div class="cap"></div>
+</div>
+<script src="build/timings.js"></script>
+<script src="../../engine/engine.js"></script>
+</body>
+</html>

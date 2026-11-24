@@ -246,7 +246,8 @@ def main(project: Path):
             nxt = fix(all_segs[k + 1].get("say", all_segs[k + 1]["show"])).translate(str.maketrans("", "", "*~^")) if k + 1 < len(all_segs) else None
             if seg.get("context") is False:  # фраза звучит лучше без соседнего контекста
                 prev = nxt = None
-            mp3, chars = elevenlabs.synth(el_cfg, say, prev, nxt, cache_dir=build / "el-cache")
+            cfg_seg = dict(el_cfg, seed=seg["seed"]) if "seed" in seg else el_cfg
+            mp3, chars = elevenlabs.synth(cfg_seg, say, prev, nxt, cache_dir=build / "el-cache")
             (seg_dir / f"{sid}.mp3").write_bytes(mp3)
             to_pcm(seg_dir / f"{sid}.mp3", out, trim=False)
             spans = elevenlabs.word_spans(chars)

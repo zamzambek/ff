@@ -119,9 +119,9 @@
     T.segments.forEach((s) => {
       let cur = null;
       s.words.forEach((w, i) => {
-        if (!cur || cur.words.map((x) => x.w).join(' ').length > 34) { cur = { start: w.start, words: [] }; chunks.push(cur); }
+        if (!cur || (cur.words.map((x) => x.w).join(' ').length > 34 && w.w !== '—')) { cur = { start: w.start, words: [] }; chunks.push(cur); }
         cur.words.push(w);
-        if (/[.?!:,—]$/.test(w.w.replace(/[*~^]/g, '')) && cur.words.map((x) => x.w).join(' ').length > 14 && i < s.words.length - 1) cur = null;
+        if (/[.?!:,]$/.test(w.w.replace(/[*~^]/g, '')) && cur.words.map((x) => x.w).join(' ').length > 14 && i < s.words.length - 1) cur = null;
       });
     });
     chunks.forEach((c, i) => (c.end = i + 1 < chunks.length ? chunks[i + 1].start : c.words[c.words.length - 1].end + 0.6));

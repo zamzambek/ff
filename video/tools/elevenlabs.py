@@ -42,6 +42,8 @@ def synth(cfg, text, prev_text=None, next_text=None, cache_dir: Path | None = No
     body = {"text": text, "model_id": cfg.get("model_id", "eleven_v3")}
     if cfg.get("language_code"):
         body["language_code"] = cfg["language_code"]
+    if cfg.get("seed") is not None:
+        body["seed"] = cfg["seed"]
     if cfg.get("voice_settings"):
         body["voice_settings"] = cfg["voice_settings"]
     if prev_text and cfg.get("context", True):

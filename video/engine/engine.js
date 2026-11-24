@@ -46,7 +46,9 @@
   const outBack = (x) => { const c1 = 1.9, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
   const hash = (str) => { let h = 0; for (const c of str) h = (h * 31 + c.charCodeAt(0)) | 0; return (h >>> 0) / 4294967295; };
 
-  const IN_DUR = 0.42, OUT_DUR = 0.3, SCENE_OUT = 0.28;
+  const SMOOTH = 'smooth' in document.body.dataset;
+  const IN_DUR = SMOOTH ? 0.65 : 0.42, OUT_DUR = SMOOTH ? 0.5 : 0.3, SCENE_OUT = 0.28;
+  const easeIO = (x) => x * x * x * (x * (x * 6 - 15) + 10); // smootherstep
 
   // ---- сцены и элементы ----
   const scenes = [...document.querySelectorAll('.scene')].map((el) => ({ el, t0: at(el.dataset.from) }));
@@ -134,7 +136,7 @@
       capShown = c;
     }
     if (PLAIN) {
-      const p = clamp((t - c.start) / 0.3);
+      const p = clamp((t - c.start) / (SMOOTH ? 0.22 : 0.3));
       cap.style.opacity = outCubic(p);
       cap.style.transform = `translateY(${(1 - outCubic(p)) * 14}px)`;
       return;
@@ -183,8 +185,8 @@
       const p = clamp((t - it.tin) / IN_DUR);
       const e = outCubic(p), b = outBack(p);
       switch (it.anim) {
-        case 'pop': tf += `scale(${Math.max(0, 0.3 + 0.7 * b)})`; op = clamp(p * 4); break;
-        case 'up': tf += `translateY(${(1 - e) * 70}px)`; op = clamp(p * 2.5); break;
+        case 'pop': if (SMOOTH) { tf += `scale(${0.86 + 0.14 * easeIO(p)})`; op = easeIO(clamp(p * 1.4)); } else { tf += `scale(${Math.max(0, 0.3 + 0.7 * b)})`; op = clamp(p * 4); } break;
+        case 'up': tf += `translateY(${(1 - (SMOOTH ? easeIO(p) : e)) * (SMOOTH ? 40 : 70)}px)`; op = SMOOTH ? easeIO(p) : clamp(p * 2.5); break;
         case 'down': tf += `translateY(${-(1 - e) * 70}px)`; op = clamp(p * 2.5); break;
         case 'left': tf += `translateX(${-(1 - e) * 120}px)`; op = clamp(p * 2.5); break;
         case 'right': tf += `translateX(${(1 - e) * 120}px)`; op = clamp(p * 2.5); break;
@@ -196,8 +198,8 @@
     }
     if (it.tout != null) {
       const q = clamp((t - it.tout) / OUT_DUR);
-      op *= 1 - q;
-      tf += ` scale(${1 - 0.35 * outCubic(q)})`;
+      op *= 1 - (SMOOTH ? easeIO(q) : q);
+      tf += SMOOTH ? ` translateY(${-20 * easeIO(q)}px)` : ` scale(${1 - 0.35 * outCubic(q)})`;
     }
     if (it.tshake != null && t >= it.tshake && t < it.tshake + 0.6) {
       const k = 1 - (t - it.tshake) / 0.6;
@@ -232,7 +234,7 @@
       for (let i = 1; i < it.moveKeys.length; i++) {
         const [kt, kx, ky, kd] = it.moveKeys[i];
         const dur = kd || Math.max(0.3, Math.min(1.2, kt - it.moveKeys[i - 1][0]));
-        const u = clamp((t - kt) / dur); const e = u * u * (3 - 2 * u);
+        const u = clamp((t - kt) / dur); const e = SMOOTH ? easeIO(u) : u * u * (3 - 2 * u);
         x += (kx - x) * e; y += (ky - y) * e;
       }
       tf = `translate(${x}px, ${y}px) ` + tf;
@@ -250,7 +252,7 @@
       let v = it.scaleKeys[0][1];
       for (let i = 1; i < it.scaleKeys.length; i++) {
         const [kt, kv] = it.scaleKeys[i];
-        if (t >= kt) v = v + (kv - v) * outBack(clamp((t - kt) / 0.35));
+        if (t >= kt) v = v + (kv - v) * (SMOOTH ? easeIO(clamp((t - kt) / 0.7)) : outBack(clamp((t - kt) / 0.35)));
       }
       tf += ` scale(${v})`;
     }

@@ -13,6 +13,10 @@
 @font-face { font-family: 'Nunito'; font-weight: 800; src: url(../assets/fonts/nunito-latin-800-normal.woff2) format('woff2'); }
 @font-face { font-family: 'Nunito'; font-weight: 900; src: url(../assets/fonts/nunito-latin-900-normal.woff2) format('woff2'); }
 
+@font-face { font-family: 'Lora'; font-style: italic; font-weight: 700; src: url(../assets/fonts/lora-cyrillic-ext-700-italic.woff2) format('woff2'); unicode-range: U+0460-052F; }
+@font-face { font-family: 'Lora'; font-style: italic; font-weight: 700; src: url(../assets/fonts/lora-cyrillic-700-italic.woff2) format('woff2'); unicode-range: U+0400-045F; }
+@font-face { font-family: 'Lora'; font-style: italic; font-weight: 700; src: url(../assets/fonts/lora-latin-700-italic.woff2) format('woff2'); }
+
 :root {
   --brand: #3A3CF4;         /* синий из логотипа KAINAP */
   --bg: #EDEFFE;

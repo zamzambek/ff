@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ky">
+<head>
+<meta charset="utf-8">
+<title>ЖРТ-лайфхак #1 — KAINAP</title>
+<link rel="stylesheet" href="../../engine/style.css">
+<style>
+  :root { --navy: #14156A; --brand: #3A3CF4; --acc: #FF8A00; --acc2: #FFB21E; --mark: #FFE3A0; --pale: #E4E6FF; --sun: #FFEFC6; --muted: #8C8EB4; --red: #E5484D; }
+  #stage { background: #F6F7FC; }
+  .dots { position: absolute; inset: 0; background-image: radial-gradient(rgba(20,21,106,.09) 2.2px, transparent 2.2px); background-size: 36px 36px; }
+  .blob { filter: none; }
+  .blob.p { width: 700px; height: 700px; right: -300px; top: -220px; background: var(--pale); }
+  .blob.s { width: 640px; height: 640px; left: -340px; top: 1380px; background: var(--sun); }
+  .abs { position: absolute; }
+  .scene.full { top: 0; height: 1920px; display: block; }
+  .serif { font-family: 'Lora', Georgia, serif; font-style: italic; font-weight: 700; }
+  /* шапка */
+  .head { position: absolute; left: 56px; right: 56px; top: 64px; display: flex; align-items: center; justify-content: space-between; z-index: 5; }
+  .brand3 { display: flex; align-items: center; gap: 18px; background: #fff; border-radius: 999px; padding: 14px 34px 14px 20px; box-shadow: 0 10px 30px rgba(20,21,106,.10); }
+  .brand3 img { height: 74px; display: block; }
+  .brand3 .nm { font-weight: 900; font-size: 54px; letter-spacing: 3px; color: var(--navy); line-height: 1; }
+  .brand3 .nm span { color: var(--brand); }
+  .series { background: var(--navy); color: #fff; font-weight: 900; font-size: 36px; padding: 20px 34px; border-radius: 999px; letter-spacing: 1px; box-shadow: 0 10px 30px rgba(20,21,106,.22); }
+  .series b { color: var(--acc2); }
+  /* карточка вопроса */
+  .qcard { position: absolute; left: 56px; right: 56px; top: 220px; background: #fff; border-radius: 40px; padding: 34px 44px 40px; box-shadow: 0 16px 44px rgba(20,21,106,.12); z-index: 5; }
+  .qcard .meta { display: flex; align-items: center; gap: 16px; font-weight: 800; font-size: 30px; color: var(--muted); letter-spacing: 2px; }
+  .qcard .meta b { width: 48px; height: 48px; border-radius: 12px; background: var(--acc); color: #fff; display: grid; place-items: center; font-size: 30px; letter-spacing: 0; }
+  .qcard .q { margin-top: 16px; font-weight: 900; font-size: 52px; line-height: 1.25; color: var(--navy); }
+  .hl { background: linear-gradient(transparent 56%, var(--mark) 56%); padding: 0 6px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+  /* формула */
+  .sym { position: absolute; font-weight: 900; font-size: 250px; line-height: 1; color: var(--navy); letter-spacing: -6px; }
+  .slot { position: absolute; width: 96px; height: 118px; margin: -59px 0 0 -48px; border: 6px dashed var(--muted); border-radius: 20px; display: grid; place-items: center; font-weight: 900; font-size: 70px; color: var(--muted); }
+  .val { position: absolute; width: 200px; height: 130px; margin: -65px 0 0 -100px; display: grid; place-items: center; font-family: 'Lora', serif; font-style: italic; font-weight: 700; font-size: 104px; color: var(--acc); }
+  .note { font-weight: 900; font-size: 44px; padding: 14px 32px; border-radius: 22px; background: #fff; color: var(--navy); box-shadow: 0 10px 28px rgba(20,21,106,.12); white-space: nowrap; }
+  .tbl { position: absolute; left: 56px; right: 56px; background: #fff; border-radius: 40px; padding: 34px 48px; box-shadow: 0 16px 44px rgba(20,21,106,.12); }
+  .tr { display: flex; align-items: center; justify-content: space-between; font-size: 56px; font-weight: 900; color: var(--navy); padding: 20px 0; border-bottom: 2px solid #EEF0FA; white-space: nowrap; }
+  .tr:last-child { border-bottom: 0; }
+  .tr .l sup { font-family: 'Lora', serif; font-style: italic; color: var(--acc); font-size: .6em; }
+  .tr .arr { color: var(--muted); font-weight: 700; }
+  .cta { display: inline-block; font-weight: 900; font-size: 48px; padding: 26px 54px; border-radius: 999px; white-space: nowrap; }
+  /* субтитры */
+  .cap { top: 1500px; left: 56px; right: 56px; }
+  .cap-box { background: var(--navy); color: #fff; border-radius: 28px; padding: 20px 40px; font-size: 58px; line-height: 1.25; box-shadow: 0 14px 34px rgba(20,21,106,.28); }
+  .cap-box .w { padding: 0 4px; }
+  .cap-box .w.key { color: var(--acc2); }
+</style>
+</head>
+<body class="cap-plain" data-pops="off" data-smooth>
+<div id="stage">
+  <div class="dots"></div>
+  <div class="blob p"></div><div class="blob s"></div>
+
+  <section class="scene full" data-from="s1-0.15">
+    <div class="qcard" data-out="s11-0.1">
+      <div class="meta"><b>1</b>ЖРТ · ХИМИЯ</div>
+      <div class="q"><span class="hl">Алюминий менен кычкылтек:</span><br><span class="hl">формуласы кандай?</span></div>
+    </div>
+
+    <!-- основная формула: Al ? O ? -->
+    <div class="abs" style="inset:0" data-out="s10-0.1">
+      <div class="sym" style="left:150px;top:820px" data-in="s1-0.1" data-anim="up" data-out="s8-0.1">Al</div>
+      <div class="sym" style="left:640px;top:820px" data-in="s1+0.15" data-anim="up" data-out="s8-0.1">O</div>
+      <div class="slot" style="left:480px;top:1040px" data-in="s1#3" data-anim="pop" data-out="s7#3+0.85">?</div>
+      <div class="slot" style="left:888px;top:1040px" data-in="s1#3+0.12" data-anim="pop" data-out="s7#0+0.85">?</div>
+      <!-- ошибка -->
+      <div class="abs" style="left:0;right:0;top:1250px;text-align:center" data-in="s3#1" data-anim="up" data-out="s4">
+        <span class="note" style="font-size:64px;color:var(--red)">Al O <span style="font-size:52px">✗</span></span>
+      </div>
+      <!-- валентности -->
+      <div class="abs" style="left:0;right:0;top:1270px;text-align:center" data-in="s4#2" data-anim="up" data-out="s6">
+        <span class="note">валенттүүлүк = <span class="serif" style="color:var(--acc)">байланыш саны</span></span>
+      </div>
+      <div class="val" style="left:290px;top:720px" data-in="s5#2" data-anim="up" data-move="s5:0,0;s7#0:598,320,1.1" data-scale="s5:1,s7#0:0.8" data-out="s7#0+0.95">III</div>
+      <div class="val" style="left:720px;top:720px" data-in="s5#5" data-anim="up" data-move="s5:0,0;s7#3:-240,320,1.1" data-scale="s5:1,s7#3:0.8" data-out="s7#3+0.95">II</div>
+      <!-- крест -->
+      <svg class="abs" style="left:0;top:0;overflow:visible" width="1080" height="1300" data-out="s8-0.1">
+        <path d="M330 790 C 520 830, 760 930, 880 1000" fill="none" stroke="var(--acc)" stroke-width="7" stroke-dasharray="4 16" stroke-linecap="round" data-in="s6#2" data-anim="draw"/>
+        <path d="M720 790 C 640 860, 560 930, 485 1000" fill="none" stroke="var(--acc)" stroke-width="7" stroke-dasharray="4 16" stroke-linecap="round" data-in="s6#2+0.25" data-anim="draw"/>
+      </svg>
+      <!-- 3 и 2 становятся индексами -->
+      <div class="abs" style="left:858px;top:985px;font-weight:900;font-size:120px;color:var(--acc)" data-in="s7#0+0.85" data-anim="fade" data-out="s8-0.1">3</div>
+      <div class="abs" style="left:452px;top:985px;font-weight:900;font-size:120px;color:var(--acc)" data-in="s7#3+0.85" data-anim="fade" data-out="s8-0.1">2</div>
+    </div>
+
+    <!-- ответ -->
+    <div class="abs" style="inset:0" data-in="s8-0.05" data-anim="fade" data-out="s10-0.1">
+      <div class="abs" style="left:0;right:0;top:820px;text-align:center;font-weight:900;font-size:250px;line-height:1;color:var(--navy);letter-spacing:-6px">Al<span style="color:var(--acc);font-size:.48em">2</span>O<span style="color:var(--acc);font-size:.48em">3</span></div>
+      <div class="abs" style="left:250px;top:1080px;width:580px;height:26px;border-radius:13px;background:var(--mark);transform-origin:0 50%" data-in="s8#2" data-anim="grow"></div>
+      <div class="abs" style="left:0;right:0;top:1180px;display:flex;justify-content:center;gap:28px">
+        <span class="note" data-in="s9#1" data-anim="up">2 · 3 = <b style="color:var(--brand)">6</b></span>
+        <span class="note" data-in="s9#6" data-anim="up">3 · 2 = <b style="color:var(--brand)">6</b></span>
+      </div>
+      <div class="abs" style="left:0;right:0;top:1310px;text-align:center" data-in="s9#10" data-anim="up"><span class="note" style="background:#E6F7EE;color:#138A5A">✓ туура</span></div>
+    </div>
+
+    <!-- второй пример -->
+    <div class="abs" style="inset:0" data-in="s10-0.1" data-anim="fade" data-out="s11-0.1">
+      <div class="abs" style="left:0;right:0;top:820px;text-align:center;font-weight:900;font-size:200px;line-height:1;color:var(--navy);white-space:nowrap">
+        <span>Na<sup class="serif" style="color:var(--acc);font-size:.42em" data-in="s10#3" data-anim="up">I</sup></span>
+        <span style="color:var(--muted);font-size:.5em;vertical-align:middle">+</span>
+        <span>O<sup class="serif" style="color:var(--acc);font-size:.42em" data-in="s10#5" data-anim="up">II</sup></span>
+      </div>
+      <div class="abs" style="left:0;right:0;top:1090px;text-align:center;font-size:90px;color:var(--muted)" data-in="s10#6" data-anim="up">↓</div>
+      <div class="abs" style="left:0;right:0;top:1200px;text-align:center;font-weight:900;font-size:170px;line-height:1;color:var(--navy)" data-in="s10#7" data-anim="up"><span class="hl">Na<span style="color:var(--acc);font-size:.5em">2</span>O</span></div>
+    </div>
+
+    <!-- Эстен кал -->
+    <div class="abs serif" style="left:0;right:0;top:250px;text-align:center;font-size:132px;color:var(--navy)" data-in="s11" data-anim="up"><span class="hl">Эстен кал!</span></div>
+    <div class="tbl" style="top:470px" data-in="s11+0.15" data-anim="up">
+      <div class="tr" data-in="s11#2" data-anim="up"><span class="l">Al<sup>III</sup> + O<sup>II</sup></span><span class="arr">→</span><span><span class="hl">Al₂O₃</span></span></div>
+      <div class="tr" data-in="s11#3" data-anim="up"><span class="l">Na<sup>I</sup> + O<sup>II</sup></span><span class="arr">→</span><span><span class="hl">Na₂O</span></span></div>
+      <div class="tr" data-in="s11#4" data-anim="up"><span class="l">C<sup>IV</sup> + O<sup>II</sup></span><span class="arr">→</span><span><span style="color:var(--muted);text-decoration:line-through;font-size:.8em">C₂O₄</span> <span class="hl">CO₂</span></span></div>
+    </div>
+    <div class="abs" style="left:0;right:0;top:1090px;text-align:center" data-in="s11#6" data-anim="up"><span class="note" style="font-size:40px">бөлүнсө — <b style="color:var(--acc)">кыскарт</b></span></div>
+    <div class="abs" style="left:0;right:0;top:1230px;text-align:center" data-in="s12#3" data-anim="up"><span class="cta" style="background:var(--acc);color:#fff;box-shadow:0 14px 34px rgba(255,138,0,.35)">ЖРТга KAINAP менен даярдан</span></div>
+    <div class="abs" style="left:0;right:0;top:1370px;text-align:center" data-in="s12#0" data-anim="up"><span class="cta" style="background:var(--navy);color:#fff;font-size:42px;padding:20px 44px">🔖 Сактап кой</span></div>
+  </section>
+
+  <div class="head">
+    <div class="brand3"><img src="../../assets/brand/kainap-logo.png" alt=""><div class="nm">KAI<span>NAP</span></div></div>
+    <div class="series">ЖРТ-ЛАЙФХАК <b>#1</b></div>
+  </div>
+  <div class="cap"></div>
+</div>
+<script src="build/timings.js"></script>
+<script src="../../engine/engine.js"></script>
+</body>
+</html>

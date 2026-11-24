@@ -121,6 +121,60 @@ def sfx_clip(name, rng):
     return np.zeros(1, dtype=np.float32)
 
 
+def curious_bed(n, rng, bpm=96, drums_from=2.5, accent_at=None):
+    """Интригующий научный грув (синтез): электропиано Dm–B♭–Gm–A, щипковые арпеджио,
+    саб-бас, мягкий бит. До drums_from — только пиано и арпеджио. accent_at — «удар» на ответе."""
+    out = np.zeros(n, dtype=np.float32)
+    beat = 60 / bpm; bar = 4 * beat
+    f = lambda m: 440.0 * 2 ** ((m - 69) / 12)
+    prog = [[50, 53, 57, 60, 64], [46, 50, 53, 57, 62], [43, 46, 50, 53, 57], [45, 49, 52, 55, 64]]  # Dm9, B♭maj7, Gm7, A7
+    def ep(freq, dur, vel):
+        L = int(SR * dur); t = np.arange(L) / SR
+        env = np.exp(-t * 1.6) * np.minimum(1, t / 0.008)
+        trem = 1 + 0.12 * np.sin(2 * np.pi * 4.5 * t)
+        x = np.sin(2 * np.pi * freq * t) + 0.35 * np.sin(2 * np.pi * 2 * freq * t) * np.exp(-t * 4) + 0.12 * np.sin(2 * np.pi * 3 * freq * t) * np.exp(-t * 8)
+        return (x * env * trem * vel).astype(np.float32)
+    def pluck(freq, vel):
+        L = int(SR * 0.45); t = np.arange(L) / SR
+        x = sum(np.sin(2 * np.pi * freq * k * t) * np.exp(-t * (6 + 5 * k)) / k for k in range(1, 6))
+        return (x * np.minimum(1, t / 0.003) * vel).astype(np.float32)
+    def kick():
+        L = int(SR * 0.3); t = np.arange(L) / SR
+        return (np.sin(2 * np.pi * np.cumsum(45 + 80 * np.exp(-t * 35)) / SR) * np.exp(-t * 11) * 0.5).astype(np.float32)
+    def snap():
+        L = int(SR * 0.18); x = rng.standard_normal(L).astype(np.float32)
+        x = x - np.convolve(x, np.ones(8) / 8, "same")
+        return x * np.exp(-np.arange(L) / SR * 22) * 0.12
+    def hat():
+        L = int(SR * 0.05); x = rng.standard_normal(L).astype(np.float32)
+        x = x - np.convolve(x, np.ones(4) / 4, "same")
+        return x * np.exp(-np.arange(L) / SR * 80) * 0.05
+    K, Sn, arp_pat = kick(), snap(), [0, 2, 4, 2, 1, 3, 4, 3]
+    i, t = 0, 0.0
+    while t < n / SR:
+        ch = prog[i % 4]
+        for m in ch[1:]:
+            add(out, ep(f(m), bar * 1.05, 0.05), t)
+        add(out, ep(f(ch[0] - 12), bar, 0.10), t)                    # бас
+        for k in range(16):                                           # арпеджио 16-ми
+            m = ch[arp_pat[k % 8]] + 12
+            add(out, pluck(f(m), 0.045 if k % 4 else 0.06), t + k * beat / 4)
+        if t >= drums_from - 0.01:
+            for b in range(4):
+                tb = t + b * beat
+                if b in (0, 2): add(out, K, tb)
+                if b == 2 and (i % 2): add(out, K, tb + beat / 2)
+                if b in (1, 3): add(out, Sn, tb)
+                add(out, hat(), tb + beat / 2)
+        i += 1; t += bar
+    if accent_at is not None:
+        L = int(SR * 2.2); tt = np.arange(L) / SR
+        hit = sum(np.sin(2 * np.pi * f(m + 12) * tt) for m in (50, 57, 62, 65)) * np.exp(-tt * 1.8) * 0.06
+        add(out, hit.astype(np.float32), accent_at)
+        add(out, K * 1.4, accent_at)
+    return out
+
+
 def add(buf, clip, t):
     i = int(t * SR)
     if i < 0 or i >= len(buf):
@@ -155,6 +209,21 @@ def main(project: Path, music: str | None):
         if "--rain" in sys.argv:
             bed += rain_bed(len(out), rng)
         out += bed * fade
+
+    if "--curious" in sys.argv:
+        tl = json.loads((build / "timings.json").read_text())
+        seg = {x["id"]: x for x in tl["segments"]}
+        a = sys.argv[sys.argv.index("--accent") + 1] if "--accent" in sys.argv else None
+        acc = None
+        if a:
+            sid, _, wi = a.partition("#")
+            acc = seg[sid]["words"][int(wi or 0)]["start"]
+        drums = seg["s2"]["start"] if "s2" in seg else 2.5
+        bed = curious_bed(len(out), rng, drums_from=drums, accent_at=acc)
+        fade = np.minimum(1, np.arange(len(out)) / (SR * 0.4)) * np.minimum(1, (len(out) - np.arange(len(out))) / (SR * 1.5))
+        env = np.convolve(np.abs(np.pad(voice, (0, len(out) - len(voice)))), np.ones(SR // 8) / (SR // 8), "same")
+        duck = np.convolve(np.where(env > 0.015, 0.3, 1.0), np.ones(SR // 6) / (SR // 6), "same")  # плавное приглушение
+        out += bed * fade * duck * 0.9
 
     if "--beat" in sys.argv:
         bed = beat_bed(len(out), rng=rng)

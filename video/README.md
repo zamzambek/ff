@@ -68,6 +68,15 @@ node tools/render.js projects/co-vs-co2 --stills 3,20,55 --scale 0.5   # сто�
    `data-in="s6#3"` (4-е слово фразы s6, счёт с нуля). Остальные атрибуты описаны в начале `engine/engine.js`.
 5. Проверь стоп-кадрами и собери видео через `build.sh`.
 
+## Стиль «силуэт-притча» (16:9)
+
+- `engine/people.js` — стройные силуэты с суставами (плечо/локоть, бедро/колено), походка и позы:
+  `stand phone reach chest hold lookup down sit read sitphone sithold`.
+- `engine/fx.js` — дождь, пар, огонь, ночной город, боке, светящееся сердце.
+- В `engine.js`: камера `data-cam`, растворения сцен `<body data-xfade>`, пульс `data-beat`,
+  цветные слова в субтитрах: `*золото*`, `~синий~`, `^красный^`.
+- Концовка: `tools/append_outro.sh <ролик> <секунда> <выход> projects/outro4/build/outro4.mp4`.
+
 ## Ограничения
 
 - Логотип: `assets/brand/kainap-logo.png` (вырезан из присланного JPG). Фирменный синий `#3A3CF4` в `engine/style.css`.

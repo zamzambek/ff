@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ky">
+<head>
+<meta charset="utf-8">
+<title>ЖРТ-лайфхак #1 — KAINAP</title>
+<link rel="stylesheet" href="../../engine/style.css">
+<style>
+  /* Палитра из логотипа KAINAP: синий + тёплый жёлто-оранжевый акцент, светлый фон в точку */
+  :root { --navy: #17186B; --brand: #3A3CF4; --acc: #FF8A00; --acc2: #FFB21E; --mark: #FFE7A3; --pale: #E6E7FF; --sun: #FFF0C8; --muted: #8B8DB0; }
+  #stage { background: #F5F6FC; }
+  .dots { position: absolute; inset: 0; background-image: radial-gradient(rgba(23,24,107,.10) 2px, transparent 2px); background-size: 34px 34px; }
+  .blob { filter: none; }
+  .blob.p { width: 620px; height: 620px; right: -260px; top: -150px; background: var(--pale); }
+  .blob.s { width: 560px; height: 560px; left: -300px; top: 1300px; background: var(--sun); }
+  .abs { position: absolute; }
+  .scene.full { top: 0; height: 1920px; display: block; }
+  .head { position: absolute; left: 60px; right: 60px; top: 70px; display: flex; align-items: center; justify-content: space-between; z-index: 5; }
+  .brand2 { display: flex; align-items: center; gap: 16px; font-weight: 900; font-size: 46px; color: var(--navy); }
+  .brand2 img { height: 62px; }
+  .brand2 span { color: var(--brand); }
+  .tagpill { background: var(--brand); color: #fff; font-weight: 900; font-size: 30px; padding: 12px 28px; border-radius: 999px; letter-spacing: 1px; }
+  .qcard { position: absolute; left: 60px; right: 60px; top: 180px; background: #fff; border-radius: 34px; padding: 30px 40px 34px; box-shadow: 0 14px 40px rgba(23,24,107,.12); z-index: 5; }
+  .qcard .meta { display: flex; align-items: center; gap: 14px; font-weight: 800; font-size: 26px; color: var(--muted); letter-spacing: 1px; }
+  .qcard .meta b { width: 40px; height: 40px; border-radius: 10px; background: var(--acc); color: #fff; display: grid; place-items: center; font-size: 26px; }
+  .qcard .q { margin-top: 14px; font-weight: 900; font-size: 50px; line-height: 1.28; color: var(--navy); }
+  .hl { background: linear-gradient(transparent 55%, var(--mark) 55%); padding: 0 4px; }
+  .math { font-family: 'DejaVu Serif', Georgia, serif; font-style: italic; color: var(--navy); }
+  .tag2 { font-weight: 900; font-size: 40px; padding: 10px 26px; border-radius: 18px; background: #fff; box-shadow: 0 8px 24px rgba(23,24,107,.12); white-space: nowrap; color: var(--navy); }
+  .stamp { font-weight: 900; color: #fff; background: var(--acc); padding: 10px 32px; font-size: 58px; letter-spacing: 3px; border-radius: 14px; transform: rotate(-8deg); box-shadow: 0 10px 30px rgba(255,138,0,.35); }
+  .big { font-weight: 900; color: var(--navy); line-height: 1; letter-spacing: -4px; }
+  .bar { position: absolute; height: 46px; background: var(--mark); border-radius: 6px; transform-origin: 0 50%; }
+  .tbl { position: absolute; left: 70px; right: 70px; background: #fff; border-radius: 34px; padding: 30px 46px; box-shadow: 0 14px 40px rgba(23,24,107,.12); }
+  .tr { display: flex; align-items: center; gap: 26px; font-size: 48px; font-weight: 900; color: var(--navy); margin: 18px 0; white-space: nowrap; }
+  .tr .m { font-family: 'DejaVu Serif', serif; font-style: italic; font-weight: 700; min-width: 230px; }
+  .tr .arr { color: var(--muted); }
+  .cta { display: inline-block; font-weight: 900; font-size: 46px; padding: 22px 46px; border-radius: 999px; white-space: nowrap; }
+  /* субтитры — тёмная плашка внизу, ключевые слова акцентом */
+  .cap { top: 1430px; left: 60px; right: 60px; }
+  .cap-box { background: var(--navy); color: #fff; border-radius: 24px; padding: 16px 34px; font-size: 50px; box-shadow: 0 12px 30px rgba(23,24,107,.25); }
+  .cap-box .w { padding: 0 3px; }
+  .cap-box .w.key { color: var(--acc2); }
+</style>
+</head>
+<body class="cap-plain">
+<div id="stage">
+  <div class="dots"></div>
+  <div class="blob p"></div><div class="blob s"></div>
+
+  <section class="scene full" data-from="s1-0.15">
+    <div class="abs" style="inset:0;transform-origin:50% 45%" data-zoom="1,1.03">
+      <!-- карточка вопроса: видна с первого кадра -->
+      <div class="qcard" data-out="s12-0.2">
+        <div class="meta"><b>1</b>ЖРТ · ХИМИЯ</div>
+        <div class="q"><span class="hl">Кайсынысы көп орун ээлейт:</span><br><span class="hl">1 моль H₂ же 1 моль CO₂?</span></div>
+      </div>
+
+      <!-- весы -->
+      <div class="abs" data-in="s3#0" data-anim="up" data-out="s6-0.1" style="left:0;top:0;width:1080px;height:1300px">
+        <svg class="abs" style="left:440px;top:990px" width="200" height="200" viewBox="0 0 200 200"><path d="M100 10 L160 170 H40 Z" fill="var(--navy)"/><rect x="10" y="168" width="180" height="22" rx="10" fill="var(--navy)"/></svg>
+        <div class="abs" style="left:230px;top:992px;width:620px;height:16px;border-radius:8px;background:var(--navy);transform-origin:50% 50%" data-rot="s3:0;s3#5:8,0.8;s5#3:0,0.8"></div>
+      </div>
+
+      <!-- воздушные шары с газами -->
+      <div class="abs" style="left:150px;top:520px;width:360px;height:480px;transform-origin:50% 100%" data-move="s1:0,0;s3#5:0,-40,0.8;s5#3:0,0,0.8" data-out="s6-0.15">
+        <svg width="360" height="480" viewBox="0 0 360 480" style="overflow:visible">
+          <path d="M180 30 C270 30 330 100 330 190 C330 290 260 360 180 370 C100 360 30 290 30 190 C30 100 90 30 180 30 Z" fill="rgba(58,60,244,.10)" stroke="var(--brand)" stroke-width="9" data-in="s1" data-anim="draw"/>
+          <path d="M168 370 L192 370 L180 388 Z" fill="var(--brand)" data-in="s1#3"/>
+          <path d="M180 388 Q166 420 180 450 Q194 470 180 480" fill="none" stroke="var(--brand)" stroke-width="4" data-in="s1#3" data-anim="draw"/>
+        </svg>
+        <div class="abs math" style="left:0;right:0;top:150px;text-align:center;font-size:84px;font-weight:700;color:var(--brand)" data-in="s2#7" data-anim="pop">H₂</div>
+        <div class="abs" style="left:0;right:0;top:250px;text-align:center" data-in="s2#5" data-anim="pop"><span class="tag2" style="font-size:34px">1 моль</span></div>
+      </div>
+      <div class="abs" style="left:570px;top:520px;width:360px;height:480px;transform-origin:50% 100%" data-move="s1:0,0;s3#5:0,40,0.8;s5#3:0,0,0.8" data-scale="s1:1,s3#3:1.22,s5#3:1" data-out="s6-0.15">
+        <svg width="360" height="480" viewBox="0 0 360 480" style="overflow:visible">
+          <path d="M180 30 C270 30 330 100 330 190 C330 290 260 360 180 370 C100 360 30 290 30 190 C30 100 90 30 180 30 Z" fill="rgba(255,138,0,.10)" stroke="var(--acc)" stroke-width="9" data-in="s1#1" data-anim="draw"/>
+          <path d="M168 370 L192 370 L180 388 Z" fill="var(--acc)" data-in="s1#4"/>
+          <path d="M180 388 Q166 420 180 450 Q194 470 180 480" fill="none" stroke="var(--acc)" stroke-width="4" data-in="s1#4" data-anim="draw"/>
+        </svg>
+        <div class="abs math" style="left:0;right:0;top:150px;text-align:center;font-size:84px;font-weight:700;color:var(--acc)" data-in="s2#11" data-anim="pop">CO₂</div>
+        <div class="abs" style="left:0;right:0;top:250px;text-align:center" data-in="s2#10" data-anim="pop"><span class="tag2" style="font-size:34px">1 моль</span></div>
+      </div>
+      <!-- интрига -->
+      <div class="abs big" style="left:0;right:0;top:650px;text-align:center;font-size:170px;color:var(--acc2)" data-in="s1#4" data-anim="pop" data-out="s2#5" data-beat="90">?</div>
+      <div class="abs math" style="left:0;right:0;top:1220px;text-align:center;font-size:96px" data-in="s2#2" data-anim="up" data-out="s6-0.1">V<sub>1</sub> ? V<sub>2</sub></div>
+      <!-- «логика»: масса -->
+      <div class="abs" style="left:230px;top:1060px" data-in="s4#2" data-anim="pop" data-out="s6-0.1"><span class="tag2" style="color:var(--brand)">2 г</span></div>
+      <div class="abs" style="left:700px;top:1060px" data-in="s4#6" data-anim="pop" data-out="s6-0.1"><span class="tag2" style="color:var(--acc)">44 г</span></div>
+      <div class="abs" style="left:690px;top:440px" data-in="s3#5" data-anim="pop" data-out="s6-0.1"><span class="tag2">оор = чоң? 🤔</span></div>
+      <div class="abs stamp" style="left:345px;top:640px" data-in="s5#3" data-anim="pop" data-shake="s5#3+0.1" data-out="s6-0.1">ТУЗАК!</div>
+
+      <!-- главный секрет -->
+      <div class="abs" style="left:0;right:0;top:470px;height:300px" data-in="s6#3" data-anim="pop" data-out="s8-0.1">
+        <div class="bar" style="left:255px;top:190px;width:570px" data-in="s6#3+0.2" data-anim="grow"></div>
+        <div class="abs big" style="left:0;right:0;top:40px;text-align:center;font-size:230px">22,4 л</div>
+      </div>
+      <div class="abs math" style="left:0;right:0;top:800px;text-align:center;font-size:62px" data-in="s7#7" data-anim="up" data-out="s8">V = n · 22,4 л/моль</div>
+      <div class="abs" style="left:0;right:0;top:900px;text-align:center;font-weight:800;font-size:36px;color:var(--muted)" data-in="s7#1" data-anim="fade" data-out="s8">н.ш.: 0 °C, 101,3 кПа</div>
+
+      <!-- сравнение: одинаковые объёмы -->
+      <div class="abs" style="left:150px;top:520px;width:360px;height:480px;transform-origin:50% 100%" data-in="s8" data-anim="pop" data-scale="s8:1,s10#3:1.26,s11#2:0.79" data-out="s12-0.2">
+        <svg width="360" height="480" viewBox="0 0 360 480" style="overflow:visible">
+          <path d="M180 30 C270 30 330 100 330 190 C330 290 260 360 180 370 C100 360 30 290 30 190 C30 100 90 30 180 30 Z" fill="rgba(58,60,244,.10)" stroke="var(--brand)" stroke-width="9"/>
+          <path d="M168 370 L192 370 L180 388 Z" fill="var(--brand)"/><path d="M180 388 Q166 420 180 450 Q194 470 180 480" fill="none" stroke="var(--brand)" stroke-width="4"/>
+        </svg>
+        <div class="abs math" style="left:0;right:0;top:150px;text-align:center;font-size:84px;font-weight:700;color:var(--brand)">H₂</div>
+      </div>
+      <div class="abs" style="left:570px;top:520px;width:360px;height:480px;transform-origin:50% 100%" data-in="s8" data-anim="pop" data-scale="s8:1" data-out="s12-0.2">
+        <svg width="360" height="480" viewBox="0 0 360 480" style="overflow:visible">
+          <path d="M180 30 C270 30 330 100 330 190 C330 290 260 360 180 370 C100 360 30 290 30 190 C30 100 90 30 180 30 Z" fill="rgba(255,138,0,.10)" stroke="var(--acc)" stroke-width="9"/>
+          <path d="M168 370 L192 370 L180 388 Z" fill="var(--acc)"/><path d="M180 388 Q166 420 180 450 Q194 470 180 480" fill="none" stroke="var(--acc)" stroke-width="4"/>
+        </svg>
+        <div class="abs math" style="left:0;right:0;top:150px;text-align:center;font-size:84px;font-weight:700;color:var(--acc)">CO₂</div>
+      </div>
+
+      <div class="abs" style="left:110px;top:548px;width:860px;height:4px;background:repeating-linear-gradient(90deg,var(--navy) 0 18px,transparent 18px 32px)" data-in="s8#1" data-anim="grow" data-out="s10"></div>
+      <div class="abs" style="left:110px;top:890px;width:860px;height:4px;background:repeating-linear-gradient(90deg,var(--navy) 0 18px,transparent 18px 32px)" data-in="s8#1+0.15" data-anim="grow" data-out="s10"></div>
+      <div class="abs math" style="left:0;right:0;top:1220px;text-align:center;font-size:96px" data-in="s8#2" data-anim="pop" data-out="s10">V<sub>1</sub> = V<sub>2</sub></div>
+      <div class="abs" style="left:230px;top:1060px" data-in="s9#1" data-anim="pop" data-out="s10"><span class="tag2" style="color:var(--brand)">2 г</span></div>
+      <div class="abs" style="left:700px;top:1060px" data-in="s9#1+0.1" data-anim="pop" data-out="s10"><span class="tag2" style="color:var(--acc)">44 г</span></div>
+      <div class="abs" style="left:0;right:0;top:1150px;text-align:center" data-in="s9#3" data-anim="up" data-out="s10"><span class="tag2" style="background:var(--navy);color:#fff">көлөм бирдей · 22,4 л</span></div>
+      <!-- примеры -->
+      <div class="abs" style="left:0;right:0;top:1200px;text-align:center" data-in="s10#3" data-anim="pop" data-out="s11"><span class="tag2" style="font-size:52px">2 моль → <b style="color:var(--brand)">44,8 л</b></span></div>
+      <div class="abs" style="left:0;right:0;top:1200px;text-align:center" data-in="s11#2" data-anim="pop" data-out="s12-0.2"><span class="tag2" style="font-size:52px">0,5 моль → <b style="color:var(--brand)">11,2 л</b></span></div>
+
+      <!-- Эстен кал -->
+      <div class="abs" style="left:0;right:0;top:420px;text-align:center" data-in="s12" data-anim="pop"><span class="math hl" style="font-size:110px;font-weight:700">Эстен кал!</span></div>
+      <div class="tbl" style="top:620px" data-in="s12+0.2" data-anim="up">
+        <div class="tr" data-in="s12#2" data-anim="left"><span class="m">1 моль</span><span class="arr">→</span><span><span class="hl">22,4 л</span></span></div>
+        <div class="tr" data-in="s12#6" data-anim="left"><span class="m">2 моль</span><span class="arr">→</span><span><span class="hl">44,8 л</span></span></div>
+        <div class="tr" data-in="s12#7" data-anim="left"><span class="m">0,5 моль</span><span class="arr">→</span><span><span class="hl">11,2 л</span></span></div>
+        <div class="tr" data-in="s12#9" data-anim="left" style="font-size:40px"><span class="m" style="min-width:0">масса башка</span><span class="arr">→</span><span>көлөм <span class="hl">бирдей</span></span></div>
+      </div>
+      <div class="abs" style="left:0;right:0;top:1180px;text-align:center" data-in="s13#3" data-anim="pop"><span class="cta" style="background:var(--acc);color:#fff;box-shadow:0 12px 30px rgba(255,138,0,.35)">ЖРТга KAINAP менен даярдан</span></div>
+      <div class="abs" style="left:0;right:0;top:1300px;text-align:center" data-in="s13#0" data-anim="pop"><span class="cta" style="background:var(--brand);color:#fff;font-size:40px;padding:16px 38px">🔖 Сактап кой!</span></div>
+    </div>
+  </section>
+
+  <div class="head">
+    <div class="brand2"><img src="../../assets/brand/kainap-logo.png" alt=""><div>KAI<span>NAP</span></div></div>
+    <div class="tagpill">ЖРТ-ЛАЙФХАК #1</div>
+  </div>
+  <div class="cap"></div>
+</div>
+<script src="build/timings.js"></script>
+<script src="../../engine/engine.js"></script>
+</body>
+</html>

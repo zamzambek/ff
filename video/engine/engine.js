@@ -57,7 +57,7 @@
   scenes.forEach((s) => {
     s.el.querySelectorAll('*').forEach((el, idx) => {
       const d = el.dataset;
-      const keys = ['in', 'out', 'hl', 'dim', 'shake', 'float', 'flicker', 'smoke', 'scale', 'zoom', 'punch', 'spin', 'orbit', 'move', 'cam', 'beat'];
+      const keys = ['in', 'out', 'hl', 'dim', 'shake', 'float', 'flicker', 'smoke', 'scale', 'zoom', 'punch', 'spin', 'orbit', 'move', 'cam', 'beat', 'rot'];
       if (!keys.some((k) => k in d)) return;
       const it = {
         el, d,
@@ -73,6 +73,7 @@
         zoom: d.zoom ? d.zoom.split(',').map(Number) : null,
         punches: d.punch ? d.punch.split(',').map(at) : [],
         camKeys: d.cam ? d.cam.split(';').map((kv) => { const i = kv.lastIndexOf(':'); const [z, x, y, du] = kv.slice(i + 1).split(',').map(Number); return [at(kv.slice(0, i)), z, x, y, du]; }).sort((a, b) => a[0] - b[0]) : null,
+        rotKeys: d.rot ? d.rot.split(';').map((kv) => { const i = kv.lastIndexOf(':'); const [a, du] = kv.slice(i + 1).split(',').map(Number); return [at(kv.slice(0, i)), a, du]; }).sort((a, b) => a[0] - b[0]) : null,
         moveKeys: d.move ? d.move.split(';').map((kv) => { const i = kv.lastIndexOf(':'); const [x, y, d] = kv.slice(i + 1).split(',').map(Number); return [at(kv.slice(0, i)), x, y, d]; }).sort((a, b) => a[0] - b[0]) : null,
       };
       if (it.anim === 'draw') {
@@ -235,6 +236,14 @@
         x += (kx - x) * e; y += (ky - y) * e;
       }
       tf = `translate(${x}px, ${y}px) ` + tf;
+    }
+    if (it.rotKeys) {
+      let a = it.rotKeys[0][1];
+      for (let i = 1; i < it.rotKeys.length; i++) {
+        const [kt, ka, kd] = it.rotKeys[i];
+        const u = clamp((t - kt) / (kd || 0.6)); a += (ka - a) * outBack(u);
+      }
+      tf += ` rotate(${a}deg)`;
     }
     if (it.scaleKeys) {
       // масштаб по ключам "время:значение" с плавными переходами 0.35 c

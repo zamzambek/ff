@@ -29,6 +29,9 @@
     sitphone:{ sL: -10, eL: -50, sR: -30, eR: -105, hL: -86, kL: 88, hR: -82, kR: 84, head: 16, lean: 4, drop: 1 },
   };
 
+  const DRESS_STAND = 'M82 140 Q100 130 118 140 L122 200 Q116 236 112 262 Q140 380 146 450 Q100 466 54 450 Q62 380 88 262 Q84 236 78 200 Z';
+  const DRESS_SIT = 'M82 140 Q100 130 118 140 L122 200 Q118 236 114 262 L126 302 L236 298 Q252 330 244 380 L132 360 Q90 362 80 334 Q80 292 88 262 Q84 236 78 200 Z';
+
   function parseKeys(s) {
     return (s || '').split(',').filter(Boolean).map((kv) => { const i = kv.lastIndexOf(':'); return { t: window.AT(kv.slice(0, i).trim()), v: kv.slice(i + 1).trim() }; }).sort((a, b) => a.t - b.t);
   }
@@ -54,8 +57,9 @@
     const legL = limb(all, 96, 318, 132, girl ? 21 : 25, 132, girl ? 15 : 19, 'foot');
     // туловище
     const body = el('g', {}, all);
+    let dress = null;
     if (girl) {
-      el('path', { d: 'M82 140 Q100 130 118 140 L122 200 Q116 236 112 262 Q140 380 146 450 Q100 466 54 450 Q62 380 88 262 Q84 236 78 200 Z', fill: K }, body);
+      dress = el('path', { d: DRESS_STAND, fill: K }, body);
     } else {
       el('path', { d: 'M76 142 Q100 130 124 142 L128 226 Q126 296 120 330 L80 330 Q74 296 72 226 Z', fill: K }, body);
       el('path', { d: 'M74 226 Q70 262 78 300 L84 300 Z', fill: K }, body);
@@ -71,7 +75,7 @@
     // ближняя нога и рука (перед телом)
     const legR = limb(all, 104, 318, 132, girl ? 21 : 25, 132, girl ? 15 : 19, 'foot');
     const armR = limb(all, 104, 150, 92, 15, 88, 12, 'hand');
-    return { svg, flip, all, armL, armR, legL, legR, head, body };
+    return { svg, flip, all, armL, armR, legL, legR, head, body, dress };
   }
 
   const people = [...document.querySelectorAll('.person')].map((root, i) => {
@@ -98,21 +102,24 @@
       const u = smooth((t - since) / 0.6);
       const q = {};
       for (const k in B) q[k] = A[k] + (B[k] - A[k]) * u;
-      // ходьба
-      let dx = 0, walking = false;
+      // ходьба: частота шагов от скорости, чтобы ступни не скользили
+      let dx = 0, walking = false, speed = 0;
       for (const w of p.walk) {
         if (t < w.a) dx += w.dx;
-        else if (t < w.b) { const v = (t - w.a) / (w.b - w.a); dx += w.dx * (1 - v); walking = true; }
+        else if (t < w.b) { const v = (t - w.a) / (w.b - w.a); dx += w.dx * (1 - v); walking = true; speed = Math.abs(w.dx) / (w.b - w.a); }
       }
       let bob = 0;
       if (walking) {
-        const ph = t * 2 * Math.PI * 0.95;
-        const s = Math.sin(ph);
-        q.hL = -22 * s; q.hR = 22 * s;
-        q.kL = 6 + 34 * Math.max(0, Math.sin(ph + 1.3)); q.kR = 6 + 34 * Math.max(0, Math.sin(ph + 1.3 + Math.PI));
-        if (cur === 'stand') { q.sL = 16 * s; q.sR = -16 * s; q.eL = -12; q.eR = -12; }
-        bob = -Math.abs(Math.cos(ph)) * 7;
-        q.lean = 3;
+        const stride = 150 * p.scale;                         // длина шага в px
+        const freq = Math.min(1.1, Math.max(0.45, speed / (2 * stride)));
+        const ph = t * 2 * Math.PI * freq + p.ph;
+        const s1 = Math.sin(ph), c1 = Math.cos(ph);
+        q.hR = -24 * s1; q.hL = 24 * s1;                      // бедро: минус — вперёд
+        q.kR = 6 + 54 * Math.pow(Math.max(0, c1), 2);         // колено сгибается при выносе ноги
+        q.kL = 6 + 54 * Math.pow(Math.max(0, -c1), 2);
+        if (cur === 'stand') { q.sR = 18 * s1; q.sL = -18 * s1; q.eR = -14 - 10 * Math.max(0, -s1); q.eL = -14 - 10 * Math.max(0, s1); }
+        bob = -4 * (1 + Math.cos(2 * ph)) / 2;                // выше всего, когда нога проходит под телом
+        q.lean = 4; q.head = Math.max(q.head, 2);
       }
       // дыхание
       const breath = Math.sin(t * 1.6 + p.ph) * 1.2;
@@ -125,6 +132,7 @@
       rot(P.armL.g1, q.sL + breath, 96, 150); rot(P.armL.g2, q.eL, 96, 242);
       rot(P.armR.g1, q.sR - breath, 104, 150); rot(P.armR.g2, q.eR, 104, 242);
       rot(P.head, q.head, 100, 112);
+      if (P.dress) P.dress.setAttribute('d', q.drop > 0.5 ? DRESS_SIT : DRESS_STAND);
     }
   }
 

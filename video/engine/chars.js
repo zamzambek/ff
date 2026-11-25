@@ -72,6 +72,12 @@
     } else if (kind === 'tae') {
       el('path', { d: 'M92 178 Q120 166 148 178 L170 330 Q120 344 70 330 Z', fill: '#FFFFFF', ...S, 'stroke-width': 7 }, body);
       el('path', { d: 'M96 182 Q120 172 144 182 L150 268 Q120 278 90 268 Z', fill: '#E5484D', ...S, 'stroke-width': 7 }, body);
+    } else if (kind === 'agai') {
+      // белый халат с лацканами и тёмная футболка
+      el('path', { d: 'M88 178 Q120 166 152 178 L162 330 L78 330 Z', fill: '#FFFFFF', ...S, 'stroke-width': 7 }, body);
+      el('path', { d: 'M108 178 L120 230 L132 178 Z', fill: '#14156A' }, body);
+      el('path', { d: 'M108 178 L120 230 M132 178 L120 230 M120 230 V326', stroke: INK, 'stroke-width': 4, fill: 'none' }, body);
+      el('rect', { x: 132, y: 246, width: 16, height: 18, rx: 3, fill: '#3A3CF4' }, body);
     } else {
       el('rect', { x: 90, y: 176, width: 60, height: 130, rx: 28, fill: '#FFC83D', ...S, 'stroke-width': 7 }, body);
       el('path', { d: 'M120 186 V296', stroke: 'rgba(18,19,63,.25)', 'stroke-width': 4 }, body);
@@ -104,6 +110,9 @@
       el('path', { d: 'M62 108 C56 40 184 40 178 108 C170 84 70 84 62 108 Z', fill: '#fff', ...S, 'stroke-width': 7 }, head);
       el('path', { d: 'M64 104 C60 150 72 176 86 186 L90 150 C80 140 74 124 76 104 Z M176 104 C180 150 168 176 154 186 L150 150 C160 140 166 124 164 104 Z', fill: '#fff', ...S, 'stroke-width': 6 }, head);
       el('path', { d: 'M92 98 q8 -4 16 0 M132 98 q8 -4 16 0', stroke: 'rgba(18,19,63,.35)', 'stroke-width': 3, fill: 'none' }, head);
+    } else if (kind === 'agai') {
+      // короткая тёмная стрижка с чёлкой
+      el('path', { d: 'M64 112 C56 36 184 36 176 112 C172 88 160 74 140 70 C128 82 104 84 86 76 C74 84 68 96 64 112 Z', fill: '#1C1410', ...S, 'stroke-width': 6 }, head);
     } else {
       // ак калпак
       el('path', { d: 'M70 74 C78 6 162 6 170 74 Z', fill: '#fff', ...S, 'stroke-width': 7 }, head);
@@ -116,6 +125,11 @@
     const eyeL = el('ellipse', { cx: 102, cy: 110, rx: 7, ry: 10, fill: INK }, head);
     const eyeR = el('ellipse', { cx: 138, cy: 110, rx: 7, ry: 10, fill: INK }, head);
     const mouth = el('path', { d: MOUTH.neutral, stroke: INK, 'stroke-width': 5, 'stroke-linecap': 'round', fill: INK }, head);
+    if (kind === 'agai') {   // очки
+      el('circle', { cx: 102, cy: 110, r: 19, fill: 'rgba(255,255,255,.15)', stroke: INK, 'stroke-width': 5 }, head);
+      el('circle', { cx: 138, cy: 110, r: 19, fill: 'rgba(255,255,255,.15)', stroke: INK, 'stroke-width': 5 }, head);
+      el('path', { d: 'M121 110 h-2', stroke: INK, 'stroke-width': 5 }, head);
+    }
     return { svg, g, body, legL, legR, armL, armR, stick, bowl, head, eyeL, eyeR, browL, browR, mouth };
   }
 
@@ -142,7 +156,7 @@
     const move = document.createElement('div');
     move.className = 'char-move';
     root.appendChild(move);
-    const human = kind === 'aibek' || kind === 'tae' || kind === 'girl';
+    const human = kind === 'aibek' || kind === 'tae' || kind === 'girl' || kind === 'agai';
     const parts = human ? buildHuman(move, kind) : buildMicrobe(move, kind);
     const d = root.dataset;
     const walk = (d.walk || '').split(',').filter(Boolean).map((w) => {

@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="ky">
+<head>
+<meta charset="utf-8">
+<title>Агай кайда? — KAINAP</title>
+<link rel="stylesheet" href="../../engine/style.css">
+<link rel="stylesheet" href="../../engine/theme-blue.css">
+<style>
+  .header .brand { padding: 16px 34px 16px 24px; }
+  .brand .logo { height: 62px; }
+  .phone { position: absolute; left: 190px; top: 330px; width: 700px; height: 900px; border-radius: 70px; background: #0E1030; border: 14px solid #1B1E4A; box-shadow: 0 30px 80px rgba(0,0,40,.45); overflow: hidden; }
+  .phone .top { padding: 46px 40px 24px; color: #fff; font-weight: 900; font-size: 40px; border-bottom: 2px solid rgba(255,255,255,.08); }
+  .phone .top small { display: block; font-size: 26px; color: #9AA0D0; font-weight: 700; }
+  .msg { position: absolute; left: 34px; max-width: 520px; background: #24285C; color: #fff; font-weight: 800; font-size: 38px; padding: 18px 28px; border-radius: 30px 30px 30px 8px; }
+  .msg b { display: block; font-size: 24px; color: #FFC83D; margin-bottom: 4px; }
+  .msg.me { left: auto; right: 34px; background: #3A3CF4; border-radius: 30px 30px 8px 30px; }
+  .cal { position: absolute; width: 300px; height: 330px; border-radius: 34px; background: #fff; box-shadow: 0 20px 50px rgba(0,0,40,.35); overflow: hidden; text-align: center; border: 6px solid #12133F; }
+  .cal .hd { background: #E5484D; color: #fff; font-weight: 900; font-size: 36px; padding: 16px 0; }
+  .cal .n { font-weight: 900; font-size: 150px; color: #12133F; line-height: 1.2; }
+  .cal .s { font-weight: 800; font-size: 30px; color: #8A82A3; margin-top: -14px; }
+  .board { position: absolute; border-radius: 26px; background: #0F1A12; border: 12px solid #2A2D3A; box-shadow: inset 0 0 60px rgba(0,0,0,.6); }
+  .pt { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; padding: 18px; }
+  .pt i { display: grid; place-items: center; height: 62px; border-radius: 10px; font-style: normal; font-weight: 900; font-size: 28px; color: #12133F; background: #D3D6FD; }
+  .neonboard { position: absolute; border-radius: 22px; background: rgba(140,255,160,.04); border: 6px solid rgba(180,255,190,.5); }
+  .neon { font-weight: 900; color: #E9FFE6; text-shadow: 0 0 8px #7CFF6B, 0 0 24px #39FF14, 0 0 60px #39FF14; white-space: nowrap; }
+  .char.neonme.hl svg { filter: brightness(0) invert(1) sepia(1) saturate(6) hue-rotate(55deg) drop-shadow(0 0 16px #39FF14) drop-shadow(0 0 50px #39FF14); }
+  .stamp { font-weight: 900; color: #fff; background: #E5484D; padding: 10px 30px; font-size: 54px; letter-spacing: 2px; border-radius: 14px; transform: rotate(-7deg); box-shadow: 0 10px 30px rgba(229,72,77,.4); white-space: nowrap; }
+  .vf { position: absolute; inset: 120px 90px 560px; border: 0; }
+  .vf i { position: absolute; width: 90px; height: 90px; border-color: #fff; border-style: solid; }
+  .rec { position: absolute; font-weight: 900; font-size: 40px; color: #fff; display: flex; align-items: center; gap: 12px; }
+  .rec::before { content: ''; width: 26px; height: 26px; border-radius: 50%; background: #E5484D; }
+  .cap { top: 1610px; }
+  .confetti { position: absolute; width: 18px; height: 30px; border-radius: 4px; }
+</style>
+</head>
+<body data-smooth>
+<div id="stage">
+  <div class="blob hexbg"></div>
+  <div class="blob a"></div><div class="blob b"></div><div class="blob c"></div>
+  <div class="spark" style="left:90px;top:330px"><svg viewBox="0 0 24 24"><path fill="#FFFFFF" d="M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z"/></svg></div>
+  <div class="spark" style="right:120px;top:520px;width:34px;height:34px"><svg viewBox="0 0 24 24"><path fill="#FFC83D" d="M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z"/></svg></div>
+
+  <!-- A. Чат учеников -->
+  <section class="scene full" data-from="s1-0.15">
+    <div class="abs" style="inset:0;transform-origin:50% 45%" data-zoom="1,1.05">
+      <div class="phone" data-in="s1-0.1" data-anim="up">
+        <div class="top">KAINAP окуучулары 💬<small>148 катышуучу</small></div>
+        <div class="msg" style="top:170px" data-in="s1#0" data-anim="up" data-sfx="softpop"><b>Айбек</b>Агай кайда?? 😭</div>
+        <div class="msg" style="top:300px" data-in="s1#1" data-anim="up" data-sfx="softpop"><b>Айпери</b>Эки жума болду!</div>
+        <div class="msg me" style="top:420px" data-in="s1#3" data-anim="up" data-sfx="softpop">Видео качан чыгат? 🥺</div>
+        <div class="msg" style="top:540px" data-in="s1#6" data-anim="up" data-sfx="softpop"><b>Бакыт</b>Агай тирүүбү 😂</div>
+      </div>
+      <div class="cal" style="left:700px;top:1020px" data-in="s1#2" data-anim="pop" data-shake="s1#7">
+        <div class="hd">ВИДЕОСУЗ</div><div class="n" data-count="s1#2|1|14|1.6|0">1</div><div class="s">күн</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- B. Класс в панике -->
+  <section class="scene full" data-from="s2">
+    <div class="abs" style="inset:0;transform-origin:50% 50%" data-zoom="1,1.06" data-punch="s4#9">
+      <div class="board" style="left:80px;top:330px;width:920px;height:520px"></div>
+      <!-- таблица Менделеева вверх ногами -->
+      <div class="abs" style="left:150px;top:380px;width:470px;background:#fff;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.3);transform-origin:50% 50%" data-in="s3#1" data-anim="pop" data-rot="s3#1:0;s3#3:180,0.9" data-sfx="swoosh" data-sfx-at="s3#3">
+        <div class="pt"><i>H</i><i style="opacity:0"></i><i style="opacity:0"></i><i style="opacity:0"></i><i style="opacity:0"></i><i>He</i><i>Li</i><i>Be</i><i>B</i><i>C</i><i>N</i><i>O</i><i>Na</i><i>Mg</i><i>Al</i><i>Si</i><i>P</i><i>S</i></div>
+      </div>
+      <!-- доска с ошибкой -->
+      <div class="abs" style="left:660px;top:420px;font-weight:900;font-size:64px;color:#fff;font-family:'Nunito'" data-in="s4#1" data-anim="fade">суу =</div>
+      <div class="abs" style="left:660px;top:510px;font-weight:900;font-size:92px;color:#FFC83D" data-in="s4#2" data-anim="up">H₂O₂</div>
+      <div class="abs stamp" style="left:560px;top:680px" data-in="s4#9" data-anim="pop" data-shake="s4#9+0.1" data-sfx="buzz">ПЕРЕКИСЬ!</div>
+      <!-- ученики -->
+      <div class="char" data-char="aibek" style="left:120px;top:880px;width:300px" data-in="s2" data-anim="left"
+           data-pose="s2:shrug,s3:hold,s4:idle" data-expr="s2:shock,s3:sus,s4:shock" data-face="right"></div>
+      <div class="char" data-char="girl" style="left:640px;top:880px;width:300px" data-in="s2+0.2" data-anim="right"
+           data-pose="s2:shrug,s4:point,s4#7:cheer" data-expr="s2:shock,s4:happy,s4#9:shock" data-face="left"></div>
+      <div class="abs" style="left:300px;top:850px;font-size:60px" data-in="s2#3" data-float>💦</div>
+    </div>
+  </section>
+
+  <!-- C. Загадка -->
+  <section class="scene full" data-from="s5">
+    <div class="abs" style="inset:0;background:#0A0B24" data-in="s5" data-anim="fade"></div>
+    <div class="abs" style="left:240px;top:200px;width:600px;height:1150px;background:linear-gradient(rgba(255,255,255,.22),rgba(255,255,255,0));clip-path:polygon(42% 0,58% 0,100% 100%,0 100%)" data-in="s5#2" data-anim="fade" data-sfx="swoosh"></div>
+    <div class="abs huge" style="left:0;right:0;top:620px;text-align:center;font-size:360px;color:#fff" data-in="s5#4" data-anim="pop" data-beat="80">?</div>
+  </section>
+
+  <!-- D. Агай-маркер -->
+  <section class="scene full" data-from="s6">
+    <div class="abs" style="inset:0;background:#05060E"></div>
+    <div class="abs" style="inset:0;transform-origin:50% 55%" data-zoom="1,1.12" data-punch="s7#0,s8#3">
+      <div class="neonboard" style="left:110px;top:330px;width:860px;height:560px" data-scale="s6:1"></div>
+      <div class="abs neon" style="left:170px;top:380px;font-size:72px" data-in="s6#1" data-anim="fade">2H₂ + O₂ → 2H₂O</div>
+      <div class="abs neon" style="left:170px;top:500px;font-size:64px" data-in="s6#2" data-anim="fade">NaCl · CO₂ · Al₂O₃</div>
+      <!-- доска разгорается -->
+      <div class="abs" style="inset:0;background:radial-gradient(circle at 50% 40%,rgba(120,255,140,.55),rgba(57,255,20,0) 60%)" data-in="s6#3" data-anim="fade"></div>
+      <div class="abs" style="inset:0;background:#EFFFF0" data-in="s7-0.08" data-anim="fade" data-out="s7#0+0.1" data-sfx="flame"></div>
+      <div class="char neonme" data-char="agai" style="left:330px;top:820px;width:420px" data-in="s6" data-anim="up"
+           data-hl="s7#0" data-pose="s6:point,s7#2:cheer,s8#5:shrug" data-expr="s6:smile,s7#0:shock,s7#3:happy,s8#5:sus" data-face="right" data-buzz="s7#0~s7#2"></div>
+      <div class="abs" style="left:240px;top:760px;font-size:60px" data-in="s7#1" data-float>✨</div>
+      <div class="abs" style="left:740px;top:820px;font-size:50px" data-in="s7#2" data-float>✨</div>
+      <div class="abs neon" style="left:0;right:0;top:690px;text-align:center;font-size:62px" data-in="s7#1" data-anim="up">🖍️ агай = маркер</div>
+      <!-- камера засвечивается -->
+      <div class="abs" style="inset:0;background:radial-gradient(circle,#FFFFFF 30%,rgba(255,255,255,.85) 70%)" data-in="s8#3" data-anim="fade" data-sfx="ding"></div>
+      <div class="vf" data-in="s8#1" data-anim="fade">
+        <i style="left:0;top:0;border-width:10px 0 0 10px"></i><i style="right:0;top:0;border-width:10px 10px 0 0"></i>
+        <i style="left:0;bottom:0;border-width:0 0 10px 10px"></i><i style="right:0;bottom:0;border-width:0 10px 10px 0"></i>
+      </div>
+      <div class="rec" style="left:140px;top:170px;color:#E5484D" data-in="s8#1" data-anim="fade">REC</div>
+      <div class="abs" style="left:0;right:0;top:620px;text-align:center" data-in="s8#4" data-anim="pop"><span class="stamp" style="background:#12133F">⚠️ ЖАРЫК ӨТӨ КӨП</span></div>
+    </div>
+  </section>
+
+  <!-- E. Наука говорит -->
+  <section class="scene full" data-from="s9">
+    <div class="abs" style="inset:0;transform-origin:50% 50%" data-zoom="1,1.05">
+      <div class="abs card" style="left:120px;top:350px;width:840px;padding:40px 50px" data-in="s9" data-anim="up">
+        <div class="label" style="font-size:36px">🔬 Жаркыроо деңгээли</div>
+        <div class="big-title" style="font-size:140px;color:#39C04A;margin:10px 0" data-count="s9#3|100|0|2.4|0" data-suffix="%">100%</div>
+        <div style="height:40px;border-radius:20px;background:#E6E8F4;overflow:hidden"><div style="height:100%;width:100%;border-radius:20px;background:linear-gradient(90deg,#39FF14,#B6FF9F);transform-origin:0 50%" data-scale="s9#3:1,s9#5:0.02"></div></div>
+      </div>
+      <div class="abs" style="left:0;right:0;top:880px;display:flex;justify-content:center;gap:12px">
+        <div class="pill sm" data-in="s9#3" data-anim="pop">1</div><div class="pill sm" data-in="s9#3+0.2" data-anim="pop">2</div><div class="pill sm" data-in="s9#3+0.4" data-anim="pop">3</div>
+        <div class="pill sm" data-in="s9#3+0.6" data-anim="pop">4</div><div class="pill sm" data-in="s9#3+0.8" data-anim="pop">5</div><div class="pill sm" data-in="s9#3+1.0" data-anim="pop">6</div>
+        <div class="pill sm yellow" data-in="s9#3+1.2" data-anim="pop">7 ✓</div>
+      </div>
+      <div class="char" data-char="agai" style="left:360px;top:1010px;width:330px" data-in="s9#1" data-anim="up" data-pose="s9:point,s9#5:wave" data-expr="s9:sus,s9#5:happy" data-face="right"></div>
+    </div>
+  </section>
+
+  <!-- F. Возвращение -->
+  <section class="scene full" data-from="s10">
+    <div class="abs" style="inset:0;transform-origin:50% 45%" data-zoom="1,1.06" data-punch="s10#2">
+      <div class="abs" style="left:0;right:0;top:330px;display:flex;justify-content:center" data-in="s10#1" data-anim="pop" data-sfx="ding">
+        <div class="cal" style="position:relative;width:560px;height:330px"><div class="hd">📅 ЖАҢЫЛЫК</div><div style="font-weight:900;font-size:76px;color:#12133F;margin-top:40px;line-height:1.1">КИЙИНКИ<br>ЖУМАДАН</div></div>
+      </div>
+      <div class="abs huge" style="left:0;right:0;top:720px;text-align:center;font-size:86px" data-in="s10#4" data-anim="up">баары кайра башталат! 🔥</div>
+      <div class="char" data-char="aibek" style="left:40px;top:980px;width:250px" data-in="s10#4" data-anim="left" data-pose="s10:cheer" data-expr="s10:happy" data-face="right"></div>
+      <div class="char" data-char="agai" style="left:350px;top:900px;width:380px" data-in="s11" data-anim="pop" data-pose="s11:wave" data-expr="s11:wink" data-sfx="swoosh"></div>
+      <div class="char" data-char="girl" style="left:790px;top:980px;width:250px" data-in="s10#4+0.2" data-anim="right" data-pose="s10:cheer" data-expr="s10:happy" data-face="left"></div>
+      <div class="confetti" style="left:120px;top:300px;background:#FFC83D" data-in="s10#4" data-anim="fly" data-fly="0,-500" data-spin="200"></div>
+      <div class="confetti" style="left:880px;top:340px;background:#FF7AA8" data-in="s10#4+0.1" data-anim="fly" data-fly="0,-500" data-spin="-180"></div>
+      <div class="confetti" style="left:520px;top:250px;background:#7CFFB2" data-in="s10#4+0.2" data-anim="fly" data-fly="0,-500" data-spin="240"></div>
+      <div class="confetti" style="left:250px;top:620px;background:#fff" data-in="s10#4+0.15" data-anim="fly" data-fly="0,-600" data-spin="-220"></div>
+      <div class="confetti" style="left:820px;top:640px;background:#FFC83D" data-in="s10#4+0.25" data-anim="fly" data-fly="0,-600" data-spin="200"></div>
+      <div class="abs" style="left:0;right:0;top:1780px;display:flex;justify-content:center;gap:20px" data-in="s11#3" data-anim="up">
+        <div class="tag y">🔔 Күтүп тургула</div><div class="tag">@kainap.kg</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="header" style="z-index:7">
+    <div class="brand"><img class="logo" src="../../assets/brand/kainap-logo.png" alt="">KAINAP</div>
+  </div>
+  <div class="cap"></div>
+</div>
+<script src="build/timings.js"></script>
+<script src="../../engine/engine.js"></script>
+<script src="../../engine/chars.js"></script>
+</body>
+</html>

@@ -1,0 +1,2 @@
+Open Peeps — Pablo Stanley (https://www.openpeeps.com), CC0 1.0 (public domain).
+Converted from the npm package @opeepsfun/open-peeps (MIT wrapper by Emre Çakır).

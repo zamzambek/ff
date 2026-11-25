@@ -77,6 +77,13 @@ node tools/render.js projects/co-vs-co2 --stills 3,20,55 --scale 0.5   # сто�
   цветные слова в субтитрах: `*золото*`, `~синий~`, `^красный^`.
 - Концовка: `tools/append_outro.sh <ролик> <секунда> <выход> projects/outro4/build/outro4.mp4`.
 
+## Персонажи Open Peeps (мимика)
+
+- `engine/peeps.js` + `assets/peeps/cast.js` — персонажи по пояс из Open Peeps (Pablo Stanley, CC0):
+  `agai` (белый пиджак, очки), `aibek` (синее худи), `aiperi` (красная футболка).
+- `data-expr="s1:Smile,s2#3:Fear"` — эмоции; `data-talk="s6~s6$"` — рот в такт словам; моргание, дыхание, кивки — сами.
+- Пересобрать каст/одежду: `tools/peeps/cast.mjs` (нужен пакет @opeepsfun/open-peeps, см. файл).
+
 ## Ограничения
 
 - Логотип: `assets/brand/kainap-logo.png` (вырезан из присланного JPG). Фирменный синий `#3A3CF4` в `engine/style.css`.

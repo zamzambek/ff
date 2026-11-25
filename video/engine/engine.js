@@ -59,7 +59,7 @@
   scenes.forEach((s) => {
     s.el.querySelectorAll('*').forEach((el, idx) => {
       const d = el.dataset;
-      const keys = ['in', 'out', 'hl', 'dim', 'shake', 'float', 'flicker', 'smoke', 'scale', 'zoom', 'punch', 'spin', 'orbit', 'move', 'cam', 'beat', 'rot', 'sweep', 'count', 'buzz', 'wiggle', 'glow'];
+      const keys = ['in', 'out', 'hl', 'dim', 'shake', 'float', 'flicker', 'smoke', 'scale', 'zoom', 'punch', 'spin', 'orbit', 'move', 'cam', 'beat', 'rot', 'sweep', 'count', 'buzz', 'wiggle', 'glow', 'write'];
       if (!keys.some((k) => k in d)) return;
       const it = {
         el, d,
@@ -282,6 +282,12 @@
       tf += ` scale(${1 + 0.16 * bump(ph, 0.08, 0.045) + 0.09 * bump(ph, 0.3, 0.05)})`;
     }
     if ('spin' in it.d) tf += ` rotate(${t * parseFloat(it.d.spin || 20)}deg)`;
+    if ('write' in it.d) {
+      // «пишется маркером»: проявление слева направо, data-write="время|длит"
+      const [ts, du] = it.d.write.split('|');
+      const u = clamp((t - at(ts)) / parseFloat(du || 1.2));
+      el.style.clipPath = `inset(-20% ${(1 - u) * 115 - 15}% -20% -5%)`;
+    }
     if ('count' in it.d) {
       // счётчик: data-count="время:от:до:длит:знаков" + data-prefix / data-suffix
       const [ts, a, b, du, dec] = it.d.count.split('|');

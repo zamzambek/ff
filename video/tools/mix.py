@@ -321,6 +321,22 @@ def main(project: Path, music: str | None):
         duck = np.convolve(np.where(env > 0.015, 0.3, 1.0), np.ones(SR // 6) / (SR // 6), "same")  # плавное приглушение
         out += bed * fade * duck * 0.9
 
+    if "--drop" in sys.argv:
+        # пафосный дроп: тишина/низкий гул до момента, затем удар + бит
+        tl = json.loads((build / "timings.json").read_text()); seg = {x["id"]: x for x in tl["segments"]}
+        sid, _, wi = sys.argv[sys.argv.index("--drop") + 1].partition("#")
+        w = seg[sid]["words"][int(wi)] if wi else None
+        td = (w["start"] if w else seg[sid]["end"]) + float(sys.argv[sys.argv.index("--drop-offset") + 1] if "--drop-offset" in sys.argv else 0)
+        bed = beat_bed(len(out), bpm=128, rng=rng); i0 = int(td * SR); bed[:i0] = 0
+        L = len(out) - i0; ramp = np.minimum(1, np.arange(L) / (SR * 0.05))
+        bed[i0:] *= ramp * np.minimum(1, (L - np.arange(L)) / (SR * 1.0))
+        out += bed * 0.95
+        add(out, sfx_clip("riser", rng) * 1.4, td - 1.25)
+        add(out, sfx_clip("boom", rng) * 1.3, td)
+        tt = np.arange(i0) / SR
+        hum = np.sin(2 * np.pi * 55 * tt) * 0.03 * np.minimum(1, tt / 1.0)
+        out[:i0] += hum.astype(np.float32)
+
     if "--beat" in sys.argv:
         bed = beat_bed(len(out), rng=rng)
         fade = np.minimum(1, np.arange(len(out)) / (SR * 0.5)) * np.minimum(1, (len(out) - np.arange(len(out))) / (SR * 1.2))

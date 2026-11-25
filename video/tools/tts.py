@@ -275,8 +275,9 @@ def main(project: Path):
             "words": precise_words(seg["show"], spans, t) if spans else word_timings(seg["show"], t, t + dur),
         })
         pcm += frames
-        pcm += b"\x00\x00" * int(SR * gap)
-        t += dur + gap
+        g = gap + float(seg.get("gap_after", 0))
+        pcm += b"\x00\x00" * int(SR * g)
+        t += dur + g
 
     total = t - gap + tail
     pcm += b"\x00\x00" * int(SR * (tail - gap))

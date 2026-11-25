@@ -1,0 +1,42 @@
+{
+  "title": "Lightboard-макет: ChatGPT",
+  "segments": [
+    {
+      "id": "s1",
+      "show": "Туура.",
+      "say": "Туура.",
+      "gap_after": 0.5
+    },
+    {
+      "id": "s2",
+      "show": "Анда ЖРТга *телефонуң* менен кирип көр.",
+      "say": "Анда Жэ Эр Тэга телефонуң менен кирип көр.",
+      "gap_after": 4.6,
+      "seed": 4
+    },
+    {
+      "id": "s3",
+      "show": "Мээ *интернетсиз* да иштейт.",
+      "say": "Мээ интернетсиз да иштейт.",
+      "seed": 1
+    },
+    {
+      "id": "s4",
+      "show": "Өтө берет да.",
+      "say": "Өтө берет да."
+    }
+  ],
+  "language": "ky",
+  "tts": {
+    "provider": "elevenlabs",
+    "voice_id": "jsSE6b3qmZL9jOxuseza",
+    "voice_name": "Alymbek Kyrgyz (вместо агая)",
+    "model_id": "eleven_v3",
+    "language_code": "ky",
+    "context": false
+  },
+  "lead_seconds": 2.6,
+  "gap_seconds": 0.1,
+  "max_pause_seconds": 0,
+  "tail_seconds": 1.6
+}

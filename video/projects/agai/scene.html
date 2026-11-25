@@ -86,45 +86,66 @@
     <div class="abs huge" style="left:0;right:0;top:620px;text-align:center;font-size:360px;color:#fff" data-in="s5#4" data-anim="pop" data-beat="80">?</div>
   </section>
 
-  <!-- D. Агай-маркер -->
+  <!-- D. НЛО -->
   <section class="scene full" data-from="s6">
-    <div class="abs" style="inset:0;background:#05060E"></div>
-    <div class="abs" style="inset:0;transform-origin:50% 55%" data-zoom="1,1.12" data-punch="s7#0,s8#3">
-      <div class="neonboard" style="left:110px;top:330px;width:860px;height:560px" data-scale="s6:1"></div>
-      <div class="abs neon" style="left:170px;top:380px;font-size:72px" data-in="s6#1" data-anim="fade">2H₂ + O₂ → 2H₂O</div>
-      <div class="abs neon" style="left:170px;top:500px;font-size:64px" data-in="s6#2" data-anim="fade">NaCl · CO₂ · Al₂O₃</div>
-      <!-- доска разгорается -->
-      <div class="abs" style="inset:0;background:radial-gradient(circle at 50% 40%,rgba(120,255,140,.55),rgba(57,255,20,0) 60%)" data-in="s6#3" data-anim="fade"></div>
-      <div class="abs" style="inset:0;background:#EFFFF0" data-in="s7-0.08" data-anim="fade" data-out="s7#0+0.1" data-sfx="flame"></div>
-      <div class="peep neonme" data-peep="agai" style="left:170px;top:830px;width:740px" data-in="s6" data-anim="up" data-hl="s7#0" data-expr="s6:Explaining,s7#0:Awe,s7#3:SmileLOL,s8#5:Cheeky" data-talk="s6~s6$" data-buzz="s7#0~s7#2"></div>
-      <div class="abs" style="left:240px;top:760px;font-size:60px" data-in="s7#1" data-float>✨</div>
-      <div class="abs" style="left:740px;top:820px;font-size:50px" data-in="s7#2" data-float>✨</div>
-      <div class="abs neon" style="left:0;right:0;top:700px;text-align:center;font-size:62px" data-in="s7#1" data-anim="up">🖍️ агай = маркер</div>
-      <!-- камера засвечивается -->
-      <div class="abs" style="inset:0;background:radial-gradient(circle,#FFFFFF 30%,rgba(255,255,255,.85) 70%)" data-in="s8#3" data-anim="fade" data-sfx="ding"></div>
-      <div class="vf" data-in="s8#1" data-anim="fade">
-        <i style="left:0;top:0;border-width:10px 0 0 10px"></i><i style="right:0;top:0;border-width:10px 10px 0 0"></i>
-        <i style="left:0;bottom:0;border-width:0 0 10px 10px"></i><i style="right:0;bottom:0;border-width:0 10px 10px 0"></i>
+    <div class="abs" style="inset:0;background:linear-gradient(#05061A 0%,#141A4A 70%,#232C6A 100%)"></div>
+    <div class="abs" style="inset:0;transform-origin:50% 45%" data-zoom="1,1.08" data-punch="s7#0">
+      <div class="star" style="position:absolute;left:120px;top:300px;width:6px;height:6px;border-radius:50%;background:#fff" data-float></div>
+      <div class="abs" style="left:900px;top:380px;width:5px;height:5px;border-radius:50%;background:#fff"></div>
+      <div class="abs" style="left:620px;top:260px;width:4px;height:4px;border-radius:50%;background:#fff" data-float></div>
+      <div class="abs" style="left:260px;top:520px;width:4px;height:4px;border-radius:50%;background:#fff"></div>
+      <div class="abs" style="left:800px;top:620px;width:6px;height:6px;border-radius:50%;background:#fff" data-float></div>
+      <div class="abs" style="left:780px;top:240px;width:150px;height:150px;border-radius:50%;background:#F4F1EA;box-shadow:0 0 70px rgba(244,241,234,.5)"></div>
+      <!-- дом -->
+      <svg class="abs" style="left:40px;top:1120px" width="1000" height="560" viewBox="0 0 1000 560">
+        <path d="M120 230 L500 20 L880 230 Z" fill="#0A0C22"/><rect x="170" y="225" width="660" height="340" fill="#0E1130"/>
+        <rect x="250" y="300" width="130" height="110" rx="8" fill="#FFD38A" style="filter:drop-shadow(0 0 20px rgba(255,200,110,.7))"/>
+        <rect x="620" y="300" width="130" height="110" rx="8" fill="#FFD38A" style="filter:drop-shadow(0 0 20px rgba(255,200,110,.7))"/>
+      </svg>
+      <!-- луч -->
+      <div class="abs" style="left:240px;top:560px;width:600px;height:1100px;background:linear-gradient(rgba(160,255,190,.55),rgba(160,255,190,.08));clip-path:polygon(38% 0,62% 0,100% 100%,0 100%)" data-in="s7#0" data-anim="fade" data-sfx="swoosh"></div>
+      <!-- тарелка -->
+      <div class="abs" style="left:270px;top:400px;width:540px;height:240px" data-in="s6#5" data-anim="fade" data-move="s6#5:0,-700;s6#5+0.05:0,0,1.6" data-float data-sfx="ufo">
+        <svg width="540" height="240" viewBox="0 0 540 240" style="overflow:visible">
+          <ellipse cx="270" cy="88" rx="110" ry="80" fill="rgba(170,230,255,.6)" stroke="#12133F" stroke-width="8"/>
+          <ellipse cx="270" cy="140" rx="260" ry="62" fill="#B9BDD9" stroke="#12133F" stroke-width="8"/>
+          <ellipse cx="270" cy="128" rx="200" ry="30" fill="#E6E8F4"/>
+          <circle cx="120" cy="150" r="14" fill="#FFC83D" data-beat="140"/><circle cx="210" cy="164" r="14" fill="#7CFFB2" data-beat="120"/>
+          <circle cx="330" cy="164" r="14" fill="#FF7AA8" data-beat="130"/><circle cx="420" cy="150" r="14" fill="#FFC83D" data-beat="110"/>
+        </svg>
       </div>
-      <div class="rec" style="left:140px;top:170px;color:#E5484D" data-in="s8#1" data-anim="fade">REC</div>
-      <div class="abs" style="left:0;right:0;top:620px;text-align:center" data-in="s8#4" data-anim="pop"><span class="stamp" style="background:#12133F">⚠️ ЖАРЫК ӨТӨ КӨП</span></div>
+      <!-- агая затягивает -->
+      <div class="peep" data-peep="agai" style="left:240px;top:1040px;width:600px" data-in="s6" data-anim="up"
+           data-expr="s6:Suspicious,s6#5:Awe,s7#0:Fear" data-move="s6:0,0;s7#2:0,-560,1.8" data-scale="s6:1,s7#2:0.55" data-rot="s6:0;s7#2:-8,1.6"></div>
+      <div class="abs" style="left:0;right:0;top:860px;text-align:center;font-size:120px" data-in="s7#2" data-anim="pop">😱</div>
     </div>
   </section>
 
-  <!-- E. Наука говорит -->
-  <section class="scene full" data-from="s9">
-    <div class="abs" style="inset:0;transform-origin:50% 50%" data-zoom="1,1.05">
-      <div class="abs card" style="left:120px;top:350px;width:840px;padding:40px 50px" data-in="s9" data-anim="up">
-        <div class="label" style="font-size:36px">🔬 Жаркыроо деңгээли</div>
-        <div class="big-title" style="font-size:140px;color:#39C04A;margin:10px 0" data-count="s9#3|100|0|2.4|0" data-suffix="%">100%</div>
-        <div style="height:40px;border-radius:20px;background:#E6E8F4;overflow:hidden"><div style="height:100%;width:100%;border-radius:20px;background:linear-gradient(90deg,#39FF14,#B6FF9F);transform-origin:0 50%" data-scale="s9#3:1,s9#5:0.02"></div></div>
-      </div>
-      <div class="abs" style="left:0;right:0;top:880px;display:flex;justify-content:center;gap:12px">
-        <div class="pill sm" data-in="s9#3" data-anim="pop">1</div><div class="pill sm" data-in="s9#3+0.2" data-anim="pop">2</div><div class="pill sm" data-in="s9#3+0.4" data-anim="pop">3</div>
-        <div class="pill sm" data-in="s9#3+0.6" data-anim="pop">4</div><div class="pill sm" data-in="s9#3+0.8" data-anim="pop">5</div><div class="pill sm" data-in="s9#3+1.0" data-anim="pop">6</div>
-        <div class="pill sm yellow" data-in="s9#3+1.2" data-anim="pop">7 ✓</div>
-      </div>
-      <div class="peep" data-peep="agai" style="left:250px;top:1010px;width:580px" data-in="s9#1" data-anim="up" data-expr="s9:Explaining,s9#5:Cheeky" data-talk="s9~s9#5"></div>
+  <!-- E. На планете пришельцев -->
+  <section class="scene full" data-from="s8">
+    <div class="abs" style="inset:0;background:radial-gradient(ellipse at 50% 30%,#2A1E6A,#0A0B24 70%)"></div>
+    <div class="abs" style="inset:0;transform-origin:50% 45%" data-zoom="1,1.06" data-punch="s9#3">
+      <div class="abs" style="left:150px;top:330px;width:5px;height:5px;border-radius:50%;background:#fff" data-float></div>
+      <div class="abs" style="left:940px;top:520px;width:6px;height:6px;border-radius:50%;background:#fff"></div>
+      <div class="abs" style="left:70px;top:700px;width:4px;height:4px;border-radius:50%;background:#fff" data-float></div>
+      <!-- планета -->
+      <div class="abs" style="left:-120px;top:1250px;width:1320px;height:900px;border-radius:50%;background:radial-gradient(circle at 50% 20%,#8EE07A,#3E9E4E 60%,#2A6A36)"></div>
+      <div class="abs" style="left:760px;top:250px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFB8E0,#B35CFF 70%);box-shadow:0 0 60px rgba(180,92,255,.5)" data-float></div>
+      <div class="abs" style="left:700px;top:330px;width:320px;height:40px;border-radius:50%;border:8px solid rgba(255,220,140,.8);transform:rotate(-18deg)"></div>
+      <!-- космическая доска -->
+      <div class="neonboard" style="left:130px;top:330px;width:600px;height:400px" data-in="s8" data-anim="fade"></div>
+      <div class="abs neon" style="left:130px;width:600px;text-align:center;top:400px;font-size:150px" data-in="s9#1" data-anim="up">H₂O</div>
+      <div class="abs neon" style="left:130px;width:600px;text-align:center;top:590px;font-size:70px" data-in="s9#3" data-anim="up" data-sfx="ding">= суу 💧</div>
+      <!-- пришельцы -->
+      <div class="peep" data-peep="alien1" style="left:-60px;top:1030px;width:440px" data-in="s8" data-anim="up" data-expr="s8:Cyclops"></div>
+      <div class="peep" data-peep="alien2" style="left:700px;top:1040px;width:440px" data-face="left" data-in="s8+0.2" data-anim="up" data-expr="s8:Monster"></div>
+      <div class="abs" style="left:60px;top:960px;font-weight:900;font-size:90px;color:#FFC83D" data-in="s8#5" data-anim="pop" data-out="s9#3" data-float>???</div>
+      <div class="abs" style="left:820px;top:970px;font-weight:900;font-size:90px;color:#FFC83D" data-in="s8#6" data-anim="pop" data-out="s9#3" data-float>???</div>
+      <div class="abs" style="left:90px;top:960px;font-size:100px" data-in="s9#3" data-anim="pop">🤯</div>
+      <div class="abs" style="left:860px;top:970px;font-size:100px" data-in="s9#3+0.15" data-anim="pop">🤩</div>
+      <!-- агай-учитель -->
+      <div class="peep" data-peep="agai" style="left:280px;top:900px;width:540px;z-index:2" data-in="s8#2" data-anim="up"
+           data-expr="s8:Concerned,s9:Explaining,s9#6:Cheeky" data-talk="s9~s9#6"></div>
     </div>
   </section>
 

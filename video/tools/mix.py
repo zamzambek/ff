@@ -96,6 +96,12 @@ def sfx_clip(name, rng):
         env = np.minimum(1, tt / 0.5) * np.minimum(1, (1.8 - tt) / 0.5)
         breath = rng.standard_normal(L).astype(np.float32) * 0.05
         return (np.sin(2 * np.pi * np.cumsum(f) / SR) * 0.11 + breath * 0.3) * env
+    if name == "ufo":
+        L = int(SR * 3.2); tt = np.arange(L) / SR
+        f = 220 + 60 * np.sin(2 * np.pi * 3.5 * tt) + 40 * tt
+        x = np.sin(2 * np.pi * np.cumsum(f) / SR) * 0.6 + np.sin(2 * np.pi * np.cumsum(f * 1.5) / SR) * 0.25
+        env = np.minimum(1, tt / 0.6) * np.minimum(1, (3.2 - tt) / 0.8)
+        return (x * env * 0.08).astype(np.float32)
     if name == "ding":
         L = int(SR * 1.4); tt = np.arange(L) / SR
         x = sum(np.sin(2 * np.pi * fr * tt) * np.exp(-tt * d) * a for fr, d, a in ((1568, 3.2, .5), (2349, 4.5, .25), (3136, 6, .12)))

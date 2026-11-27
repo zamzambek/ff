@@ -47,7 +47,7 @@
     return { g1, g2, x, y, len1 };
   }
 
-  function build(root, kind) {
+  function build(root, kind, round) {
     const svg = el('svg', { viewBox: '0 0 200 600', height: '100%', style: 'overflow:visible;display:block' }, root);
     const flip = el('g', {}, svg);
     const all = el('g', {}, flip);
@@ -67,11 +67,18 @@
     el('rect', { x: 93, y: 104, width: 14, height: 34, rx: 6, fill: K }, body); // шея
     // голова и волосы
     const head = el('g', {}, all);
+    if (round) {
+      // минималистичный стиль: круглая голова, без профиля
+      if (girl) el('path', { d: 'M70 70 C70 30 130 30 130 70 C136 120 132 160 124 196 L76 196 C68 160 64 120 70 70 Z', fill: K }, head);
+      el('circle', { cx: 100, cy: 74, r: 31, fill: K }, head);
+      if (!girl) el('path', { d: 'M68 70 C66 36 134 36 132 70 C124 54 76 54 68 70 Z', fill: K }, head);
+    } else {
     // волосы в профиль: чёлка спереди, длинная прядь по спине
     if (girl) el('path', { d: 'M120 62 C122 40 104 34 92 38 C76 42 70 58 72 80 C70 120 64 180 70 238 C76 246 86 244 90 236 C86 190 86 140 90 104 L96 96 C104 74 112 60 120 62 Z', fill: K }, head);
     el('ellipse', { cx: 100, cy: 74, rx: 23, ry: 30, fill: K }, head);
     el('path', { d: 'M110 86 q10 4 12 10 q-6 4 -12 2 z', fill: K }, head); // нос/подбородок — профиль
     if (!girl) el('path', { d: 'M76 66 C74 36 96 30 110 36 C122 30 130 46 124 62 C118 52 108 50 100 54 C92 48 82 54 76 66 Z', fill: K }, head);
+    }
     // ближняя нога и рука (перед телом)
     const legR = limb(all, 104, 318, 132, girl ? 21 : 25, 132, girl ? 15 : 19, 'foot');
     const armR = limb(all, 104, 150, 92, 15, 88, 12, 'hand');
@@ -79,7 +86,7 @@
   }
 
   const people = [...document.querySelectorAll('.person')].map((root, i) => {
-    const P = build(root, root.dataset.person);
+    const P = build(root, root.dataset.person, 'round' in root.dataset);
     const d = root.dataset;
     const walk = (d.walk || '').split(',').filter(Boolean).map((w) => {
       const m = w.match(/^(.+?)-(s\d+.*?):(-?[\d.]+)$/);

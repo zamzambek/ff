@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ky">
+<head>
+<meta charset="utf-8">
+<title>Сүйүү — KAINAP</title>
+<link rel="stylesheet" href="../../engine/style.css">
+<style>
+  html, body, #stage { width: 1920px !important; height: 1080px !important; }
+  :root { --gold: #FFC46B; --heart: #FF3B5C; }
+  #stage { background: #07060F; }
+  .abs { position: absolute; }
+  .scene.full { top: 0; height: 1080px; display: block; overflow: hidden; }
+  .world { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+  .person { position: absolute; }
+  /* силуэт: почти чёрный с тонким тёплым контуром, как в референсе */
+  .sil { filter: brightness(0) drop-shadow(2.5px 0 0 rgba(255,205,150,.95)) drop-shadow(-2px 0 0 rgba(255,205,150,.6)) drop-shadow(0 -2px 0 rgba(255,205,150,.65)) drop-shadow(0 0 18px rgba(255,190,130,.18)); }
+  .sil svg path, .sil svg ellipse, .sil svg circle, .sil svg line { fill: #120F1C; stroke: #120F1C; }
+  .vign { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 45%, rgba(0,0,0,.75) 100%); pointer-events: none; }
+  .bokeh, .skyline { position: absolute; overflow: hidden; }
+  .lamp { position: absolute; width: 8px; background: #08070D; }
+  .lamp::before { content: ''; position: absolute; left: -14px; top: -10px; width: 36px; height: 14px; border-radius: 8px; background: #08070D; }
+  .lampglow { position: absolute; border-radius: 50%; background: radial-gradient(circle, rgba(255,214,150,.75), rgba(255,200,130,.18) 30%, rgba(255,200,130,0) 65%); }
+  .ground { position: absolute; left: 0; right: 0; background: #0C0A14; }
+  .heart { position: absolute; width: 70px; height: 64px; margin: -32px 0 0 -35px; filter: drop-shadow(0 0 12px rgba(255,59,92,.95)) drop-shadow(0 0 46px rgba(255,59,92,.55)); }
+  .halo { position: absolute; width: 360px; height: 360px; margin: -180px; border-radius: 50%; background: radial-gradient(circle, rgba(255,70,100,.33), rgba(255,70,100,0) 65%); }
+  .tagc { position: absolute; font-weight: 900; font-size: 40px; color: #1A1206; background: var(--gold); border-radius: 18px; padding: 10px 26px; box-shadow: 0 0 40px rgba(255,196,107,.35); white-space: nowrap; }
+  .tagc.pink { background: #FF8FA8; } .tagc.blue { background: #9CC8FF; }
+  .plaque { position: absolute; width: 330px; height: 150px; border-radius: 16px; background: #1B1830; border: 3px solid rgba(255,196,107,.35); display: grid; place-items: center; text-align: center; font-weight: 900; color: #F4E7D0; box-shadow: 0 30px 60px rgba(0,0,0,.6); }
+  .plaque b { display: block; font-size: 38px; letter-spacing: 3px; }
+  .plaque small { font-size: 26px; color: var(--gold); font-weight: 800; }
+  .spot { position: absolute; background: linear-gradient(rgba(255,220,170,.26), rgba(255,220,170,0)); clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%); }
+  .brain { position: absolute; }
+  .phoneglow { position: absolute; width: 26px; height: 40px; margin: -20px -13px; border-radius: 5px; background: #CFE3FF; box-shadow: 0 0 30px 10px rgba(160,200,255,.55), 0 0 90px 30px rgba(160,200,255,.18); }
+  .notif { position: absolute; background: rgba(30,32,60,.92); border: 1px solid rgba(255,255,255,.15); border-radius: 18px; padding: 12px 20px; font-weight: 800; font-size: 26px; color: #fff; white-space: nowrap; box-shadow: 0 10px 30px rgba(0,0,0,.5); }
+  .chap { position: absolute; left: 0; right: 0; text-align: center; font-family: 'Lora', serif; font-style: italic; font-weight: 700; color: #F4E7D0; text-shadow: 0 0 30px rgba(255,196,107,.35); }
+  .cap { top: auto; bottom: 70px; left: 200px; right: 200px; z-index: 9; }
+  .cap-box { background: none; box-shadow: none; color: #fff; font-size: 52px; line-height: 1.28; text-shadow: 0 4px 18px rgba(0,0,0,.95); padding: 0; max-width: 1500px; }
+  .cap-box .w { padding: 0 3px; }
+  .cap-box .w.key { color: var(--gold); }
+  .corner-logo { position: absolute; right: 50px; top: 40px; width: 100px; opacity: .45; z-index: 9; }
+</style>
+</head>
+<body class="cap-plain" data-pops="off" data-xfade="0.8" data-smooth>
+<div id="stage">
+
+  <!-- 1. Глава: сумерки, город, прохожие -->
+  <section class="scene full" data-from="s1-0.6">
+    <div class="world" data-cam="s1-0.6:1.0,960,540;s1:1.06,960,560,3">
+      <div class="abs" style="inset:0;background:linear-gradient(#2A1E4A 0%,#4A2E5E 45%,#8A4A6A 75%,#C9706A 100%)"></div>
+      <div class="bokeh" style="inset:0" data-n="10"></div>
+      <div class="skyline" style="left:0;top:500px;width:1920px;height:360px" data-seed="51" data-h="360" data-color="#1A1328" data-win="rgba(255,205,120,.75)"></div>
+      <div class="ground" style="top:860px;height:220px"></div>
+      <div class="person sil" data-person="boy" data-round style="left:273px;top:375px;height:495px" data-walk="s1-0.6-s2:-260"></div>
+      <div class="person sil" data-person="girl" data-round style="left:795px;top:405px;height:465px" data-walk="s1-0.6-s2:300" data-face="left"></div>
+      <div class="person sil" data-person="boy" data-round style="left:1273px;top:383px;height:487px" data-walk="s1-0.6-s2:-220"></div>
+      <div class="person sil" data-person="girl" data-round style="left:1595px;top:413px;height:457px" data-walk="s1-0.6-s2:260" data-face="left"></div>
+      <div class="chap" style="top:220px;font-size:96px" data-in="s1#0" data-anim="fade">Биринчи бөлүм</div>
+      <div class="chap" style="top:350px;font-size:70px;color:var(--gold)" data-in="s1#2" data-anim="up">Сүйүү</div>
+    </div>
+    <div class="vign"></div>
+  </section>
+
+  <!-- 2–3. Улица, фонарь: он видит её, сердце бьётся -->
+  <section class="scene full" data-from="s2">
+    <div class="world" data-cam="s2:1.0,960,540;s2#5:1.35,700,560,1.8;s3:1.6,640,610,1.8">
+      <div class="abs" style="inset:0;background:linear-gradient(#24183E 0%,#3E2652 55%,#6A3A5E 100%)"></div>
+      <div class="skyline" style="left:0;top:560px;width:1920px;height:300px" data-seed="61" data-h="300" data-color="#17112A" data-win="rgba(255,205,120,.7)"></div>
+      <div class="ground" style="top:860px;height:220px"></div>
+      <div class="lampglow" style="left:280px;top:160px;width:340px;height:340px"></div>
+      <div class="lamp" style="left:446px;top:320px;height:540px"></div>
+      <div class="person sil" data-person="boy" data-round style="left:531px;top:345px;height:525px" data-pose="s2:stand,s2#4:lookup,s3:chest" data-face="right"></div>
+      <div class="person sil" data-person="girl" data-round style="left:1133px;top:375px;height:495px" data-walk="s2-s2#6:420" data-face="left" data-pose="s2:stand"></div>
+      <div class="halo" style="left:630px;top:522px" data-in="s2#5" data-anim="fade" data-beat="110"></div>
+      <div class="heart" style="left:630px;top:522px;width:52px;height:48px;margin:-24px 0 0 -26px" data-in="s2#5" data-anim="pop" data-beat="110" data-sfx="heartbeat"></div>
+      <div class="abs" data-in="s3" data-sfx="heartbeat"></div>
+      <div class="tagc pink" style="left:380px;top:420px;font-size:32px" data-in="s3#1" data-anim="up">💧 колу тердейт</div>
+      <div class="tagc" style="left:760px;top:480px;font-size:32px" data-in="s3#4" data-anim="up">🦋 ичи кычышат</div>
+    </div>
+    <div class="vign"></div>
+  </section>
+
+  <!-- 4. Адреналин: стоит в луче, вокруг вспышки -->
+  <section class="scene full" data-from="s4">
+    <div class="world" data-cam="s4:1.1,960,560;s4#5:1.0,960,540,1.8" data-punch="s4#5">
+      <div class="abs" style="inset:0;background:#0B0913"></div>
+      <div class="spot" style="left:660px;top:0;width:600px;height:920px"></div>
+      <div class="ground" style="top:880px;height:200px;background:#0F0C18"></div>
+      <div class="person sil" data-person="boy" data-round style="left:870px;top:340px;height:540px" data-pose="s4:chest"></div>
+      <div class="halo" style="left:975px;top:522px;width:600px;height:600px;margin:-300px" data-in="s4#5" data-anim="fade"></div>
+      <div class="plaque" style="left:200px;top:300px" data-in="s4#5" data-anim="up" data-sfx="swoosh"><div><b>АДРЕНАЛИН</b><small>жүрөк ↑ · тер ↑</small></div></div>
+      <div class="abs" style="left:1400px;top:300px;font-weight:900;font-size:120px;color:#FF5A6E;text-shadow:0 0 40px rgba(255,90,110,.7)" data-in="s4#5" data-anim="pop" data-beat="130">♥ 120</div>
+    </div>
+    <div class="vign"></div>
+  </section>
+
+  <!-- 5–6. Дофамин: тёмная комната, телефон, уведомления -->
+  <section class="scene full" data-from="s5">
+    <div class="world" data-cam="s5:1.0,960,540;s6:1.3,820,560,2.2">
+      <div class="abs" style="inset:0;background:#09081A"></div>
+      <div class="abs" style="left:1200px;top:160px;width:520px;height:560px;background:linear-gradient(#0C1640,#1A2A6A);border:14px solid #05040B"></div>
+      <div class="skyline" style="left:1214px;top:420px;width:492px;height:300px" data-seed="71" data-h="260" data-color="#070A22" data-win="rgba(255,205,120,.55)"></div>
+      <div class="ground" style="top:860px;height:220px;background:#07060E"></div>
+      <div class="person sil" data-person="boy" data-round style="left:623px;top:375px;height:495px" data-pose="s5:sitphone"></div>
+      <div class="abs" style="left:600px;top:745px;width:240px;height:16px;background:#05040B"></div>
+      <div class="phoneglow" style="left:840px;top:596px"></div>
+      <!-- мозг с дофамином -->
+      <svg class="brain" style="left:300px;top:180px" width="300" height="230" viewBox="0 0 300 230" data-in="s5#2" data-anim="pop" data-sfx="ding">
+        <path d="M150 20 C90 10 40 40 40 90 C10 110 20 170 70 180 C90 215 140 220 150 200 C160 220 210 215 230 180 C280 170 290 110 260 90 C260 40 210 10 150 20 Z" fill="rgba(255,196,107,.15)" stroke="#FFC46B" stroke-width="6" style="filter:drop-shadow(0 0 14px rgba(255,196,107,.8))"/>
+        <path d="M150 30 V200 M90 70 C110 90 100 120 120 140 M210 70 C190 90 200 120 180 140" fill="none" stroke="#FFC46B" stroke-width="4"/>
+      </svg>
+      <div class="tagc" style="left:330px;top:440px" data-in="s5#2+0.2" data-anim="up">ДОФАМИН ✨</div>
+      <div class="notif" style="left:860px;top:430px" data-in="s6#1" data-anim="up" data-out="s6#2">📱 Жаңы билдирүү жок</div>
+      <div class="notif" style="left:860px;top:430px" data-in="s6#2" data-anim="up" data-out="s7-0.2">📱 Дагы текшерейинчи… 🔄</div>
+      <div class="abs" style="left:700px;top:520px;font-size:60px" data-in="s6#2" data-spin="160">🔄</div>
+    </div>
+    <div class="vign"></div>
+  </section>
+
+  <!-- 7. Окситоцин: объятие в тёплом свете -->
+  <section class="scene full" data-from="s7">
+    <div class="world" data-cam="s7:1.0,960,560;s7#4:1.25,960,600,2.4">
+      <div class="abs" style="inset:0;background:radial-gradient(ellipse at 50% 55%,#4A2A3A,#120B18 65%)"></div>
+      <div class="bokeh" style="inset:0" data-n="16"></div>
+      <div class="ground" style="top:880px;height:200px;background:#0E0A14"></div>
+      <div class="person sil" data-person="boy" data-round style="left:770px;top:340px;height:540px" data-walk="s7-s7#3:-170" data-pose="s7:stand,s7#3:hold"></div>
+      <div class="person sil" data-person="girl" data-round style="left:872px;top:370px;height:510px" data-walk="s7-s7#3:170" data-pose="s7:stand,s7#3:hold" data-face="left"></div>
+      <div class="halo" style="left:910px;top:522px;width:700px;height:700px;margin:-350px" data-in="s7#3" data-anim="fade"></div>
+      <div class="heart" style="left:910px;top:522px" data-in="s7#3+0.2" data-anim="pop" data-beat="70"></div>
+      <div class="plaque" style="left:180px;top:280px" data-in="s7#4" data-anim="up" data-sfx="swoosh"><div><b>ОКСИТОЦИН</b><small>ишеним · жакындык</small></div></div>
+    </div>
+    <div class="vign"></div>
+  </section>
+
+  <!-- 8–9. Сердце поднимается в голову -->
+  <section class="scene full" data-from="s8">
+    <div class="world" data-cam="s8:1.0,960,560;s9:1.4,975,460,1.6" data-punch="s9#0">
+      <div class="abs" style="inset:0;background:#08070E"></div>
+      <div class="spot" style="left:660px;top:0;width:600px;height:920px"></div>
+      <div class="ground" style="top:880px;height:200px;background:#0F0C18"></div>
+      <div class="person sil" data-person="girl" data-round style="left:870px;top:340px;height:540px"></div>
+      <div class="halo" style="left:975px;top:522px" data-move="s8:0,0;s8#3:0,-115,1.8"></div>
+      <div class="heart" style="left:975px;top:522px;width:56px;height:52px;margin:-26px 0 0 -28px" data-beat="72" data-move="s8:0,0;s8#3:0,-115,1.8" data-out="s9#0+0.2"></div>
+      <!-- превращается в мозг -->
+      <svg class="brain" style="left:905px;top:353px" width="140" height="108" viewBox="0 0 300 230" data-in="s9#0" data-anim="pop" data-sfx="ding">
+        <path d="M150 20 C90 10 40 40 40 90 C10 110 20 170 70 180 C90 215 140 220 150 200 C160 220 210 215 230 180 C280 170 290 110 260 90 C260 40 210 10 150 20 Z" fill="rgba(255,90,120,.3)" stroke="#FF6E8A" stroke-width="10" style="filter:drop-shadow(0 0 16px rgba(255,59,92,.9))"/>
+      </svg>
+    </div>
+    <div class="vign"></div>
+  </section>
+
+  <!-- 10. Эстеп кал: три таблички на стене -->
+  <section class="scene full" data-from="s10">
+    <div class="world" data-cam="s10:1.08,960,500;s10:1.0,960,540,6">
+      <div class="abs" style="inset:0;background:radial-gradient(ellipse at 50% 30%,#3A2A2A,#0E0B12 70%)"></div>
+      <div class="lampglow" style="left:760px;top:-80px;width:400px;height:400px"></div>
+      <div class="plaque" style="left:300px;top:330px" data-in="s10#2" data-anim="up" data-sfx="softpop"><div><b>АДРЕНАЛИН</b><small>толкундануу</small></div></div>
+      <div class="plaque" style="left:795px;top:330px" data-in="s10#5" data-anim="up" data-sfx="softpop"><div><b>ДОФАМИН</b><small>кубаныч</small></div></div>
+      <div class="plaque" style="left:1290px;top:330px" data-in="s10#8" data-anim="up" data-sfx="softpop"><div><b>ОКСИТОЦИН</b><small>жакындык</small></div></div>
+      <div class="abs" style="left:0;right:0;top:220px;text-align:center;font-family:'Lora',serif;font-style:italic;font-weight:700;font-size:64px;color:#F4E7D0" data-in="s10" data-anim="fade">Эстеп кал</div>
+    </div>
+    <div class="vign"></div>
+  </section>
+
+  <!-- 11. Финал: сумерки, пара -->
+  <section class="scene full" data-from="s11">
+    <div class="world" data-cam="s11:1.0,960,540;s11:1.08,960,580,3">
+      <div class="abs" style="inset:0;background:linear-gradient(#2A1E4A 0%,#5A3060 50%,#D07A66 100%)"></div>
+      <div class="abs" style="left:1240px;top:640px;width:200px;height:200px;border-radius:50%;background:#FFD9A0;box-shadow:0 0 120px rgba(255,200,130,.9)"></div>
+      <div class="skyline" style="left:0;top:600px;width:1920px;height:260px" data-seed="81" data-h="260" data-color="#1A1026" data-win="rgba(255,205,120,.6)"></div>
+      <div class="ground" style="top:860px;height:220px;background:#120B18"></div>
+      <div class="person sil" data-person="boy" data-round style="left:791px;top:345px;height:525px" data-pose="s11:reach"></div>
+      <div class="person sil" data-person="girl" data-round style="left:933px;top:375px;height:495px" data-pose="s11:reach" data-face="left"></div>
+      <div class="heart" style="left:946px;top:522px;width:50px;height:46px;margin:-23px 0 0 -25px" data-beat="68"></div>
+    </div>
+    <div class="vign"></div>
+  </section>
+
+  <img class="corner-logo" src="../../assets/brand/kainap-logo-white.png" alt="">
+  <div class="cap"></div>
+</div>
+<script src="build/timings.js"></script>
+<script src="../../engine/engine.js"></script>
+<script src="../../engine/people.js"></script>
+<script src="../../engine/fx.js"></script>
+</body>
+</html>
